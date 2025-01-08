@@ -1,25 +1,32 @@
-from setuptools import setup, find_packages
-
-setup(
-    name='magic',
-    version='0.1',
-    description='A powerful tool for scanning and network diagnostics',
-    author='biskit069',
-    author_email='your-email@example.com',
-    url='https://github.com/biskit069/magic',
-    packages=find_packages(),
-    install_requires=[
-        'colorama',  # for colored output
-    ],
-    entry_points={
-        'console_scripts': [
-            'magic = magic.main:main_menu',  # Assumes your main function is inside a file named 'main.py' within the 'magic' directory
-        ],
-    },
-    classifiers=[
-        'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
-    ],
-    python_requires='>=3.6',
+from setuptools import setup  
+  
+setup(  
+   name='your_project_name',  
+   version='0.1',  
+   author='Your Name',  
+   author_email='your_email@example.com',  
+   description='A brief description of your project',  
+   long_description='A longer description of your project',  
+   url='https://github.com/your_username/your_project_name',  
+   packages=['your_package_name'],  
+   install_requires=[  
+      'colorama',  
+      'subprocess',  
+      'platform',  
+      'ipaddress',  
+      're',  
+      'os',  
+      'time',  
+      'signal',  
+      'threading'  
+   ],  
+   classifiers=[  
+      'Development Status :: 3 - Alpha',  
+      'Intended Audience :: Developers',  
+      'License :: OSI Approved :: MIT License',  
+      'Programming Language :: Python :: 3',  
+      'Programming Language :: Python :: 3.6',  
+      'Programming Language :: Python :: 3.7',  
+      'Programming Language :: Python :: 3.8',  
+   ],  
 )
