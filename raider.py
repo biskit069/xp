@@ -257,7 +257,7 @@ def exiting_loading_screen():
    # Display a final "Exiting..." message with a blue background and white text  
    print(Fore.BLUE + Fore.WHITE + "\n")  
    time.sleep(1)  # Wait for a second before program exit  
-   print("")  
+   print("Taking The Piss ingore the unicorn shit ")  
    # Final message  
    sys.exit()  # Exit the program  
   
@@ -324,20 +324,43 @@ def show_sslscan_commands():
    ]  
    show_submenu(ssl_commands)  
   
+def show_all_metasploit_commands():  
+   clear_screen()  
+   commands = [  
+      "All Metasploit Commands:",  
+      "msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS <ip>; run'",  
+      "msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOSTS <ip>; run'",  
+      "msfconsole -h",  
+      "msfconsole -q -x 'use auxiliary/scanner/http/ssl; set RHOSTS <ip>; run'",  
+      "msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS <ip>; run'",  
+      "msfconsole -q -x 'use exploit/windows/dcerpc/ms03_026_dcom; set RHOSTS <ip>; run'",  
+      "msfconsole -q -x 'use exploit/windows/smb/ms08_067_netapi; set RHOSTS <ip>; run'",  
+      "msfconsole -q -x 'use exploit/unix/ftp/vsftpd_234_backdoor; set RHOSTS <ip>; run'",  
+   ]  
+   show_submenu(commands)  
+
 # Function to update the script from GitHub  
 def update_script():  
    try:  
-      print(Fore.BLUE + "Updating script from GitHub...")  
-      url = "https://raw.githubusercontent.com/biskit069/magic/refs/heads/main/magic.py"  
+      print("Updating script from GitHub...")  
+      url = "https://raw.githubusercontent.com/biskit069/raider/refs/heads/main/raider.py"  
       response = requests.get(url)  
-      with open(__file__, "w") as file:  
-        file.write(response.text)  
-      print(Fore.GREEN + "Script updated successfully!")  
+      if response.status_code == 200:  
+        confirm = input("Are you sure you want to update the script? (yes/no): ")  
+        if confirm.lower() == "yes":  
+           with open(__file__, "w") as file:  
+              file.write(response.text)  
+           print("Script updated successfully!")  
+        else:  
+           print("Update cancelled.")  
+      else:  
+        print(f"Error updating script: {response.status_code}")  
    except requests.exceptions.RequestException as e:  
-      print(Fore.RED + f"Error updating script: {e}")  
+      print(f"Error updating script: {e}")  
    finally:  
-      clear_screen()  
-  
+      clear_screen()
+
+
 # Function to run Routersploit  
 # Function to run Metasploit  
 def metasploit_scan():  
