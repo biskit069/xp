@@ -1,32 +1,27 @@
 from setuptools import setup  
+import subprocess  
+import sys  
+import platform  
   
-setup(  
-   name='your_project_name',  
-   version='0.1',  
-   author='Your Name',  
-   author_email='your_email@example.com',  
-   description='A brief description of your project',  
-   long_description='A longer description of your project',  
-   url='https://github.com/your_username/your_project_name',  
-   packages=['your_package_name'],  
-   install_requires=[  
-      'colorama',  
-      'subprocess',  
-      'platform',  
-      'ipaddress',  
-      're',  
-      'os',  
-      'time',  
-      'signal',  
-      'threading'  
-   ],  
-   classifiers=[  
-      'Development Status :: 3 - Alpha',  
-      'Intended Audience :: Developers',  
-      'License :: OSI Approved :: MIT License',  
-      'Programming Language :: Python :: 3',  
-      'Programming Language :: Python :: 3.6',  
-      'Programming Language :: Python :: 3.7',  
-      'Programming Language :: Python :: 3.8',  
-   ],  
-)
+def install_nmap():  
+   if platform.system() == "Windows":  
+      subprocess.run(["powershell", "-Command", "winget install nmap"], check=True)  
+   elif platform.system() == "Darwin":  # macOS  
+      subprocess.run(["brew", "install", "nmap"], check=True)  
+   else:  # Linux  
+      subprocess.run(["sudo", "apt-get", "install", "-y", "nmap"], check=True)  
+  
+def install_sslscan():  
+   if platform.system() == "Windows":  
+      subprocess.run(["powershell", "-Command", "winget install sslscan"], check=True)  
+   elif platform.system() == "Darwin":  # macOS  
+      subprocess.run(["brew", "install", "sslscan"], check=True)  
+   else:  # Linux  
+      subprocess.run(["sudo", "apt-get", "install", "-y", "sslscan"], check=True)  
+  
+def main():  
+   install_nmap()  
+   install_sslscan()  
+  
+if __name__ == "__main__":  
+   main()
