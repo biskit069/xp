@@ -8,6 +8,7 @@ import time
 import os  
 import re  
 import ipaddress  
+import requests  
   
 # Initialize colorama  
 init(autoreset=True)  
@@ -40,37 +41,44 @@ def clear_screen():
 def fast_loading_screen():  
    clear_screen()  
    loading_text = '''  
-   ⠀ __ ___ _ __ __ _  
-   / |/ /___ _____ ()/ / / /_ (_)______ _________ _____  
-   / /|/ / __ / __ / / / / / __ / / / __ / / __ / __/ / / / / // / // / / // // / / / / / // // / / / / /  
-   ( ) // //_,/_, //_/_// ///_/_// // /// //  
-   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  
-   ⠀⠀⠀⠀⠀⠀⠀⠀ _____ _  
-   / /___ _____ ____ ()__ ____ _ __  
-   / / __ / __ \/ __ \/ / __ \/ __ / / /  
-   // // / / / / / / / / / / / // / _ _  
-   /____/_/_,// /// //// //_, (||) /___/  
+              __           ____              __                      __       
+  ____ ______/ /_   ____  / __/  ____  ___  / /__      ______  _____/ /_______
+ / __ `/ ___/ __/  / __ \/ /_   / __ \/ _ \/ __/ | /| / / __ \/ ___/ //_/ ___/
+/ /_/ / /  / /_   / /_/ / __/  / / / /  __/ /_ | |/ |/ / /_/ / /  / ,< (__  ) 
+\__,_/_/   \__/   \____/_/    /_/ /_/\___/\__/ |__/|__/\____/_/  /_/|_/____/  
+                                                                                         
+  
+                                _                
+   ______________ _____  ____  (_)___  ____ _    
+  / ___/ ___/ __ `/ __ \/ __ \/ / __ \/ __ `/    
+ (__  ) /__/ /_/ / / / / / / / / / / / /_/ / _ _ 
+/____/\___/\__,_/_/ /_/_/ /_/_/_/ /_/\__, (_|_|_)
+                                    /____/       
+  
+  
    '''  
    for i, line in enumerate(loading_text.splitlines()):  
       if i % 2 == 0:  
-        print(Fore.LIGHTWHITE_EX + line)  # Blue for even lines  
+        print(Fore.BLUE + line)  # Blue for even lines  
       else:  
-        print(Fore.LIGHTRED_EX + line)  # White for odd lines  
+        print(Fore.WHITE + line)  # White for odd lines  
       time.sleep(0.1)  # Short delay (0.1 seconds per line)  
    print(Fore.BLUE + """Running Scan... Connection Completed Waiting For Results... """)  
   
 # Function to show the main menu logo with blue and white mix  
 def show_main_menu_logo():  
    logo_text = r'''  
-   __ ___ _ ____ _ __  
-   / |/ /___ _____ ()/ __ __ ()_ / /_ ____ _ _______  
-   / /|/ / __ / __ / / __/ // / __ `/ / __ / __ / __ \  
-   | /| / / __/ / / / / // / // / / // , / // / / / / / // / /_/ / |/ |/ ( ) // //_,/_, //_// ||_,/// //./_/|/|__// //  
+    ____        _     __         
+   / __ \____ _(_)___/ /__  _____
+  / /_/ / __ `/ / __  / _ \/ ___/
+ / _, _/ /_/ / / /_/ /  __/ /    
+/_/ |_|\__,_/_/\__,_/\___/_/     
+                                                                                                             
    '''  
    clear_screen()  
    for i, line in enumerate(logo_text.splitlines()):  
       if i % 2 == 0:  
-        print(Fore.LIGHTRED_EX + line)  # Blue for even lines  
+        print(Fore.BLUE + line)  # Blue for even lines  
       else:  
         print(Fore.WHITE + line)  # White for odd lines  
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)  
@@ -234,16 +242,17 @@ def normal_nmap_scan():
 def exiting_loading_screen():  
    clear_screen()  
    loading_text = '''  
-   ______ _ _  
-   / / / __()___ ____ _ __ ______ ()________ _________ _____  
-   / // / / / / / __ / __ `/ / / / / __ / / / __ / __/ __ / __/ / __/ / // / / / / /  
-   ( ) // //_, /// //_, / _,// ///_/_// // /// /__/ /___/  
+  ___          ___          
+ | _ )_  _ ___| _ )_  _ ___ 
+ | _ \ || / -_) _ \ || / -_)
+ |___/\_, \___|___/\_, \___|
+      |__/         |__/     
    '''  
    for i, line in enumerate(loading_text.splitlines()):  
       if i % 5 == 0:  
-        print(Fore.LIGHTRED_EX + line)  # Blue for even lines  
+        print(Fore.BLUE + line)  # Blue for even lines  
       else:  
-        print(Fore.LIGHTWHITE_EX + line)  # White for odd lines  
+        print(Fore.WHITE + line)  # White for odd lines  
       time.sleep(0.1)  # Short delay (0.1 seconds per line)  
    # Display a final "Exiting..." message with a blue background and white text  
    print(Fore.BLUE + Fore.WHITE + "\n")  
@@ -319,14 +328,87 @@ def show_sslscan_commands():
 def update_script():  
    try:  
       print(Fore.BLUE + "Updating script from GitHub...")  
-      subprocess.run(["git", "pull"], check=True)  
+      url = "https://raw.githubusercontent.com/biskit069/magic/refs/heads/main/magic.py"  
+      response = requests.get(url)  
+      with open(__file__, "w") as file:  
+        file.write(response.text)  
       print(Fore.GREEN + "Script updated successfully!")  
-   except subprocess.CalledProcessError as e:  
+   except requests.exceptions.RequestException as e:  
       print(Fore.RED + f"Error updating script: {e}")  
-   except FileNotFoundError:  
-      print(Fore.RED + "Git is not installed or not in the system's PATH.")  
    finally:  
       clear_screen()  
+  
+# Function to run Routersploit  
+# Function to run Metasploit  
+def metasploit_scan():  
+   global scanning_in_progress  
+   ip = get_ip_address()  
+   if ip:  
+      scanning_in_progress = True  
+      try:  
+        while True:  
+           print(Fore.BLUE + "\nChoose a Metasploit option:")  
+           print("1. Scan for vulnerabilities")  
+           print("2. Exploit a vulnerability")  
+           print("3. Manual Metasploit")  
+           print("4. View all Metasploit commands (-h)")  
+           print("99. Return to main menu")  
+           choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
+           if choice == '1':  
+              command = f"msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS {ip}; run'"  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Metasploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Metasploit Completed Successfully.")  
+                print(output)  
+           elif choice == '2':  
+              command = f"msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOSTS {ip}; run'"  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Metasploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Metasploit Completed Successfully.")  
+                print(output)  
+           elif choice == '3':  
+              command = input(Fore.BLUE + "Enter your Metasploit command: ").strip()  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Metasploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Metasploit Completed Successfully.")  
+                print(output)  
+           elif choice == '4':  
+              print(Fore.BLUE + "\nViewing all Metasploit commands...")  
+              command = "msfconsole -h"  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Metasploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Metasploit Commands:")  
+                print(output)  
+           elif choice == '99':  
+              scanning_in_progress = False  
+              break  
+           else:  
+              print(Fore.RED + "Invalid choice. Please try again.")  
+      except Exception as e:  
+        print(Fore.RED + f"Error running Metasploit: {e}")  
+      finally:  
+        scanning_in_progress = False  
+        clear_screen()  
   
 # Function to run Routersploit  
 def routersploit_scan():  
@@ -335,97 +417,77 @@ def routersploit_scan():
    if ip:  
       scanning_in_progress = True  
       try:  
-        print(Fore.BLUE + "\nChoose a Routersploit command:")  
-        print("1. Scan for vulnerabilities")  
-        print("2. Exploit a vulnerability")  
-        print("3. Manual Routersploit")  
-        print("99. Return to main menu")  
-        choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
-        # Define the Routersploit command based on the user's choice  
-        if choice == '1':  
-           command = f"routersploit scan {ip}"  
-        elif choice == '2':  
-           command = f"routersploit exploit {ip}"  
-        elif choice == '3':  
-           command = input(Fore.BLUE + "Enter your Routersploit command: ").strip()  
-        elif choice == '99':  
-           return  
-        else:  
-           print(Fore.RED + "Invalid choice. Exiting Routersploit.")  
-           return  
-        # Run the selected Routersploit command  
-        print(Fore.BLUE + f"Running {command}...")  
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
-        stdout, stderr = process.communicate()  
-        if stderr:  
-           print(Fore.RED + "Error during Routersploit:", stderr.decode())  
-        else:  
-           output = stdout.decode()  
-           print(Fore.BLUE + "Routersploit Completed Successfully.")  
-           print(output)  
-           # Save Routersploit results to a file  
-           file_name = input(Fore.BLUE + "Enter file name to save the results: ").strip()  
-           with open(file_name, "a") as file:  
-              file.write(f"IP: {ip}\n{output}\n\n")  
-           print(Fore.BLUE + f"Results saved to '{file_name}'.")  
+        while True:  
+           print(Fore.BLUE + "\nChoose a Routersploit option:")  
+           print("1. Scan for vulnerabilities")  
+           print("2. Exploit a vulnerability")  
+           print("3. Manual Routersploit")  
+           print("4. View all Routersploit commands (-h)")  
+           print("99. Return to main menu")  
+           choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
+           if choice == '1':  
+              command = f"routersploit scan {ip}"  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Routersploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Routersploit Completed Successfully.")  
+                print(output)  
+           elif choice == '2':  
+              command = f"routersploit exploit {ip}"  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Routersploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Routersploit Completed Successfully.")  
+                print(output)  
+           elif choice == '3':  
+              command = input(Fore.BLUE + "Enter your Routersploit command: ").strip()  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Routersploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Routersploit Completed Successfully.")  
+                print(output)  
+           elif choice == '4':  
+              print(Fore.BLUE + "\nViewing all Routersploit commands...")  
+              command = "routersploit -h"  
+              print(Fore.BLUE + f"Running {command}...")  
+              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+              stdout, stderr = process.communicate()  
+              if stderr:  
+                print(Fore.RED + "Error during Routersploit:", stderr.decode())  
+              else:  
+                output = stdout.decode()  
+                print(Fore.BLUE + "Routersploit Commands:")  
+                print(output)  
+           elif choice == '99':  
+              scanning_in_progress = False  
+              break  
+           else:  
+              print(Fore.RED + "Invalid choice. Please try again.")  
       except Exception as e:  
         print(Fore.RED + f"Error running Routersploit: {e}")  
       finally:  
         scanning_in_progress = False  
-        clear_screen()  
-  
-# Function to run Metasploit  
-def metasploit_scan():  
-   global scanning_in_progress  
-   ip = get_ip_address()  
-   if ip:  
-      scanning_in_progress = True  
-      try:  
-        print(Fore.BLUE + "\nChoose a Metasploit command:")  
-        print("1. Scan for vulnerabilities")  
-        print("2. Exploit a vulnerability")  
-        print("3. Manual Metasploit")  
-        print("99. Return to main menu")  
-        choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
-        # Define the Metasploit command based on the user's choice  
-        if choice == '1':  
-           command = f"msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS {ip}; run'"  
-        elif choice == '2':  
-           command = f"msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOSTS {ip}; run'"  
-        elif choice == '3':  
-           command = input(Fore.BLUE + "Enter your Metasploit command: ").strip()  
-        elif choice == '99':  
-           return  
-        else:  
-           print(Fore.RED + "Invalid choice. Exiting Metasploit.")  
-           return  
-        # Run the selected Metasploit command  
-        print(Fore.BLUE + f"Running {command}...")  
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
-        stdout, stderr = process.communicate()  
-        if stderr:  
-           print(Fore.RED + "Error during Metasploit:", stderr.decode())  
-        else:  
-           output = stdout.decode()  
-           print(Fore.BLUE + "Metasploit Completed Successfully.")  
-           print(output)  
-           # Save Metasploit results to a file  
-           file_name = input(Fore.BLUE + "Enter file name to save the results: ").strip()  
-           with open(file_name, "a") as file:  
-              file.write(f"IP: {ip}\n{output}\n\n")  
-           print(Fore.BLUE + f"Results saved to '{file_name}'.")  
-      except Exception as e:  
-        print(Fore.RED + f"Error running Metasploit: {e}")  
-      finally:  
-        scanning_in_progress = False  
-        clear_screen()  
+        clear_screen()
+
   
 # Main menu function with options  
 def main_menu():  
    while True:  
       show_main_menu_logo()  
       print("Manual Scan is Broken fixing later...")  
-      print(Fore.LIGHTRED_EX + "V 0.1 biskit@")  
+      print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")  
       print("1. Automatic Scan")  
       print("2. Automatic Scan (No DNS)")  
       print("3. Automatic Stealth Scan")  
