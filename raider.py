@@ -73,7 +73,7 @@ def show_main_menu_logo():
   / /_/ / __ `/ / __  / _ \/ ___/
  / _, _/ /_/ / / /_/ /  __/ /    
 /_/ |_|\__,_/_/\__,_/\___/_/     
-                                                                                                             
+        testing                                                                                                     
    '''  
    clear_screen()  
    for i, line in enumerate(logo_text.splitlines()):  
