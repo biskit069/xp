@@ -169,7 +169,7 @@ def scan_ip_0_24():
    # Update the command to scan in CIDR format 0/24  
    for ip in ips:  
       print(Fore.BLUE + f"Running {ip} with 0/24...")  
-      full_command = f"nmap -T4 -sS -sU --script vuln -n {ip}/24"  
+      full_command = f"nmap -T4 -n -vv {ip}/24"  
       run_scan(full_command, ip)  
   
 # Function to show all Nmap commands  
@@ -189,6 +189,75 @@ def show_all_nmap_commands():
       "nmap -sV 192.168.1.1 Version detection",  
       "nmap -A 192.168.1.1 OS detection, version detection, script scanning, traceroute",  
       "nmap -Pn 192.168.1.1 Disable ping scan"  
+   
+   '''      
+-sS nmap 192.168.1.1 -sS	TCP SYN port scan (Default)
+-sT	nmap 192.168.1.1 -sT	TCP connect port scan (Default without root privilege)
+-sU	nmap 192.168.1.1 -sU	UDP port scan
+-sA	nmap 192.168.1.1 -sA	TCP ACK port scan
+-sW	nmap 192.168.1.1 -sW	TCP Window port scan
+-sM	nmap 192.168.1.1 -sM	TCP Maimon port scan
+-PR	nmap 192.168.1.1-1/24 -PR	ARP discovery on local network                                            
+-p	nmap 192.168.1.1 -p http,https	Port scan from service name
+-sV -version-all	nmap 192.168.1.1 -sV -version-all	Enable intensity level 9. Higher possibility of correctness. Slower
+-O	nmap 192.168.1.1 -O	Remote OS detection using TCP/IP stack fingerprinting
+-O -osscan-limit	nmap 192.168.1.1 -O -osscan-limit	If at least one open and one closed TCP port are not found it will not try OS detection against host
+-O -osscan-guess	nmap 192.168.1.1 -O -osscan-guess	Makes Nmap guess more aggressively
+-O -max-os-tries	nmap 192.168.1.1 -O -max-os-tries 1	Set the maximum number x of OS detection tries against a target
+-A	nmap 192.168.1.1 -A	Enables OS detection, version detection, script scanning, and traceroute
+-T5	nmap 192.168.1.1 -T5	Insane (5) speeds scan; assumes you are on an extraordinarily fast network
+-sC	nmap 192.168.1.1 -sC	Scan with default NSE scripts. Considered useful for discovery and safe
+-script default	nmap 192.168.1.1 -script default	Scan with default NSE scripts. Considered useful for discovery and safe
+-script	nmap 192.168.1.1 -script=banner	Scan with a single script. Example banner
+-script	nmap 192.168.1.1 -script=http*	Scan with a wildcard. Example http
+-script	nmap 192.168.1.1 -script=http,banner	Scan with two scripts. Example http and banner
+-script	nmap 192.168.1.1 -script "not intrusive"	Scan default, but remove intrusive scripts
+-script-args	nmap -script snmp-sysdescr -script-args snmpcommunity=admin 192.168.1.1	NSE script with arguments
+nmap -Pn -script=http-sitemap-generator scanme.nmap.org	http site map generator
+nmap -n -Pn -p 80 -open -sV -vvv -script banner,http-title -iR 1000	Fast search for random web servers
+nmap -Pn -script=dns-brute domain.com	Brute forces DNS hostnames guessing subdomains
+nmap -n -Pn -vv -O -sV -script smb-enum*,smb-ls,smb-mbenum,smb-os-discovery,smb-s*,smb-vuln*,smbv2* -vv 192.168.1.1	Safe SMB scripts to run
+nmap -script whois* domain.com	Whois query
+nmap -p80 -script http-unsafe-output-escaping scanme.nmap.org	Detect cross site scripting vulnerabilities
+nmap -p80 -script http-sql-injection scanme.nmap.org	Check for SQL injections
+-f	nmap 192.168.1.1 -f	Requested scan (including ping scans) use tiny fragmented IP packets. Harder for packet filters
+-mtu	nmap 192.168.1.1 -mtu 32	Set your own offset size
+-D	nmap -D 192.168.1.101,192.168.1.102,192.168.1.103,192.168.1.23 192.168.1.1	Send scans from spoofed IPs
+-D	nmap -D decoy-ip1,decoy-ip2,your-own-ip,decoy-ip3,decoy-ip4 remote-host-ip	Above example explained
+-S	nmap -S www.microsoft.com www.facebook.com	Scan Facebook from Microsoft (-e eth0 -Pn may be required)
+-g	nmap -g 53 192.168.1.1	Use given source port number
+-proxies	nmap -proxies http://192.168.1.1:8080, http://192.168.1.2:8080 192.168.1.1	Relay connections through HTTP/SOCKS4 proxies
+-data-length	nmap -data-length 200 192.168.1.1	Appends random data to sent packets
+-oN	nmap 192.168.1.1 -oN normal.file	Normal output to the file normal.file
+-oX	nmap 192.168.1.1 -oX xml.file	XML output to the file xml.file
+-oG	nmap 192.168.1.1 -oG grep.file	Grepable output to the file grep.file
+-oA	nmap 192.168.1.1 -oA results	Output in the three major formats at once
+-oG -	nmap 192.168.1.1 -oG -	Grepable output to screen. -oN -, -oX - also usable
+-append-output	nmap 192.168.1.1 -oN file.file -append-output	Append a scan to a previous scan file
+-v	nmap 192.168.1.1 -v	Increase the verbosity level (use -vv or more for greater effect)
+-d	nmap 192.168.1.1 -d	Increase debugging level (use -dd or more for greater effect)
+-reason	nmap 192.168.1.1 -reason	Display the reason a port is in a particular state, same output as -vv
+-open	nmap 192.168.1.1 -open	Only show open (or possibly open) ports
+-packet-trace	nmap 192.168.1.1 -T4 -packet-trace	Show all packets sent and received
+-iflist	nmap -iflist	Shows the host interfaces and routes
+-resume	nmap -resume results.file	Resume a scan
+nmap -p80 -sV -oG - -open 192.168.1.1/24 | grep open	Scan for web servers and grep to show which IPs are running web servers
+nmap -iR 10 -n -oX out.xml | grep "Nmap" | cut -d " " -f5 > live-hosts.txt	Generate a list of the IPs of live hosts
+nmap -iR 10 -n -oX out2.xml | grep "Nmap" | cut -d " " -f5 >> live-hosts.txt	Append IP to the list of live hosts
+ndiff scanl.xml scan2.xml	Compare output from nmap using the ndif
+xsltproc nmap.xml -o nmap.html	Convert nmap xml files to html files
+grep " open " results.nmap | sed -r ‘s/ +/ /g’ | sort | uniq -c | sort -rn | less	Reverse sorted list of how often ports turn up
+-6	nmap -6 2607:f0d0:1002:51::4	Enable IPv6 scanning
+-h	nmap -h	nmap help screen
+nmap -iR 10 -PS22-25,80,113,1050,35000 -v -sn	Discovery only on ports x, no port scan
+nmap 192.168.1.1-1/24 -PR -sn -vv	Arp discovery only on local network, no port scan
+nmap -iR 10 -sn -traceroute	Traceroute to random targets, no port scan
+nmap 192.168.1.1-50 -sL -dns-server 192.168.1.1	Query the Internal DNS for hosts, list targets only
+nmap 192.168.1.1 --packet-trace	Show the details of the packets that are sent and received during a scan and capture the traffic.
+
+!!! Fixing Later !!!
+'''
+   
    ]  
    show_submenu(commands)  
   
