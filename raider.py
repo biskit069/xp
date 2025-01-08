@@ -257,7 +257,7 @@ def exiting_loading_screen():
    # Display a final "Exiting..." message with a blue background and white text  
    print(Fore.BLUE + Fore.WHITE + "\n")  
    time.sleep(1)  # Wait for a second before program exit  
-   print("Taking The Piss ingore the unicorn shit ")  
+   print("")  
    # Final message  
    sys.exit()  # Exit the program  
   
