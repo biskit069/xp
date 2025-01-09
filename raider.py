@@ -663,7 +663,7 @@ def main_menu():
       print("12. Metasploit")  
       print("13. Update Script")  
       print("14. Exit")  
-      choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
+      choice = input(Fore.LIGHTCYAN_EX + "\nEnter your choice: ").strip()  
       if choice == '1':  
         automatic_scan()  
       elif choice == '2':  
