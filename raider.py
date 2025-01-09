@@ -656,7 +656,7 @@ def routersploit_scan():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 raider.py")
+      print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 raider.py, root to update script")
       print("Manual Scan is Broken fixing later...")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
       print(Fore.LIGHTWHITE_EX+"1. Automatic Scan")
