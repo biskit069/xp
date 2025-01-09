@@ -653,7 +653,7 @@ def main_menu():
       print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 nethunt.py & Updates")
       print(Fore.LIGHTGREEN_EX+"alot broken accept nmap and sslscan only manual scan is broken for sslscan finish comming soon!...")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
-      rint(Fore.LIGHTWHITE_EX+"1. nmap")
+      print(Fore.LIGHTWHITE_EX+"1. nmap")
       print(Fore.LIGHTWHITE_EX+"2. Show All Nmap Commands")
       print(Fore.LIGHTWHITE_EX+"3. sslscan")
       print(Fore.LIGHTWHITE_EX+"4. Routersploit")
