@@ -92,7 +92,7 @@ def run_scan(command, ip=None):
       fast_loading_screen()  
       # Check if the command is not empty or None  
       if command:  
-        print(Fore.BLUE + f"Running command: {command}")  
+        print(Fore.YELLOW + f"Running command: {command}")  
         # Run the scan in a subprocess  
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
         stdout, stderr = process.communicate()  
@@ -108,13 +108,13 @@ def run_scan(command, ip=None):
               file_name = input(Fore.BLUE + "Enter a file name to save results (e.g., results.txt): ").strip()  
               with open(file_name, "a") as file:  
                 file.write(f"IP: {ip}\n{output}\n\n")  
-              print(Fore.BLUE + f"Results saved to '{file_name}'.")  
+              print(Fore.LIGHTGREEN_EX + f"Results saved to '{file_name}'.")  
            elif save_results == "no":  
-              print(Fore.BLUE + "Returning to the main menu...")  
+              print(Fore.WHITE + "Returning to the main menu...")  
            else:  
               print(Fore.RED + "Invalid choice, returning to the main menu.")  
            # Add a prompt to ensure the user sees the output  
-           input(Fore.BLUE + "\nPress Enter to return to the main menu...")  
+           input(Fore.LIGHTRED_EX + "\nPress Enter to return to the main menu...")  
       else:  
         print(Fore.RED + "Error: Invalid command!")  
    except subprocess.CalledProcessError as e:  
@@ -297,13 +297,13 @@ def show_firewall_scan_commands():
 # Function to show the submenu with command options  
 def show_submenu(commands):  
    print("\n".join(commands))  
-   input(Fore.BLUE + "\nPress Enter to return to the main menu...")  
+   input(Fore.WHITE + "\nPress Enter to return to the main menu...")  
   
 # Function to handle manual Nmap scan (option 1)  
 def normal_nmap_scan():  
    ip = get_ip_address()  
    if ip:  
-      command = input(Fore.BLUE + "Enter your Nmap command: ").strip()  
+      command = input(Fore.LIGHTRED_EX + "Enter your Nmap command: ").strip()  
       full_command = f"nmap {command} {ip}"  
       run_scan(full_command, ip)  
   
