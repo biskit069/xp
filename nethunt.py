@@ -343,6 +343,9 @@ def exiting_loading_screen():
 import subprocess
 from colorama import Fore
 
+import subprocess
+from colorama import Fore
+
 def sslscan_scan():
    global scanning_in_progress
    ip = get_ip_address()  # Assuming this is your method to get the IP address
@@ -371,6 +374,7 @@ def sslscan_scan():
            if not command:
                print(Fore.RED + "No command entered. Returning to menu.")
                return  # Exit if no command is entered
+           print(Fore.GREEN + f"Running custom SSLScan command: {command}")  # Debug print
         elif choice == '5':
            command = f"sslscan --bugs {ip}"  # New command for Vuln Scan
         else:
@@ -411,6 +415,7 @@ def show_sslscan_commands():
       "sslscan --tls1_2 {ip} Check TLS 1.2 Support"
    ]
    show_submenu(ssl_commands)  # Assuming show_submenu() is defined elsewhere
+
 
 def show_all_metasploit_commands():
    clear_screen()
@@ -661,18 +666,17 @@ def main_menu():
       print(Fore.LIGHTWHITE_EX+"6. Update Script")
       print(Fore.LIGHTCYAN_EX+"99. Exit")
       choice = input(Fore.RED + "\nEnter your choice: ").strip()
-      if choice == '1':
-        
+      if choice == '2':
         show_all_nmap_commands()
       elif choice == '1':
         normal_nmap_scan()
-      elif choice == '2':
-        sslscan_scan()
       elif choice == '3':
-        routersploit_scan()
+        sslscan_scan()
       elif choice == '4':
-        metasploit_scan()
+        routersploit_scan()
       elif choice == '5':
+        metasploit_scan()
+      elif choice == '6':
         update_script()
       elif choice == '99':
         exiting_loading_screen()
