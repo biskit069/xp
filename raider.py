@@ -514,7 +514,7 @@ def metasploit_scan():
                 print(f"{key}: {value}")  
               exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()  
               if exploit_choice in exploits:  
-                metasploit_command = f"msfconsole -q -x use                                                            set lhost {ip}; set lport 4444; exploit \"" 
+                metasploit_command = f"msfconsole -q -x use auxiliary/scanner/http/http_version set RHOST {ip}; run\"" 
                 subprocess.Popen(metasploit_command, shell=True)   
                 if stderr:  
                    print(Fore.RED + "Error during Metasploit:", stderr.decode())  
