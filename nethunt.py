@@ -420,8 +420,8 @@ def show_all_metasploit_commands():
 # Function to update the script from GitHub
 def update_script():
    try:
-      print("Updating script from GitHub...")
-      url = "https://raw.githubusercontent.com/biskit069/raider/refs/heads/main/raider.py"
+      print("Updated Restart Script")
+      url = "https://raw.githubusercontent.com/biskit069/nethunt/refs/heads/main/nethunt.py"
       response = requests.get(url)
       if response.status_code == 200:
         confirm = input("Update (yes/no): ")
