@@ -82,7 +82,7 @@ def show_main_menu_logo():
         print(Fore.RED + line)  # Blue for even lines
       else:
         print(Fore.LIGHTRED_EX + line)  # White for odd lines
-      time.sleep(0.3)  # Medium delay (0.3 seconds per line)
+      time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
 def run_scan(command, ip=None):
