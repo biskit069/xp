@@ -80,7 +80,7 @@ def show_main_menu_logo():
       if i % 2 == 0:  
         print(Fore.BLUE + line)  # Blue for even lines  
       else:  
-        print(Fore.WHITE + line)  # White for odd lines  
+        print(Fore.LIGHTBLACK_EX + line)  # White for odd lines  
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)  
   
 # Function to run a scan with a given command  
