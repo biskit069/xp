@@ -40,48 +40,48 @@ def clear_screen():
 # ASCII loading screen with faster effect and blue/white color scheme  
 def fast_loading_screen():  
    clear_screen()  
-   loading_text = '''  
-              __           ____              __                      __       
-  ____ ______/ /_   ____  / __/  ____  ___  / /__      ______  _____/ /_______
- / __ `/ ___/ __/  / __ \/ /_   / __ \/ _ \/ __/ | /| / / __ \/ ___/ //_/ ___/
-/ /_/ / /  / /_   / /_/ / __/  / / / /  __/ /_ | |/ |/ / /_/ / /  / ,< (__  ) 
-\__,_/_/   \__/   \____/_/    /_/ /_/\___/\__/ |__/|__/\____/_/  /_/|_/____/  
-                                                                                         
-  
-                                _                
-   ______________ _____  ____  (_)___  ____ _    
-  / ___/ ___/ __ `/ __ \/ __ \/ / __ \/ __ `/    
- (__  ) /__/ /_/ / / / / / / / / / / / /_/ / _ _ 
-/____/\___/\__,_/_/ /_/_/ /_/_/_/ /_/\__, (_|_|_)
-                                    /____/       
-  
-  
+   loading_text = '''                                                                                         
+  ██████  ▄████▄   ▄▄▄       ███▄    █  ███▄    █  ██▓ ███▄    █   ▄████                
+▒██    ▒ ▒██▀ ▀█  ▒████▄     ██ ▀█   █  ██ ▀█   █ ▓██▒ ██ ▀█   █  ██▒ ▀█▒               
+░ ▓██▄   ▒▓█    ▄ ▒██  ▀█▄  ▓██  ▀█ ██▒▓██  ▀█ ██▒▒██▒▓██  ▀█ ██▒▒██░▄▄▄░               
+  ▒   ██▒▒▓▓▄ ▄██▒░██▄▄▄▄██ ▓██▒  ▐▌██▒▓██▒  ▐▌██▒░██░▓██▒  ▐▌██▒░▓█  ██▓               
+▒██████▒▒▒ ▓███▀ ░ ▓█   ▓██▒▒██░   ▓██░▒██░   ▓██░░██░▒██░   ▓██░░▒▓███▀▒ ██▓  ██▓  ██▓ 
+▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░ ▒▒   ▓▒█░░ ▒░   ▒ ▒ ░ ▒░   ▒ ▒ ░▓  ░ ▒░   ▒ ▒  ░▒   ▒  ▒▓▒  ▒▓▒  ▒▓▒ 
+░ ░▒  ░ ░  ░  ▒     ▒   ▒▒ ░░ ░░   ░ ▒░░ ░░   ░ ▒░ ▒ ░░ ░░   ░ ▒░  ░   ░  ░▒   ░▒   ░▒  
+░  ░  ░  ░          ░   ▒      ░   ░ ░    ░   ░ ░  ▒ ░   ░   ░ ░ ░ ░   ░  ░    ░    ░   
+      ░  ░ ░            ░  ░         ░          ░  ░           ░       ░   ░    ░    ░  
+         ░                                                                 ░    ░    ░  
    '''  
    for i, line in enumerate(loading_text.splitlines()):  
       if i % 2 == 0:  
-        print(Fore.BLUE + line)  # Blue for even lines  
+        print(Fore.RED + line)  # Blue for even lines  
       else:  
-        print(Fore.WHITE + line)  # White for odd lines  
+        print(Fore.LIGHTRED_EX + line)  # White for odd lines  
       time.sleep(0.1)  # Short delay (0.1 seconds per line)  
-   print(Fore.BLUE + """Running Scan... Connection Completed Waiting For Results... """)  
+   print(Fore.CYAN + """Running Scan... Connection Completed Waiting For Results... """)  
   
 # Function to show the main menu logo with blue and white mix  
 def show_main_menu_logo():  
    logo_text = r'''  
-    ____        _     __         
-   / __ \____ _(_)___/ /__  _____
-  / /_/ / __ `/ / __  / _ \/ ___/
- / _, _/ /_/ / / /_/ /  __/ /    
-/_/ |_|\__,_/_/\__,_/\___/_/     
-                                                                                                             
+   
+ ███▄    █ ▓█████▄▄▄█████▓    ██░ ██  █    ██  ███▄    █ ▄▄▄█████▓
+ ██ ▀█   █ ▓█   ▀▓  ██▒ ▓▒   ▓██░ ██▒ ██  ▓██▒ ██ ▀█   █ ▓  ██▒ ▓▒
+▓██  ▀█ ██▒▒███  ▒ ▓██░ ▒░   ▒██▀▀██░▓██  ▒██░▓██  ▀█ ██▒▒ ▓██░ ▒░
+▓██▒  ▐▌██▒▒▓█  ▄░ ▓██▓ ░    ░▓█ ░██ ▓▓█  ░██░▓██▒  ▐▌██▒░ ▓██▓ ░ 
+▒██░   ▓██░░▒████▒ ▒██▒ ░    ░▓█▒░██▓▒▒█████▓ ▒██░   ▓██░  ▒██▒ ░ 
+░ ▒░   ▒ ▒ ░░ ▒░ ░ ▒ ░░       ▒ ░░▒░▒░▒▓▒ ▒ ▒ ░ ▒░   ▒ ▒   ▒ ░░   
+░ ░░   ░ ▒░ ░ ░  ░   ░        ▒ ░▒░ ░░░▒░ ░ ░ ░ ░░   ░ ▒░    ░    
+   ░   ░ ░    ░    ░          ░  ░░ ░ ░░░ ░ ░    ░   ░ ░   ░      
+         ░    ░  ░            ░  ░  ░   ░              ░          
+                                                                                                                                                                              
    '''  
    clear_screen()  
    for i, line in enumerate(logo_text.splitlines()):  
       if i % 2 == 0:  
-        print(Fore.BLUE + line)  # Blue for even lines  
+        print(Fore.RED + line)  # Blue for even lines  
       else:  
-        print(Fore.LIGHTWHITE_EX + line)  # White for odd lines  
-      time.sleep(0.1)  # Medium delay (0.3 seconds per line)  
+        print(Fore.LIGHTRED_EX + line)  # White for odd lines  
+      time.sleep(0.3)  # Medium delay (0.3 seconds per line)  
   
 # Function to run a scan with a given command  
 def run_scan(command, ip=None):  
@@ -92,7 +92,7 @@ def run_scan(command, ip=None):
       fast_loading_screen()  
       # Check if the command is not empty or None  
       if command:  
-        print(Fore.YELLOW + f"Running command: {command}")  
+        print(Fore.LIGHTCYAN_EX + f"Running command: {command}")  
         # Run the scan in a subprocess  
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  
         stdout, stderr = process.communicate()  
@@ -103,9 +103,9 @@ def run_scan(command, ip=None):
            print(Fore.BLUE + "Scan Completed Successfully.")  
            print(output)  
            # Save the packet data to a file  
-           save_results = input(Fore.BLUE + "Would you like to save the results of the scan and the IP? (yes/no): ").strip().lower()  
+           save_results = input(Fore.YELLOW + "Would you like to save the results of the scan and the IP? (yes/no): ").strip().lower()  
            if save_results == "yes":  
-              file_name = input(Fore.BLUE + "Enter a file name to save results (e.g., results.txt): ").strip()  
+              file_name = input(Fore.LIGHTWHITE_EX + "Enter a file name to save results (e.g., results.txt): ").strip()  
               with open(file_name, "a") as file:  
                 file.write(f"IP: {ip}\n{output}\n\n")  
               print(Fore.LIGHTGREEN_EX + f"Results saved to '{file_name}'.")  
@@ -168,7 +168,7 @@ def scan_ip_0_24():
       return  
    # Update the command to scan in CIDR format 0/24  
    for ip in ips:  
-      print(Fore.BLUE + f"Running {ip} with 0/24...")  
+      print(Fore.LIGHTCYAN_EX + f"Running {ip} with 0/24...")  
       full_command = f"nmap -T4 -n -vv {ip}/24"  
       run_scan(full_command, ip)  
   
@@ -311,22 +311,30 @@ def normal_nmap_scan():
 def exiting_loading_screen():  
    clear_screen()  
    loading_text = '''  
-  ___          ___          
- | _ )_  _ ___| _ )_  _ ___ 
- | _ \ || / -_) _ \ || / -_)
- |___/\_, \___|___/\_, \___|
-      |__/         |__/     
+                       
+   
+ ▄▄▄▄    █    ██  ▄▄▄▄   ▓█████▓██   ██▓▓█████ 
+▓█████▄  ██  ▓██▒▓█████▄ ▓█   ▀ ▒██  ██▒▓█   ▀ 
+▒██▒ ▄██▓██  ▒██░▒██▒ ▄██▒███    ▒██ ██░▒███   
+▒██░█▀  ▓▓█  ░██░▒██░█▀  ▒▓█  ▄  ░ ▐██▓░▒▓█  ▄ 
+░▓█  ▀█▓▒▒█████▓ ░▓█  ▀█▓░▒████▒ ░ ██▒▓░░▒████▒
+░▒▓███▀▒░▒▓▒ ▒ ▒ ░▒▓███▀▒░░ ▒░ ░  ██▒▒▒ ░░ ▒░ ░
+▒░▒   ░ ░░▒░ ░ ░ ▒░▒   ░  ░ ░  ░▓██ ░▒░  ░ ░  ░
+ ░    ░  ░░░ ░ ░  ░    ░    ░   ▒ ▒ ░░     ░   
+ ░         ░      ░         ░  ░░ ░        ░  ░
+      ░                ░        ░ ░            
+   
    '''  
    for i, line in enumerate(loading_text.splitlines()):  
-      if i % 5 == 0:  
-        print(Fore.BLUE + line)  # Blue for even lines  
+      if i % 4 == 0:  
+        print(Fore.RED + line)  # Blue for even lines  
       else:  
-        print(Fore.WHITE + line)  # White for odd lines  
+        print(Fore.LIGHTRED_EX + line)  # White for odd lines  
       time.sleep(0.1)  # Short delay (0.1 seconds per line)  
    # Display a final "Exiting..." message with a blue background and white text  
    print(Fore.BLUE + Fore.WHITE + "\n")  
    time.sleep(1)  # Wait for a second before program exit  
-   print(Fore.LIGHTCYAN_EX + "Credits! biskit")  
+   print(Fore.YELLOW + "Credits! biskit")  
    # Final message  
    sys.exit()  # Exit the program  
   
@@ -371,7 +379,7 @@ def sslscan_scan():
            print(Fore.BLUE + "SSLScan Completed Successfully.")  
            print(output)  
            # Save SSL scan results to a file  
-           file_name = input(Fore.BLUE + "Enter file name to save the results: ").strip()  
+           file_name = input(Fore.LIGHTWHITE_EX + "Enter file name to save the results: ").strip()  
            with open(file_name, "a") as file:  
               file.write(f"IP: {ip}\n{output}\n\n")  
            print(Fore.BLUE + f"Results saved to '{file_name}'.")  
@@ -415,7 +423,7 @@ def update_script():
       url = "https://raw.githubusercontent.com/biskit069/raider/refs/heads/main/raider.py"  
       response = requests.get(url)  
       if response.status_code == 200:  
-        confirm = input("Are you sure you want to update the script? (yes/no): ")  
+        confirm = input("Update (yes/no): ")  
         if confirm.lower() == "yes":  
            with open(__file__, "w") as file:  
               file.write(response.text)  
@@ -548,7 +556,7 @@ def routersploit_scan():
            print("4. View all Routersploit commands (-h)")  
            print("5. View Network Exploits")  
            print("99. Return to main menu")  
-           choice = input(Fore.BLUE + "\nEnter your choice: ").strip()  
+           choice = input(Fore.WHITE + "\nEnter your choice: ").strip()  
            if choice == '1':  
               command = f"routersploit scan {ip}"  
               print(Fore.BLUE + f"Running {command}...")  
@@ -648,22 +656,22 @@ def main_menu():
       show_main_menu_logo()  
       print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 raider.py")
       print("Manual Scan is Broken fixing later...")  
-      print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")  
-      print("1. Automatic Scan")  
-      print("2. Automatic Scan (No DNS)")  
-      print("3. Automatic Stealth Scan")  
-      print("4. Scan Multiple IP Addresses")  
-      print("5. Show All Nmap Commands")  
-      print("6. Show OS Scan Commands")  
-      print("7. Show NSE Script Commands")  
-      print("8. Show Firewall Scan Commands")  
-      print("9. Manual Nmap Scan")  
-      print("10. SSLScan")  
-      print("11. Routersploit")  
-      print("12. Metasploit")  
-      print("13. Update Script")  
-      print("14. Exit")  
-      choice = input(Fore.LIGHTCYAN_EX + "\nEnter your choice: ").strip()  
+      print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")  
+      print(Fore.LIGHTWHITE_EX+"1. Automatic Scan")  
+      print(Fore.LIGHTWHITE_EX+"2. Automatic Scan (No DNS)")  
+      print(Fore.LIGHTWHITE_EX+"3. Automatic Stealth Scan")  
+      print(Fore.LIGHTWHITE_EX+"4. Scan Multiple IP Addresses")  
+      print(Fore.LIGHTWHITE_EX+"5. Show All Nmap Commands")  
+      print(Fore.LIGHTWHITE_EX+"6. Show OS Scan Commands")  
+      print(Fore.LIGHTWHITE_EX+"7. Show NSE Script Commands")  
+      print(Fore.LIGHTWHITE_EX+"8. Show Firewall Scan Commands")  
+      print(Fore.LIGHTWHITE_EX+"9. Manual Nmap Scan")  
+      print(Fore.LIGHTWHITE_EX+"10. SSLScan")  
+      print(Fore.LIGHTWHITE_EX+"11. Routersploit")  
+      print(Fore.LIGHTWHITE_EX+"12. Metasploit")  
+      print(Fore.LIGHTWHITE_EX+"13. Update Script")  
+      print(Fore.LIGHTCYAN_EX+"14. Exit")  
+      choice = input(Fore.RED + "\nEnter your choice: ").strip()  
       if choice == '1':  
         automatic_scan()  
       elif choice == '2':  
