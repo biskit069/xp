@@ -509,7 +509,8 @@ def metasploit_scan():
                 "44": "exploit/unix/ftp/vsftpd_234_backdoor",  
                 "55": "exploit/multi/http/struts2_code_exec",  
                 "66": "exploit/multi/http/jboss_deployment_scanner"  
-              }  
+                 "77" "windows/smb/ms17_010_eternalblue",
+              }
               for key, value in exploits.items():  
                 print(f"{key}: {value}")  
               exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()  
