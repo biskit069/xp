@@ -459,7 +459,7 @@ def metasploit_scan():
            print("99. Return to main menu")
            choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
            if choice == '1':
-              command = f"msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS {ip}; run'"
+              command = f"msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS {ip}; run RPORTS 4444'"
               print(Fore.BLUE + f"Running {command}...")
               process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
               stdout, stderr = process.communicate()
@@ -470,7 +470,7 @@ def metasploit_scan():
                 print(Fore.BLUE + "Metasploit Completed Successfully.")
                 print(output)
            elif choice == '2':
-              command = f"msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOSTS {ip}; run'"
+              command = f"msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOSTS {ip}; run RPORTS 4444'"
               print(Fore.BLUE + f"Running {command}...")
               process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
               stdout, stderr = process.communicate()
@@ -656,7 +656,7 @@ def routersploit_scan():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 raider.py, root to update script")
+      print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 raider.py")
       print("Manual Scan is Broken fixing later...")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
       print(Fore.LIGHTWHITE_EX+"1. Automatic Scan")
