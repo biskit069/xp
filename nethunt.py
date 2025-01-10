@@ -523,13 +523,25 @@ def metasploit_scan():
                     "55": "exploit/multi/http/struts2_code_exec",
                     "66": "exploit/multi/http/jboss_deployment_scanner",
                     "77": "exploit/windows/smb/ms17_010_eternalblue",
-                    "108": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/tomcat_mgr_upload",
-                    "110": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/dcerpc/ms03_026_dcom",
-                    "112": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/smb/ms08_067_netapi",
-                    "114": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/unix/ftp/vsftpd_234_backdoor",
-                    "116": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/struts2_code_exec",
-                    "118": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/jboss_deployment_scanner",
-                    "120": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/smb/ms17_010_eternalblue"
+                    "108": "exploit/multi/http/tomcat_mgr_upload set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "110": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "112": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "114": "exploit/unix/ftp/vsftpd_234_backdoor set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "116": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "118": "exploit/multi/http/jboss_deployment_scanner set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "120": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "122": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "130": "exploit/unix/ftp/vsftpd_234_backdoor set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "140": "exploit/multi/http/jboss_deployment_scanner set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "150": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "160": "exploit/multi/http/tomcat_mgr_upload set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "170": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "180": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "190": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "200": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "210": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                }
+
                 }
                 for key, value in exploits.items():
                     print(f"{key}: {value}")
@@ -668,6 +680,7 @@ def routersploit_scan():
                 "104": "exploits/asus/rt_ac66u/rt_ac66u_auth_bypass",
                 "105": "exploits/belkin/f9k1105/f9k1105_auth_bypass",
                 "106": "exploits/belkin/f9k1115/f9k1115_auth_bypass",
+                
               }
               for key, value in exploits.items():
                 print(f"{key}: {value}")
