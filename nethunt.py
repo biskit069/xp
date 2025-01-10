@@ -482,6 +482,9 @@ from colorama import Fore
 import os
 from colorama import Fore
 
+import os
+from colorama import Fore
+
 def metasploit_scan():
     try:
         while True:
@@ -579,8 +582,9 @@ def metasploit_scan():
                     print(Fore.RED + "Error: Missing RHOSTS or LHOST in the command. Aborting...")
                     continue  # Skip this iteration if missing required parameters
 
-                # Directly run the msfconsole with the command
+                # Ensure correct separation of commands
                 full_command = f"msfconsole -q -x \"{metasploit_commands}\""
+                print(Fore.BLUE + f"Executing command: {full_command}")  # Debug print to verify command
                 os.system(full_command)
                 break  # Exit the loop after launching Metasploit
 
