@@ -190,6 +190,65 @@ def scan_ip_0_24():
       print(Fore.LIGHTCYAN_EX + f"Running {ip} with 0/24...")
       full_command = f"nmap -T4 -n -vv {ip}/24"
       run_scan(full_command, ip)
+init(autoreset=True)
+def run_subfinder():
+    """Function to integrate Subfinder for domain enumeration."""
+    try:
+        while True:
+            print(Fore.BLUE + "\nSubfinder Menu:")
+            print("1. Run Subfinder on a domain")
+            print("2. View Subfinder help")
+            print("99. Return to Main Menu")
+
+            choice = input(Fore.CYAN + "\nEnter your choice: ").strip()
+
+            if choice == '1':
+                domain = input(Fore.YELLOW + "\nEnter the domain to enumerate: ").strip()
+                if domain:
+                    command = f"subfinder -d {domain}"
+                    print(Fore.GREEN + f"Running command: {command}")
+                    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    stdout, stderr = process.communicate()
+
+                    if stderr:
+                        print(Fore.RED + "Error during Subfinder execution:", stderr.decode())
+                    else:
+                        output = stdout.decode()
+                        print(Fore.LIGHTCYAN_EX + "\nSubfinder Results:")
+                        print(output)
+
+                        save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
+                        if save_results == 'yes':
+                            file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
+                            with open(file_name, "w") as file:
+                                file.write(output)
+                            print(Fore.GREEN + f"Results saved to '{file_name}'.")
+                        elif save_results == 'no':
+                            print(Fore.WHITE + "Results not saved.")
+                        else:
+                            print(Fore.RED + "Invalid choice. Results not saved.")
+                else:
+                    print(Fore.RED + "Invalid domain. Please try again.")
+
+            elif choice == '2':
+                command = "subfinder -h"
+                print(Fore.GREEN + "Displaying Subfinder help:")
+                process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = process.communicate()
+                if stderr:
+                    print(Fore.RED + "Error displaying help:", stderr.decode())
+                else:
+                    print(stdout.decode())
+
+            elif choice == '99':
+                print(Fore.CYAN + "Returning to Main Menu...")
+                break
+
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
+
+    except Exception as e:
+        print(Fore.RED + f"Error running Subfinder: {e}")
 
 # Function to show all Nmap commands
 def show_all_nmap_commands():
@@ -756,7 +815,9 @@ def main_menu():
         metasploit_scan()
       elif choice == '6':
         update_script()
-      elif choice == '99':
+      elif choice == '7':
+       run_subfinder()
+      elif choice == '99': 
         exiting_loading_screen()
       else:
         print(Fore.RED + "Invalid choice. Please try again.")
