@@ -572,6 +572,14 @@ def metasploit_scan():
                     else:
                         print(Fore.RED + "Invalid choice. Please select either 'LHOST' or 'RHOST'.")
                         continue  # Ask again if invalid input
+
+                    # Now, prompt to set the corresponding port based on the host type
+                    if host_type == 'rhost':
+                        rport = input(Fore.BLUE + "Enter the RPORT: ").strip()
+                        metasploit_commands = metasploit_commands.replace(f"set RPORT {port}", f"set RPORT {rport}")
+                    elif host_type == 'lhost':
+                        lport = input(Fore.BLUE + "Enter the LPORT: ").strip()
+                        metasploit_commands = metasploit_commands.replace(f"set LPORT {port}", f"set LPORT {lport}")
                 else:
                     print(Fore.RED + "Invalid exploit choice.")
                     continue
