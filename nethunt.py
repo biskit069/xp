@@ -790,6 +790,98 @@ def get_port_number():
             return port
         else:
             print(Fore.RED + "Invalid port number. Please enter a number between 1 and 65535.")
+import subprocess
+from colorama import Fore
+
+def run_subfinder():
+    """Function to launch Subfinder directly with a manually entered command."""
+    try:
+        # Prompt the user to manually enter the Subfinder command
+        print(Fore.YELLOW + "\nEnter your custom Subfinder command (e.g., subfinder -d example.com -t 50 -timeout 3):")
+        command = input(Fore.CYAN + "Enter command: ").strip()
+
+        if command:
+            print(Fore.GREEN + f"Running command: {command}")
+            try:
+                # Launch Subfinder with the manually entered command
+                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+                # Check if Subfinder executed successfully
+                if result.returncode == 0:
+                    print(Fore.GREEN + "\nSubfinder completed successfully.")
+                    output = result.stdout
+
+                    # Show the results from Subfinder
+                    print(Fore.LIGHTCYAN_EX + "\nSubfinder Results:")
+                    print(output)
+
+                    # Ask if the user wants to save the results
+                    save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
+                    if save_results == 'yes':
+                        file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
+                        with open(file_name, "w") as file:
+                            file.write(output)
+                        print(Fore.GREEN + f"Results saved to '{file_name}'.")
+                    elif save_results == 'no':
+                        print(Fore.WHITE + "Results not saved.")
+                    else:
+                        print(Fore.RED + "Invalid choice. Results not saved.")
+                else:
+                    print(Fore.RED + "\nSubfinder did not complete successfully.")
+                    print(Fore.YELLOW + f"Error: {result.stderr}")
+
+            except Exception as e:
+                print(Fore.RED + f"Error running Subfinder: {e}")
+        else:
+            print(Fore.RED + "Invalid command. Please try again.")
+
+    except Exception as e:
+        print(Fore.RED + f"Error launching Subfinder: {e}")
+
+def run_magicrecon():
+    """Function to launch MagicRecon directly with a manually entered command."""
+    try:
+        # Prompt the user to manually enter the MagicRecon command
+        print(Fore.YELLOW + "\nEnter your custom MagicRecon command (e.g., magicrecon -d example.com):")
+        command = input(Fore.CYAN + "Enter command: ").strip()
+
+        if command:
+            print(Fore.GREEN + f"Running command: {command}")
+            try:
+                # Launch MagicRecon with the manually entered command
+                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+                # Check if MagicRecon executed successfully
+                if result.returncode == 0:
+                    print(Fore.GREEN + "\nMagicRecon completed successfully.")
+                    output = result.stdout
+
+                    # Show the results from MagicRecon
+                    print(Fore.LIGHTCYAN_EX + "\nMagicRecon Results:")
+                    print(output)
+
+                    # Ask if the user wants to save the results
+                    save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
+                    if save_results == 'yes':
+                        file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
+                        with open(file_name, "w") as file:
+                            file.write(output)
+                        print(Fore.GREEN + f"Results saved to '{file_name}'.")
+                    elif save_results == 'no':
+                        print(Fore.WHITE + "Results not saved.")
+                    else:
+                        print(Fore.RED + "Invalid choice. Results not saved.")
+                else:
+                    print(Fore.RED + "\nMagicRecon did not complete successfully.")
+                    print(Fore.YELLOW + f"Error: {result.stderr}")
+
+            except Exception as e:
+                print(Fore.RED + f"Error running MagicRecon: {e}")
+        else:
+            print(Fore.RED + "Invalid command. Please try again.")
+
+    except Exception as e:
+        print(Fore.RED + f"Error launching MagicRecon: {e}")
 
 
 # Main menu function with options
@@ -804,8 +896,9 @@ def main_menu():
       print(Fore.LIGHTWHITE_EX+"3. sslscan")
       print(Fore.LIGHTWHITE_EX+"4. Routersploit")
       print(Fore.LIGHTWHITE_EX+"5. Metasploit")
-      print(Fore.LIGHTWHITE_EX+"7.  subfinder")
+      print(Fore.LIGHTWHITE_EX+"7. subfinder")
       print(Fore.LIGHTWHITE_EX+"8. Update Script")
+      print(Fore.LIGHTRED_EX  +"8. MagicRecon")
       print(Fore.LIGHTCYAN_EX+"99. Exit")
       choice = input(Fore.RED + "\nEnter your choice: ").strip()
       if choice == '2':
@@ -822,7 +915,9 @@ def main_menu():
         update_script()
       elif choice == '7':
        run_subfinder()
-      elif choice == '99': 
+      elif choice == '8': 
+        run_magicrecon()
+      elif choice == '99':
         exiting_loading_screen()
       else:
         print(Fore.RED + "Invalid choice. Please try again.")
