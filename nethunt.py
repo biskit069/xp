@@ -479,6 +479,9 @@ from colorama import Fore
 import os
 from colorama import Fore
 
+import os
+from colorama import Fore
+
 def metasploit_scan():
     try:
         while True:
@@ -583,6 +586,7 @@ def metasploit_scan():
 
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
+
 
 
 
