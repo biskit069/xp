@@ -488,6 +488,12 @@ from colorama import Fore
 import os
 from colorama import Fore
 
+import os
+from colorama import Fore
+
+import os
+from colorama import Fore
+
 def metasploit_scan():
     try:
         while True:
@@ -508,7 +514,7 @@ def metasploit_scan():
                     print(Fore.RED + "No IP address provided. Returning to the main menu...")
                     return
 
-                metasploit_commands = f"use auxiliary/scanner/http/http_version\nset RHOSTS {ip}\nrun"
+                metasploit_commands = f"use auxiliary/scanner/http/http_version\nset RHOSTS {ip} \nrun"
             elif choice == '2':  # Exploit a vulnerability
                 ip = get_ip_address()  # Prompt for IP address
                 if not ip:
@@ -554,15 +560,15 @@ def metasploit_scan():
                     host_type = input(Fore.BLUE + "Do you want to use LHOST or RHOST? ").strip().lower()
 
                     if host_type == 'rhost':
-                        metasploit_commands = f"use {exploits[exploit_choice]}\nset RHOSTS {ip}\n"
+                        metasploit_commands = f"use {exploits[exploit_choice]} \nset RHOSTS {ip} \n"
                         # Prompt for RPORT only if using RHOST
                         rport = input(Fore.BLUE + "Enter the RPORT: ").strip()
-                        metasploit_commands += f"set RPORT {rport}\nrun"
+                        metasploit_commands += f"set RPORT {rport} \nrun"
                     elif host_type == 'lhost':
-                        metasploit_commands = f"use {exploits[exploit_choice]}\nset LHOST {ip}\n"
+                        metasploit_commands = f"use {exploits[exploit_choice]} \nset LHOST {ip} \n"
                         # Prompt for LPORT only if using LHOST
                         lport = input(Fore.BLUE + "Enter the LPORT: ").strip()
-                        metasploit_commands += f"set LPORT {lport}\nrun"
+                        metasploit_commands += f"set LPORT {lport} \nrun"
                     else:
                         print(Fore.RED + "Invalid choice. Please select either 'LHOST' or 'RHOST'.")
                         continue  # Ask again if invalid input
@@ -580,11 +586,6 @@ def metasploit_scan():
             if metasploit_commands:
                 print(Fore.BLUE + "Launching Metasploit...")
 
-                # Check if the necessary parameters are set
-                if 'RHOSTS' not in metasploit_commands and 'LHOST' not in metasploit_commands:
-                    print(Fore.RED + "Error: Missing RHOSTS or LHOST in the command. Aborting...")
-                    continue  # Skip this iteration if missing required parameters
-
                 # Ensure correct separation of commands (with a space after 'set' commands)
                 full_command = f"msfconsole -q -x \"{metasploit_commands}\""
                 print(Fore.BLUE + f"Executing command: {full_command}")  # Debug print to verify command
@@ -593,6 +594,7 @@ def metasploit_scan():
 
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
+
 
 
 
