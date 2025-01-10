@@ -800,7 +800,8 @@ def main_menu():
       print(Fore.LIGHTWHITE_EX+"3. sslscan")
       print(Fore.LIGHTWHITE_EX+"4. Routersploit")
       print(Fore.LIGHTWHITE_EX+"5. Metasploit")
-      print(Fore.LIGHTWHITE_EX+"6. Update Script")
+      print(Fore.LIGHTWHITE_EX+"7  subfinder")
+      print(Fore.LIGHTWHITE_EX+"8. Update Script")
       print(Fore.LIGHTCYAN_EX+"99. Exit")
       choice = input(Fore.RED + "\nEnter your choice: ").strip()
       if choice == '2':
