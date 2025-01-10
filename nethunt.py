@@ -346,6 +346,9 @@ from colorama import Fore
 import subprocess
 from colorama import Fore
 
+import subprocess
+from colorama import Fore
+
 def sslscan_scan():
     global scanning_in_progress
     try:
@@ -355,7 +358,13 @@ def sslscan_scan():
         print("3. SSL Certificate Details")
         print("4. Manual SSLScan")
         print("5. Vuln Scan")
+        print("99. Return to Main Menu")  # Option to return to the main menu
         choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
+
+        # Return to the main menu if the user selects option 99
+        if choice == '99':
+            print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
+            return  # Exits the function and goes back to the main menu
 
         ip = ""  # Default to empty, we'll ask for IP only when necessary
 
@@ -437,7 +446,7 @@ def show_sslscan_commands():
         "sslscan --tls1_2 {ip} Check TLS 1.2 Support"
     ]
     show_submenu(ssl_commands)  # Assuming show_submenu() is defined elsewhere
-# Function to update the script from GitHub
+
 def update_script():
    try:
       print("Updated Restart Script")
@@ -661,7 +670,7 @@ def main_menu():
    while True:
       show_main_menu_logo()
       print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 nethunt.py & Updates")
-      print(Fore.LIGHTGREEN_EX+"alot broken accept nmap and sslscan only manual scan is broken for sslscan finish comming soon!...")
+      print(Fore.LIGHTGREEN_EX+"alot more comming soon!!! ingore routersploit for now i have not tested to see if works or not, will fix soon!!!")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
       print(Fore.LIGHTWHITE_EX+"1. nmap")
       print(Fore.LIGHTWHITE_EX+"2. Show All Nmap Commands")
