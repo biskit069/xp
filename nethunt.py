@@ -347,91 +347,96 @@ import subprocess
 from colorama import Fore
 
 def sslscan_scan():
-   global scanning_in_progress
-   ip = get_ip_address()  # Assuming this is your method to get the IP address
-   if ip:
-      scanning_in_progress = True
-      try:
+    global scanning_in_progress
+    try:
         print(Fore.BLUE + "\nChoose an SSLScan command:")
         print("1. Basic SSL Scan")
         print("2. Full SSL Scan")
         print("3. SSL Certificate Details")
         print("4. Manual SSLScan")
         print("5. Vuln Scan")
-        # Added new option
         choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
+
+        ip = ""  # Default to empty, we'll ask for IP only when necessary
+
+        # Only prompt for IP if needed
+        if choice in ['1', '2', '3', '5']:  # Basic, Full, Cert, and Vuln scans
+            ip = get_ip_address()  # Assuming this is your method to get the IP address
+            if not ip:
+                print(Fore.RED + "No IP address provided. Exiting SSLScan.")
+                return
 
         # Define the SSLScan command based on the user's choice
         if choice == '1':
-           command = f"sslscan {ip}"
+            command = f"sslscan {ip}"
         elif choice == '2':
-           command = f"sslscan --full {ip}"
+            command = f"sslscan --full {ip}"
         elif choice == '3':
-           command = f"sslscan --cert {ip}"
+            command = f"sslscan --cert {ip}"
         elif choice == '4':
-           # Handle manual input command
-           command = input(Fore.BLUE + "Enter your SSLScan command: ").strip()
-           if not command:
-               print(Fore.RED + "No command entered. Returning to menu.")
-               return  # Exit if no command is entered
-           print(Fore.GREEN + f"Running custom SSLScan command: {command}")  # Debug print
+            print(Fore.YELLOW + "\nExample of Manual SSLScan command:")
+            print(Fore.YELLOW + "sslscan --bugs 192.168.1.1")
+            command = input(Fore.BLUE + "Enter your SSLScan command: ").strip()
+            if not command:
+                print(Fore.RED + "No command entered. Returning to menu.")
+                return  # Exit if no command is entered
+            print(Fore.GREEN + f"Running custom SSLScan command: {command}")  # Debug print
         elif choice == '5':
-           command = f"sslscan --bugs {ip}"  # New command for Vuln Scan
+            command = f"sslscan --bugs {ip}"  # New command for Vuln Scan
         else:
-           print(Fore.RED + "Invalid choice. Exiting SSLScan.")
-           return
+            print(Fore.RED + "Invalid choice. Exiting SSLScan.")
+            return
 
-        # Run the selected SSLScan command
-        print(Fore.BLUE + f"Running {command}...")
+        # Debugging: print the command before execution
+        print(Fore.YELLOW + f"Debug: Command to run: {command}")
+
+        # Run the selected SSLScan command quickly by using Popen directly
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
 
+        # Check if there's an error
         if stderr:
-           print(Fore.RED + "Error during SSLScan:", stderr.decode())
+            print(Fore.RED + "Error during SSLScan:", stderr.decode())
         else:
-           output = stdout.decode()
-           print(Fore.BLUE + "SSLScan Completed Successfully.")
-           print(output)
-           
-           # Save SSL scan results to a file
-           file_name = input(Fore.LIGHTWHITE_EX + "Enter file name to save the results: ").strip()
-           with open(file_name, "a") as file:
-              file.write(f"IP: {ip}\n{output}\n\n")
-           print(Fore.BLUE + f"Results saved to '{file_name}'.")
-      except Exception as e:
+            output = stdout.decode()
+            if output:  # If there's output, print it
+                print(Fore.BLUE + "SSLScan Completed Successfully.")
+                print(output)
+            else:
+                print(Fore.RED + "No output received from SSLScan.")
+
+            # Prompt if the user wants to save the results
+            save_choice = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
+            if save_choice == 'yes':
+                file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
+                if file_name:  # Ensure a valid file name is provided
+                    with open(file_name, "a") as file:
+                        file.write(f"IP: {ip}\n{output}\n\n")
+                    print(Fore.BLUE + f"Results saved to '{file_name}'.")
+                else:
+                    print(Fore.RED + "Invalid file name. Results not saved.")
+            elif save_choice == 'no':
+                print(Fore.GREEN + "Returning to the main menu...")
+            else:
+                print(Fore.RED + "Invalid choice. Returning to the main menu.")
+                return  # Go back to the main menu
+    except Exception as e:
         print(Fore.RED + f"Error running SSLScan: {e}")
-      finally:
+    finally:
         scanning_in_progress = False
         clear_screen()  # Assuming clear_screen() is defined elsewhere
 
 # Function to show SSLScan commands list (option 66)
 def show_sslscan_commands():
-   clear_screen()
-   ssl_commands = [
-      "SSLScan Commands:",
-      "sslscan {ip} Basic SSL Scan",
-      "sslscan --full {ip} Full SSL Scan",
-      "sslscan --cert {ip} SSL Certificate Details",
-      "sslscan --tls1_2 {ip} Check TLS 1.2 Support"
-   ]
-   show_submenu(ssl_commands)  # Assuming show_submenu() is defined elsewhere
-
-
-def show_all_metasploit_commands():
-   clear_screen()
-   commands = [
-      "All Metasploit Commands:",
-      "msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS {ip} run RPORTS 4444'",
-      "msfconsole -q -x 'use exploit/multi/http/tomcat_mgr_upload; set RHOSTS {ip} run RPORTS 4444'",
-      "msfconsole -h",
-      "msfconsole -q -x 'use auxiliary/scanner/http/ssl; set RHOSTS {ip} run RPORTS 4444'",
-      "msfconsole -q -x 'use auxiliary/scanner/http/http_version; set RHOSTS {ip} run RPORTS 4444'",
-      "msfconsole -q -x 'use exploit/windows/dcerpc/ms03_026_dcom; set RHOSTS {ip} run RPORTS 4444'",
-      "msfconsole -q -x 'use exploit/windows/smb/ms08_067_netapi; set RHOSTS {ip} run RPORTS 4444 '",
-      "msfconsole -q -x 'use exploit/unix/ftp/vsftpd_234_backdoor; set RHOSTS {ip} run RPORTS 4444'",
-   ]
-   show_submenu(commands)
-
+    clear_screen()
+    ssl_commands = [
+        "SSLScan Commands:",
+        "sslscan {ip} Basic SSL Scan",
+        "sslscan --full {ip} Full SSL Scan",
+        "sslscan --cert {ip} SSL Certificate Details",
+        "sslscan --tls1_2 {ip} Check TLS 1.2 Support"
+    ]
+    show_submenu(ssl_commands)  # Assuming show_submenu() is defined elsewhere
 # Function to update the script from GitHub
 def update_script():
    try:
