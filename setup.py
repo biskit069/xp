@@ -15,7 +15,7 @@ setup(
     description="network kit plus web tools",
     author="biskit",
     author_email="no email",  # Replace with your actual email
-    url="https://github.com/biskit069/xpSpoit",
+    url="https://github.com/biskit069/xp",
     packages=find_packages(),
     py_modules=["xp"],
     install_requires=requirements,
