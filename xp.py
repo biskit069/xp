@@ -281,7 +281,7 @@ if __name__ == "__main__":
 
 
 # Function to show all Nmap commands
-     def show_all_nmap_commands():
+def show_all_nmap_commands():
     clear_screen()
     commands = [
         "nmap 192.168.1.1 -sS TCP SYN port scan (Default)",
