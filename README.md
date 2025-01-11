@@ -4,5 +4,5 @@ How To install: sudo git clone https://github.com/biskit069/xp
 
 install setup file: sudo python3 setup.py
 
-![Description of the Screenshot](path/to/screenshot.png)
+[](screenshot.png)
 
