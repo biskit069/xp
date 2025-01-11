@@ -1,5 +1,3 @@
-network kit with web tools finished but unfinished at the same time more tools and more stuff to make this tool a really good tool coming soon!!!
-
 <img src="screenshot.png" alt="Main Menu Screenshot" width="600">
 
 
