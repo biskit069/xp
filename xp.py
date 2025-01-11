@@ -443,6 +443,11 @@ def exiting_loading_screen():
 # Function to run SSLScan on a given IP with command selection
 
 
+import subprocess
+from colorama import Fore
+
+scanning_in_progress = False
+
 def sslscan_scan():
     global scanning_in_progress
     try:
@@ -462,7 +467,7 @@ def sslscan_scan():
 
         ip = ""  # Default to empty, we'll ask for IP only when necessary
 
-        # Only prompt for IP if needed
+        # Only prompt for IP if needed (1, 2, 3, 5)
         if choice in ['1', '2', '3', '5']:  # Basic, Full, Cert, and Vuln scans
             ip = get_ip_address()  # Assuming this is your method to get the IP address
             if not ip:
@@ -523,23 +528,26 @@ def sslscan_scan():
             else:
                 print(Fore.RED + "Invalid choice. Returning to the main menu.")
                 return  # Go back to the main menu
+
     except Exception as e:
         print(Fore.RED + f"Error running SSLScan: {e}")
     finally:
         scanning_in_progress = False
         clear_screen()  # Assuming clear_screen() is defined elsewhere
 
-# Function to show SSLScan commands list (option 66)
-def show_sslscan_commands():
-    clear_screen()
-    ssl_commands = [
-        "SSLScan Commands:",
-        "sslscan {ip} Basic SSL Scan",
-        "sslscan --full {ip} Full SSL Scan",
-        "sslscan --cert {ip} SSL Certificate Details",
-        "sslscan --tls1_2 {ip} Check TLS 1.2 Support"
-    ]
-    show_submenu(ssl_commands)  # Assuming show_submenu() is defined elsewhere
+
+def get_ip_address():
+    # Function to get the IP address (you can replace this with your own method)
+    ip = input(Fore.BLUE + "Enter the IP address to scan: ").strip()
+    return ip
+
+
+# Ensure the clear_screen() method works as expected
+def clear_screen():
+    # This is just an example. Adjust according to your environment.
+    subprocess.call('clear' if os.name == 'posix' else 'cls', shell=True)
+
+
 
 def update_script():
    try:
