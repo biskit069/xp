@@ -14,22 +14,8 @@ import shutil
 # Initialize colorama
 init(autoreset=True)
 
-# Global flag for exit condition
-exit_program = False
-scanning_in_progress = False
-
-# Function to handle Ctrl+C gracefully
-def signal_handler(sig, frame):
-   global exit_program, scanning_in_progress
-   if scanning_in_progress:
-      print("\nScan aborted. Returning to the main menu...")
-      exit_program = False  # Allow return to main menu
-   else:
-      print("\nScan is not in progress.")
-   return
 
 # Register the signal handler
-signal.signal(signal.SIGINT, signal_handler)
 
 # Function to clear the screen (teleportation effect)
 def clear_screen():
@@ -37,26 +23,6 @@ def clear_screen():
       os.system("cls")
    else:
       os.system("clear")
-
-# ASCII loading screen with faster effect and blue/white color scheme
-def fast_loading_screen():
-   clear_screen()
-   loading_text = '''
-   
-                                                         .__                           
-  ______ ____ _____    ____   _______ __ __  ____   ____ |__| ____    ____             
- /  ___// ___\\__  \  /    \  \_  __ \  |  \/    \ /    \|  |/    \  / ___\            
- \___ \\  \___ / __ \|   |  \  |  | \/  |  /   |  \   |  \  |   |  \/ /_/  >           
-/____  >\___  >____  /___|  /  |__|  |____/|___|  /___|  /__|___|  /\___  / /\  /\  /\ 
-     \/     \/     \/     \/                    \/     \/        \//_____/  \/  \/  \/                                                                                                                              
-   '''
-   for i, line in enumerate(loading_text.splitlines()):
-      if i % 2 == 0:
-        print(Fore.WHITE + line)  # Blue for even lines
-      else:
-        print(Fore.LIGHTWHITE_EX + line)  # White for odd lines
-      time.sleep(0.1)  # Short delay (0.1 seconds per line)
-   print(Fore.CYAN + """Running Scan... Connection Completed Waiting For Results... """)
 
 # Function to show the main menu logo with blue and white mix
 def show_main_menu_logo():
@@ -73,117 +39,101 @@ ___  _________ /   _____/_____   ____ |__|/  |_
    clear_screen()
    for i, line in enumerate(logo_text.splitlines()):
       if i % 2 == 0:
-        print(Fore.RED+ line)  # Blue for even lines
+        print(Fore.LIGHTWHITE_EX+ line)  # Blue for even lines
       else:
-        print(Fore.LIGHTRED_EX + line)  # White for odd lines
+        print(Fore.LIGHTBLACK_EX + line)  # White for odd lines
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
 
+import subprocess
+import shutil
+import os
+from colorama import Fore
 
-def run_scan(command, ip=None):
-    global exit_program, scanning_in_progress
-    scanning_in_progress = True
+def run_nmap():
+    """Function to launch Nmap with a custom command."""
     try:
-        # Display the fast loading screen (this function needs to be defined elsewhere in your code)
-        fast_loading_screen()
-        
-        # Check if the command is not empty or None
-        if command:
-            print(Fore.LIGHTCYAN_EX + f"Running command: {command}")
-            
-            # Run the scan in a subprocess
-            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate()
-            
-            if stderr:
-                print(Fore.RED + "Error during scan:", stderr.decode())
-            else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Scan Completed Successfully.")
-                print(output)
-                
-                # Save the packet data to a file
-                save_results = input(Fore.YELLOW + "Would you like to save the results of the scan and the IP? (yes/no): ").strip().lower()
-                
-                if save_results == "yes":
-                    file_name = input(Fore.LIGHTWHITE_EX + "Enter a file name to save results (e.g., results.txt): ").strip()
+        print(Fore.LIGHTWHITE_EX + "\nChoose an Nmap option:")
+        print("1. Run Nmap")
+        print("99. Return to Main Menu")  # Option to return to the main menu
+        choice = input(Fore.LIGHTCYAN_EX + "\nEnter your choice: ").strip()
+
+        # Return to the main menu if the user selects option 99
+        if choice == '99':
+            print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
+            return  # Exits the function and goes back to the main menu
+
+        # Run Nmap with custom command if selected
+        if choice == '1':
+            print(Fore.LIGHTRED_EX + "\nEnter Command (Example: nmap 192.168.1.1 -vv -n):")
+            command = input(Fore.LIGHTMAGENTA_EX + "Enter command: ").strip()
+
+            if command:
+                print(Fore.GREEN + f"Running command: {command}")
+                try:
+                    # Ensure nmap is in the system path
+                    if not shutil.which("nmap"):
+                        print(Fore.RED + "Nmap is not installed or not found in the system path.")
+                        return
                     
-                    # Save the results in the file without root privileges
-                    with open(file_name, "a") as file:
-                        file.write(f"IP: {ip}\n{output}\n\n")
-                    print(Fore.LIGHTGREEN_EX + f"Results saved to '{file_name}'.")
-                
-                elif save_results == "no":
-                    print(Fore.WHITE + "Returning to the main menu...")
-                else:
-                    print(Fore.RED + "Invalid choice, returning to the main menu.")
-                
-                # Add a prompt to ensure the user sees the output
-                input(Fore.LIGHTRED_EX + "\nPress Enter to return to the main menu...")
-        
-        else:
-            print(Fore.RED + "Error: Invalid command!")
-    
-    except subprocess.CalledProcessError as e:
-        print(f"Error running scan: {e}")
-    
-    finally:
-        scanning_in_progress = False  # Clear the screen after the scan if user presses Enter
-        clear_screen()  # Ensure this function is defined elsewhere in your code
+                    # Launch Nmap with the manually entered command
+                    result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
+                    # Check if Nmap executed successfully
+                    if result.returncode == 0:
+                        print(Fore.GREEN + "\nNmap scan completed successfully.")
+                        output = result.stdout
 
-# Function to handle IP address input with exit option
+                        # Show the results from Nmap
+                        print(Fore.LIGHTCYAN_EX + "\nNmap Results:")
+                        print(output)
 
+                        # Ask if the user wants to save the results
+                        save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
+                        if save_results == 'yes':
+                            file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
+                            with open(file_name, "w") as file:
+                                file.write(output)
+                            print(Fore.GREEN + f"Results saved to '{file_name}'.")
+                        elif save_results == 'no':
+                            print(Fore.WHITE + "Results not saved.")
+                        else:
+                            print(Fore.RED + "Invalid choice. Results not saved.")
+                    else:
+                        print(Fore.RED + "\nNmap did not complete successfully.")
+                        print(Fore.YELLOW + f"Error: {result.stderr}")
 
-
-def get_ip_address():
-    """Run an Nmap scan based on the full Nmap command input by the user."""
-    try:
-        # Prompt the user to enter the full Nmap command (e.g., nmap 203.211.74.76 -vv -n)
-        command = input(Fore.CYAN + "Enter your Nmap command (e.g., nmap 192.168.1.1 -vv -n): ").strip()
-
-        if command:
-            print(Fore.GREEN + f"Running command: {command}\n")
-            
-            # Execute the Nmap command using subprocess
-            process = subprocess.Popen(
-                command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
-            )
-
-            # Capture the output and error
-            stdout, stderr = process.communicate()
-
-            if stderr:
-                print(Fore.RED + f"Error during Nmap scan: {stderr.strip()}")
+                except Exception as e:
+                    print(Fore.RED + f"Error running Nmap: {e}")
             else:
-                print(Fore.LIGHTCYAN_EX + "\nScan Results:")
-                print(stdout)  # Print the scan results directly to the screen
-
-                # Ask if the user wants to save the results
-                save_results = input(Fore.YELLOW + "\nWould you like to save the results to a file? (yes/no): ").strip().lower()
-                if save_results == 'yes':
-                    file_name = input(Fore.LIGHTWHITE_EX + "Enter the file name (e.g., scan_results.txt): ").strip()
-                    with open(file_name, "w") as file:
-                        file.write(stdout)  # Save the scan output to the file
-                    print(Fore.GREEN + f"Results saved to '{file_name}'.")
-                elif save_results == 'no':
-                    print(Fore.WHITE + "Results not saved.")
-                else:
-                    print(Fore.RED + "Invalid choice. Results not saved.")
-
-                # Prompt to return to the main menu after showing results
-                input(Fore.LIGHTRED_EX + "\nPress Enter to return to the main menu...")
-
-        else:
-            print(Fore.RED + "No command entered. Please try again.")
+                print(Fore.RED + "Invalid command. Please try again.")
 
     except Exception as e:
-        print(Fore.RED + f"Error running Nmap scan: {e}")
+        print(Fore.RED + f"Error launching Nmap: {e}")
 
-# Main function will not run automatically, you call it when needed
-if __name__ == "__main__":
-    pass  # Nothing will run automatically at startup
+def clear_screen():
+    """Clears the terminal screen."""
+    subprocess.call('clear' if os.name == 'posix' else 'cls', shell=True)
+
+def main_menu():
+    while True:
+        clear_screen()  # Clear the screen before showing the menu
+        print(Fore.WHITE + "\nNmap:")
+        print(Fore.GREEN + "1. Run Nmap")
+        print(Fore.RED + "99. Return to main menu")
+
+        option = input(Fore.CYAN + "\nEnter an option: ").strip()
+
+        if option == "1":
+            run_nmap()  # Launch Nmap directly when option 1 is selected
+        elif option == "99":
+            print(Fore.GREEN + "Exiting program...")
+            break
+        else:
+            print(Fore.RED + "Invalid option. Please try again.")
+
+# DO NOT call main_menu() automatically at the start of the script
 
 
 
@@ -191,48 +141,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-
-
-# Function for automatic scan with default command
-def automatic_scan():
-   ip = get_ip_address()
-   if ip:
-      # Simplified scan command to only include the --script vuln option
-      full_command = f"nmap --script vuln -n -sS {ip}"
-      run_scan(full_command, ip)
-
-# Function for automatic scan with DNS resolution disabled
-def automatic_scan_no_dns():
-   ip = get_ip_address()
-   if ip:
-      full_command = f"nmap -n -T4 {ip}"
-      run_scan(full_command, ip)
-
-# Function for automatic stealth scan
-def automatic_stealth_scan():
-   ip = get_ip_address()
-   if ip:
-      full_command = f"nmap -sS -D RND:10 -T4 {ip}"
-      run_scan(full_command, ip)
-
-# Function to scan multiple IP addresses (up to 240) with automatic CIDR 0/24 option
-def scan_ip_0_24():
-   clear_screen()
-   ips = input("\nEnter up to 240 IP addresses in CIDR format (e.g., 192.168.1.0/24): ").split()
-   if len(ips) > 240:
-      print("You can only scan up to 240 IP addresses at once.")
-      return
-   # Update the command to scan in CIDR format 0/24
-   for ip in ips:
-      print(Fore.LIGHTCYAN_EX + f"Running {ip} with 0/24...")
-      full_command = f"nmap -T4 -n -vv {ip}/24"
-      run_scan(full_command, ip)
-init(autoreset=True)
 
 
 
@@ -387,13 +295,7 @@ def show_submenu(commands):
    print("\n".join(commands))
    input(Fore.WHITE + "\nPress Enter to return to the main menu...")
 
-# Function to handle manual Nmap scan (option 1)
-def normal_nmap_scan():
-   ip = get_ip_address()
-   if ip:
-      command = input(Fore.LIGHTRED_EX + "Enter your Nmap command: ").strip()
-      full_command = f"nmap {command} {ip}"
-      run_scan(full_command, ip)
+
 
 # Exiting loading screen with blue and white color scheme
 def exiting_loading_screen():
@@ -409,9 +311,9 @@ def exiting_loading_screen():
    '''
    for i, line in enumerate(loading_text.splitlines()):
       if i % 4 == 0:
-        print(Fore.WHITE + line)  # Blue for even lines
+        print(Fore.LIGHTWHITE_EX + line)  # Blue for even lines
       else:
-        print(Fore.WHITE + line)  # White for odd lines
+        print(Fore.LIGHTBLACK_EX + line)  # White for odd lines
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
    # Display a final "Exiting..." message with a blue background and white text
    print(Fore.BLUE + Fore.WHITE + "\n")
@@ -942,22 +844,22 @@ def main_menu():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.YELLOW+ "sudo python3 xp.py To Update")
-      print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
-      print(Fore.LIGHTWHITE_EX+"1. nmap")
-      print(Fore.LIGHTWHITE_EX+"2. Show All Nmap Commands")
-      print(Fore.LIGHTWHITE_EX+"3. sslscan")
-      print(Fore.LIGHTWHITE_EX+"5. Metasploit")
-      print(Fore.LIGHTWHITE_EX+"7. subfinder")
-      print(Fore.LIGHTWHITE_EX+"6. Update Script")
+      print(Fore.LIGHTYELLOW_EX+ "sudo python3 xp.py To Update")
+      print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")
+      print(Fore.LIGHTRED_EX+"1. nmap")
+      print(Fore.BLUE+"2. Show All Nmap Commands")
+      print(Fore.LIGHTCYAN_EX+"3. sslscan")
+      print(Fore.LIGHTRED_EX+"5. Metasploit")
+      print(Fore.BLUE+"7. subfinder")
+      print(Fore.LIGHTCYAN_EX+"6. Update Script")
       print(Fore.LIGHTRED_EX  +"8. MagicRecon")
       print(Fore.BLUE+         "88. Routersploit")
       print(Fore.LIGHTCYAN_EX+"99. Exit")
-      choice = input(Fore.RED + "\nEnter your choice: ").strip()
+      choice = input(Fore.LIGHTBLACK_EX + "\nEnter your choice: ").strip()
       if choice == '2':
         show_all_nmap_commands()
       elif choice == '1':
-        normal_nmap_scan()
+       run_nmap()
       elif choice == '3':
         sslscan_scan()
       elif choice == '5':
