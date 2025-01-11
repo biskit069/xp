@@ -284,90 +284,77 @@ if __name__ == "__main__":
 def show_all_nmap_commands():
    clear_screen()
    commands = [
-      "All Nmap Commands:",
-      "nmap 192.168.1.1 Scan a single IP",
-      "nmap 192.168.1.1-254 Scan a range",
-      "nmap -iL targets.txt Scan targets from a file",
-      "nmap -sS 192.168.1.1 TCP SYN scan",
-      "nmap -sT 192.168.1.1 TCP Connect scan",
-      "nmap -O 192.168.1.1 OS detection",
-      "nmap -sU 192.168.1.1 UDP scan",
-      "nmap -p 80 192.168.1.1 Scan port 80",
-      "nmap -p 1-1000 192.168.1.1 Scan ports 1-1000",
-      "nmap -sV 192.168.1.1 Version detection",
-      "nmap -A 192.168.1.1 OS detection, version detection, script scanning, traceroute",
-      "nmap -Pn 192.168.1.1 Disable ping scan"
-
-   '''
--sS nmap 192.168.1.1 -sS        TCP SYN port scan (Default)
--sT     nmap 192.168.1.1 -sT    TCP connect port scan (Default without root privilege)
--sU     nmap 192.168.1.1 -sU    UDP port scan
--sA     nmap 192.168.1.1 -sA    TCP ACK port scan
--sW     nmap 192.168.1.1 -sW    TCP Window port scan
--sM     nmap 192.168.1.1 -sM    TCP Maimon port scan
--PR     nmap 192.168.1.1-1/24 -PR       ARP discovery on local network
--p      nmap 192.168.1.1 -p http,https  Port scan from service name
--sV -version-all        nmap 192.168.1.1 -sV -version-all       Enable intensity level 9. Higher possibility of correctness. Slower
--O      nmap 192.168.1.1 -O     Remote OS detection using TCP/IP stack fingerprinting
--O -osscan-limit        nmap 192.168.1.1 -O -osscan-limit       If at least one open and one closed TCP port are not found it will not try OS detection against host
--O -osscan-guess        nmap 192.168.1.1 -O -osscan-guess       Makes Nmap guess more aggressively
--O -max-os-tries        nmap 192.168.1.1 -O -max-os-tries 1     Set the maximum number x of OS detection tries against a target
--A      nmap 192.168.1.1 -A     Enables OS detection, version detection, script scanning, and traceroute
--T5     nmap 192.168.1.1 -T5    Insane (5) speeds scan; assumes you are on an extraordinarily fast network
--sC     nmap 192.168.1.1 -sC    Scan with default NSE scripts. Considered useful for discovery and safe
--script default nmap 192.168.1.1 -script default        Scan with default NSE scripts. Considered useful for discovery and safe
--script nmap 192.168.1.1 -script=banner Scan with a single script. Example banner
--script nmap 192.168.1.1 -script=http*  Scan with a wildcard. Example http
--script nmap 192.168.1.1 -script=http,banner    Scan with two scripts. Example http and banner
--script nmap 192.168.1.1 -script "not intrusive"        Scan default, but remove intrusive scripts
--script-args    nmap -script snmp-sysdescr -script-args snmpcommunity=admin 192.168.1.1 NSE script with arguments
-nmap -Pn -script=http-sitemap-generator scanme.nmap.org http site map generator
-nmap -n -Pn -p 80 -open -sV -vvv -script banner,http-title -iR 1000     Fast search for random web servers
-nmap -Pn -script=dns-brute domain.com   Brute forces DNS hostnames guessing subdomains
-nmap -n -Pn -vv -O -sV -script smb-enum*,smb-ls,smb-mbenum,smb-os-discovery,smb-s*,smb-vuln*,smbv2* -vv 192.168.1.1     Safe SMB scripts to run
-nmap -script whois* domain.com  Whois query
-nmap -p80 -script http-unsafe-output-escaping scanme.nmap.org   Detect cross site scripting vulnerabilities
-nmap -p80 -script http-sql-injection scanme.nmap.org    Check for SQL injections
--f      nmap 192.168.1.1 -f     Requested scan (including ping scans) use tiny fragmented IP packets. Harder for packet filters
--mtu    nmap 192.168.1.1 -mtu 32        Set your own offset size
--D      nmap -D 192.168.1.101,192.168.1.102,192.168.1.103,192.168.1.23 192.168.1.1      Send scans from spoofed IPs
--D      nmap -D decoy-ip1,decoy-ip2,your-own-ip,decoy-ip3,decoy-ip4 remote-host-ip      Above example explained
--S      nmap -S www.microsoft.com www.facebook.com      Scan Facebook from Microsoft (-e eth0 -Pn may be required)
--g      nmap -g 53 192.168.1.1  Use given source port number
--proxies        nmap -proxies http://192.168.1.1:8080, http://192.168.1.2:8080 192.168.1.1      Relay connections through HTTP/SOCKS4 proxies
--data-length    nmap -data-length 200 192.168.1.1       Appends random data to sent packets
--oN     nmap 192.168.1.1 -oN normal.file        Normal output to the file normal.file
--oX     nmap 192.168.1.1 -oX xml.file   XML output to the file xml.file
--oG     nmap 192.168.1.1 -oG grep.file  Grepable output to the file grep.file
--oA     nmap 192.168.1.1 -oA results    Output in the three major formats at once
--oG -   nmap 192.168.1.1 -oG -  Grepable output to screen. -oN -, -oX - also usable
--append-output  nmap 192.168.1.1 -oN file.file -append-output   Append a scan to a previous scan file
--v      nmap 192.168.1.1 -v     Increase the verbosity level (use -vv or more for greater effect)
--d      nmap 192.168.1.1 -d     Increase debugging level (use -dd or more for greater effect)
--reason nmap 192.168.1.1 -reason        Display the reason a port is in a particular state, same output as -vv
--open   nmap 192.168.1.1 -open  Only show open (or possibly open) ports
--packet-trace   nmap 192.168.1.1 -T4 -packet-trace      Show all packets sent and received
--iflist nmap -iflist    Shows the host interfaces and routes
--resume nmap -resume results.file       Resume a scan
-nmap -p80 -sV -oG - -open 192.168.1.1/24 | grep open    Scan for web servers and grep to show which IPs are running web servers
-nmap -iR 10 -n -oX out.xml | grep "Nmap" | cut -d " " -f5 > live-hosts.txt      Generate a list of the IPs of live hosts
-nmap -iR 10 -n -oX out2.xml | grep "Nmap" | cut -d " " -f5 >> live-hosts.txt    Append IP to the list of live hosts
-ndiff scanl.xml scan2.xml       Compare output from nmap using the ndif
-xsltproc nmap.xml -o nmap.html  Convert nmap xml files to html files
-grep " open " results.nmap | sed -r ‘s/ +/ /g’ | sort | uniq -c | sort -rn | less       Reverse sorted list of how often ports turn up
--6      nmap -6 2607:f0d0:1002:51::4    Enable IPv6 scanning
--h      nmap -h nmap help screen
-nmap -iR 10 -PS22-25,80,113,1050,35000 -v -sn   Discovery only on ports x, no port scan
-nmap 192.168.1.1-1/24 -PR -sn -vv       Arp discovery only on local network, no port scan
-nmap -iR 10 -sn -traceroute     Traceroute to random targets, no port scan
-nmap 192.168.1.1-50 -sL -dns-server 192.168.1.1 Query the Internal DNS for hosts, list targets only
-nmap 192.168.1.1 --packet-trace Show the details of the packets that are sent and received during a scan and capture the traffic.
-
-!!! Fixing Later !!!
-'''
-
-   ]
-   show_submenu(commands)
+     def show_all_nmap_commands():
+    clear_screen()
+    commands = [
+        "nmap 192.168.1.1 -sS TCP SYN port scan (Default)",
+        "nmap 192.168.1.1 -sT TCP connect port scan (Default without root privilege)",
+        "nmap 192.168.1.1 -sU UDP port scan",
+        "nmap 192.168.1.1 -sA TCP ACK port scan",
+        "nmap 192.168.1.1 -sW TCP Window port scan",
+        "nmap 192.168.1.1 -sM TCP Maimon port scan",
+        "nmap 192.168.1.1-1/24 -PR ARP discovery on local network",
+        "nmap 192.168.1.1 -p http,https Port scan from service name",
+        "nmap 192.168.1.1 -sV -version-all Enable intensity level 9. Higher possibility of correctness. Slower",
+        "nmap 192.168.1.1 -O Remote OS detection using TCP/IP stack fingerprinting",
+        "nmap 192.168.1.1 -O -osscan-limit If at least one open and one closed TCP port are not found it will not try OS detection against host",
+        "nmap 192.168.1.1 -O -osscan-guess Makes Nmap guess more aggressively",
+        "nmap 192.168.1.1 -O -max-os-tries 1 Set the maximum number x of OS detection tries against a target",
+        "nmap 192.168.1.1 -A Enables OS detection, version detection, script scanning, and traceroute",
+        "nmap 192.168.1.1 -T5 Insane (5) speeds scan; assumes you are on an extraordinarily fast network",
+        "nmap 192.168.1.1 -sC Scan with default NSE scripts. Considered useful for discovery and safe",
+        "nmap 192.168.1.1 -script default Scan with default NSE scripts. Considered useful for discovery and safe",
+        "nmap 192.168.1.1 -script=banner Scan with a single script. Example banner",
+        "nmap 192.168.1.1 -script=http* Scan with a wildcard. Example http",
+        "nmap 192.168.1.1 -script=http,banner Scan with two scripts. Example http and banner",
+        "nmap 192.168.1.1 -script \"not intrusive\" Scan default, but remove intrusive scripts",
+        "nmap 192.168.1.1 -script snmp-sysdescr -script-args snmpcommunity=admin NSE script with arguments",
+        "nmap -Pn -script=http-sitemap-generator scanme.nmap.org http site map generator",
+        "nmap -n -Pn -p 80 -open -sV -vvv -script banner,http-title -iR 1000 Fast search for random web servers",
+        "nmap -Pn -script=dns-brute domain.com Brute forces DNS hostnames guessing subdomains",
+        "nmap -n -Pn -vv -O -sV -script smb-enum*,smb-ls,smb-mbenum,smb-os-discovery,smb-s*,smb-vuln*,smbv2* -vv 192.168.1.1 Safe SMB scripts to run",
+        "nmap -script whois* domain.com Whois query",
+        "nmap -p80 -script http-unsafe-output-escaping scanme.nmap.org Detect cross site scripting vulnerabilities",
+        "nmap -p80 -script http-sql-injection scanme.nmap.org Check for SQL injections",
+        "nmap 192.168.1.1 -f Requested scan (including ping scans) use tiny fragmented IP packets. Harder for packet filters",
+        "nmap 192.168.1.1 -mtu 32 Set your own offset size",
+        "nmap -D 192.168.1.101,192.168.1.102,192.168.1.103,192.168.1.23 192.168.1.1 Send scans from spoofed IPs",
+        "nmap -D decoy-ip1,decoy-ip2,your-own-ip,decoy-ip3,decoy-ip4 remote-host-ip Above example explained",
+        "nmap -S www.microsoft.com www.facebook.com Scan Facebook from Microsoft (-e eth0 -Pn may be required)",
+        "nmap -g 53 192.168.1.1 Use given source port number",
+        "nmap -proxies http://192.168.1.1:8080, http://192.168.1.2:8080 192.168.1.1 Relay connections through HTTP/SOCKS4 proxies",
+        "nmap -data-length 200 192.168.1.1 Appends random data to sent packets",
+        "nmap 192.168.1.1 -oN normal.file Normal output to the file normal.file",
+        "nmap 192.168.1.1 -oX xml.file XML output to the file xml.file",
+        "nmap 192.168.1.1 -oG grep.file Grepable output to the file grep.file",
+        "nmap 192.168.1.1 -oA results Output in the three major formats at once",
+        "nmap 192.168.1.1 -oG - Grepable output to screen. -oN -, -oX - also usable",
+        "nmap 192.168.1.1 -oN file.file -append-output Append a scan to a previous scan file",
+        "nmap 192.168.1.1 -v Increase the verbosity level (use -vv or more for greater effect)",
+        "nmap 192.168.1.1 -d Increase debugging level (use -dd or more for greater effect)",
+        "nmap 192.168.1.1 -reason Display the reason a port is in a particular state, same output as -vv",
+        "nmap 192.168.1.1 -open Only show open (or possibly open) ports",
+        "nmap 192.168.1.1 -T4 -packet-trace Show all packets sent and received",
+        "nmap -iflist Shows the host interfaces and routes",
+        "nmap -resume results.file Resume a scan",
+        "nmap -p80 -sV -oG - -open 192.168.1.1/24 | grep open Scan for web servers and grep to show which IPs are running web servers",
+        "nmap -iR 10 -n -oX out.xml | grep \"Nmap\" | cut -d \" \" -f5 > live-hosts.txt Generate a list of the IPs of live hosts",
+        "nmap -iR 10 -n -oX out2.xml | grep \"Nmap\" | cut -d \" \" -f5 >> live-hosts.txt Append IP to the list of live hosts",
+        "ndiff scanl.xml scan2.xml Compare output from nmap using the ndiff",
+        "xsltproc nmap.xml -o nmap.html Convert nmap xml files to html files",
+        "grep \" open \" results.nmap | sed -r ‘s/ +/ /g’ | sort | uniq -c | sort -rn | less Reverse sorted list of how often ports turn up",
+        "nmap -6 2607:f0d0:1002:51::4 Enable IPv6 scanning",
+        "nmap -h nmap help screen",
+        "nmap -iR 10 -PS22-25,80,113,1050,35000 -v -sn Discovery on specific ports",
+        "nmap 192.168.1.1-1/24 -PR -sn -vv ARP discovery only on local network",
+        "nmap -iR 10 -sn -traceroute Random target traceroute",
+        "nmap 192.168.1.1-50 -sL -dns-server 192.168.1.1 Query the Internal DNS for hosts, list targets only",
+        "nmap 192.168.1.1 --packet-trace Show the details of the packets that are sent and received during a scan and capture the traffic"
+    ]
+    
+    # Printing the commands for the user
+    for command in commands:
+        print(command)
 
 # Function to show OS scan commands
 def show_os_scan_commands():
@@ -443,11 +430,6 @@ def exiting_loading_screen():
 # Function to run SSLScan on a given IP with command selection
 
 
-import subprocess
-from colorama import Fore
-
-scanning_in_progress = False
-
 def sslscan_scan():
     global scanning_in_progress
     try:
@@ -457,6 +439,7 @@ def sslscan_scan():
         print("3. SSL Certificate Details")
         print("4. Manual SSLScan")
         print("5. Vuln Scan")
+        print("6. Show SSLScan Command List")  # Option to show the SSLScan command list
         print("99. Return to Main Menu")  # Option to return to the main menu
         choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
 
@@ -464,6 +447,11 @@ def sslscan_scan():
         if choice == '99':
             print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
             return  # Exits the function and goes back to the main menu
+
+        # Show SSLScan command list if selected
+        if choice == '6':
+            show_sslscan_commands()
+            return
 
         ip = ""  # Default to empty, we'll ask for IP only when necessary
 
@@ -542,10 +530,37 @@ def get_ip_address():
     return ip
 
 
-# Ensure the clear_screen() method works as expected
 def clear_screen():
     # This is just an example. Adjust according to your environment.
     subprocess.call('clear' if os.name == 'posix' else 'cls', shell=True)
+
+
+def show_sslscan_commands():
+    clear_screen()
+    ssl_commands = [
+        "SSLScan Command List:",
+        "sslscan {ip}                   Basic SSL Scan (scans the SSL certificate and protocol support)",
+        "sslscan --full {ip}            Full SSL Scan (performs a more thorough scan, including supported cipher suites)",
+        "sslscan --cert {ip}            SSL Certificate Details (displays certificate information)",
+        "sslscan --tls1_2 {ip}          Check TLS 1.2 Support (specifically checks for TLS 1.2 support)",
+        "sslscan --tls1_3 {ip}          Check TLS 1.3 Support (specifically checks for TLS 1.3 support)",
+        "sslscan --bugs {ip}            Vulnerability Scan (scans for known SSL vulnerabilities)",
+        "sslscan --no-failed {ip}       Skip failed connections (avoids showing failed connections)",
+        "sslscan --ip {ip}              Scan an IP address directly",
+        "sslscan --no-check-certificate {ip}  Skip certificate verification (useful for testing)",
+        "sslscan --ssl2 {ip}            Check for SSLv2 Support (older and less secure SSL protocol)",
+        "sslscan --ssl3 {ip}            Check for SSLv3 Support (older SSL protocol, vulnerable to attacks)",
+        "sslscan --show-ciphers {ip}    Show Supported Ciphers (lists the ciphers supported by the server)",
+        "sslscan --starttls {protocol} {ip} Start TLS scan for specific protocols (e.g., smtp, imap)",
+        "sslscan --connect {ip} {port}  Connect to a specific port (useful for scanning non-standard SSL ports)"
+    ]
+    
+    print(Fore.GREEN + "\nAvailable SSLScan Commands:")
+    for command in ssl_commands:
+        print(Fore.YELLOW + command)
+    print(Fore.LIGHTCYAN_EX + "\nPress any key to return to the menu...")
+    input()  # Wait for the user to press a key to return to the menu
+    return  # Return to the main menu
 
 
 
@@ -670,47 +685,94 @@ def metasploit_scan():
 def run_subfinder():
     """Function to launch Subfinder directly with a manually entered command."""
     try:
-        # Prompt the user to manually enter the Subfinder command
-        print(Fore.YELLOW + "\nEnter your custom Subfinder command (e.g., subfinder -d example.com -t 50 -timeout 3):")
-        command = input(Fore.CYAN + "Enter command: ").strip()
+        print(Fore.BLUE + "\nChoose a Subfinder option:")
+        print("1. Run Subfinder with Custom Command")
+        print("2. Show Subfinder Command List")  # Option to show Subfinder command list
+        print("99. Return to Main Menu")  # Option to return to the main menu
+        choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
 
-        if command:
-            print(Fore.GREEN + f"Running command: {command}")
-            try:
-                # Launch Subfinder with the manually entered command
-                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        # Return to the main menu if the user selects option 99
+        if choice == '99':
+            print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
+            return  # Exits the function and goes back to the main menu
 
-                # Check if Subfinder executed successfully
-                if result.returncode == 0:
-                    print(Fore.GREEN + "\nSubfinder completed successfully.")
-                    output = result.stdout
+        # Show Subfinder command list if selected
+        if choice == '2':
+            show_subfinder_commands()
+            return
 
-                    # Show the results from Subfinder
-                    print(Fore.LIGHTCYAN_EX + "\nSubfinder Results:")
-                    print(output)
+        # Run Subfinder with custom command if selected
+        if choice == '1':
+            print(Fore.YELLOW + "\nEnter your custom Subfinder command (e.g., subfinder -d example.com -t 50 -timeout 3):")
+            command = input(Fore.CYAN + "Enter command: ").strip()
 
-                    # Ask if the user wants to save the results
-                    save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
-                    if save_results == 'yes':
-                        file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
-                        with open(file_name, "w") as file:
-                            file.write(output)
-                        print(Fore.GREEN + f"Results saved to '{file_name}'.")
-                    elif save_results == 'no':
-                        print(Fore.WHITE + "Results not saved.")
+            if command:
+                print(Fore.GREEN + f"Running command: {command}")
+                try:
+                    # Launch Subfinder with the manually entered command
+                    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+                    # Check if Subfinder executed successfully
+                    if result.returncode == 0:
+                        print(Fore.GREEN + "\nSubfinder completed successfully.")
+                        output = result.stdout
+
+                        # Show the results from Subfinder
+                        print(Fore.LIGHTCYAN_EX + "\nSubfinder Results:")
+                        print(output)
+
+                        # Ask if the user wants to save the results
+                        save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
+                        if save_results == 'yes':
+                            file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
+                            with open(file_name, "w") as file:
+                                file.write(output)
+                            print(Fore.GREEN + f"Results saved to '{file_name}'.")
+                        elif save_results == 'no':
+                            print(Fore.WHITE + "Results not saved.")
+                        else:
+                            print(Fore.RED + "Invalid choice. Results not saved.")
                     else:
-                        print(Fore.RED + "Invalid choice. Results not saved.")
-                else:
-                    print(Fore.RED + "\nSubfinder did not complete successfully.")
-                    print(Fore.YELLOW + f"Error: {result.stderr}")
+                        print(Fore.RED + "\nSubfinder did not complete successfully.")
+                        print(Fore.YELLOW + f"Error: {result.stderr}")
 
-            except Exception as e:
-                print(Fore.RED + f"Error running Subfinder: {e}")
-        else:
-            print(Fore.RED + "Invalid command. Please try again.")
+                except Exception as e:
+                    print(Fore.RED + f"Error running Subfinder: {e}")
+            else:
+                print(Fore.RED + "Invalid command. Please try again.")
 
     except Exception as e:
         print(Fore.RED + f"Error launching Subfinder: {e}")
+
+
+def show_subfinder_commands():
+    """Displays a list of common Subfinder commands."""
+    clear_screen()
+    subfinder_commands = [
+        "Subfinder Command List:",
+        "subfinder -d example.com -t 50 -timeout 3            Basic Subdomain Scan (specify domain and number of threads)",
+        "subfinder -d example.com -silent                    Silent mode (suppresses output)",
+        "subfinder -d example.com -o subdomains.txt           Output to a file",
+        "subfinder -d example.com -v                          Verbose mode (shows more details)",
+        "subfinder -d example.com -t 100                      Increase number of threads",
+        "subfinder -d example.com -timeout 5                  Set a custom timeout for the scan",
+        "subfinder -d example.com -all                         Show all subdomains found",
+        "subfinder -d example.com -r resolvers.txt            Use custom DNS resolvers from a file",
+        "subfinder -d example.com -max-ips 100                Limit the number of IP addresses to resolve",
+        "subfinder -d example.com -o subdomains.json           Output results in JSON format"
+    ]
+    
+    print(Fore.GREEN + "\nAvailable Subfinder Commands:")
+    for command in subfinder_commands:
+        print(Fore.YELLOW + command)
+    print(Fore.LIGHTCYAN_EX + "\nPress any key to return to the menu...")
+    input()  # Wait for the user to press a key to return to the menu
+    return  # Return to the main menu
+
+
+def clear_screen():
+    """Clears the terminal screen."""
+    subprocess.call('clear' if os.name == 'posix' else 'cls', shell=True)
 
 
 
