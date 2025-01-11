@@ -8,4 +8,4 @@ img src="screenshot.png" alt="Main Menu Screenshot" width="600">
  install setup file: sudo python3 setup.py 
  How To install: sudo git clone https://github.com/biskit069/xp 
 
-
+img src="screenshot.png" alt="Main Menu Screenshot" width="600">
