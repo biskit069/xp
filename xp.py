@@ -852,7 +852,7 @@ def main_menu():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.YELLOW+ "sudo python3 nethunt.py To Update")
+      print(Fore.YELLOW+ "sudo python3 xp.py To Update")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
       print(Fore.LIGHTWHITE_EX+"1. nmap")
       print(Fore.LIGHTWHITE_EX+"2. Show All Nmap Commands")
