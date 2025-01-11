@@ -42,119 +42,168 @@ def fast_loading_screen():
    clear_screen()
    loading_text = '''
    
-███████╗ ██████╗ █████╗ ███╗   ██╗███╗   ██╗██╗███╗   ██╗ ██████╗     ███╗   ██╗███████╗████████╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
-██╔════╝██╔════╝██╔══██╗████╗  ██║████╗  ██║██║████╗  ██║██╔════╝     ████╗  ██║██╔════╝╚══██╔══╝██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝
-███████╗██║     ███████║██╔██╗ ██║██╔██╗ ██║██║██╔██╗ ██║██║  ███╗    ██╔██╗ ██║█████╗     ██║   ██║ █╗ ██║██║   ██║██████╔╝█████╔╝ 
-╚════██║██║     ██╔══██║██║╚██╗██║██║╚██╗██║██║██║╚██╗██║██║   ██║    ██║╚██╗██║██╔══╝     ██║   ██║███╗██║██║   ██║██╔══██╗██╔═██╗ 
-███████║╚██████╗██║  ██║██║ ╚████║██║ ╚████║██║██║ ╚████║╚██████╔╝    ██║ ╚████║███████╗   ██║   ╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗
-╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═╝  ╚═══╝╚══════╝   ╚═╝    ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝                                                                                                                               
+                                                         .__                           
+  ______ ____ _____    ____   _______ __ __  ____   ____ |__| ____    ____             
+ /  ___// ___\\__  \  /    \  \_  __ \  |  \/    \ /    \|  |/    \  / ___\            
+ \___ \\  \___ / __ \|   |  \  |  | \/  |  /   |  \   |  \  |   |  \/ /_/  >           
+/____  >\___  >____  /___|  /  |__|  |____/|___|  /___|  /__|___|  /\___  / /\  /\  /\ 
+     \/     \/     \/     \/                    \/     \/        \//_____/  \/  \/  \/                                                                                                                              
    '''
    for i, line in enumerate(loading_text.splitlines()):
       if i % 2 == 0:
-        print(Fore.CYAN + line)  # Blue for even lines
+        print(Fore.WHITE + line)  # Blue for even lines
       else:
-        print(Fore.LIGHTCYAN_EX + line)  # White for odd lines
+        print(Fore.LIGHTWHITE_EX + line)  # White for odd lines
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
    print(Fore.CYAN + """Running Scan... Connection Completed Waiting For Results... """)
 
 # Function to show the main menu logo with blue and white mix
 def show_main_menu_logo():
    logo_text = r'''
-
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠤⠶⣷⠲⠤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠞⢉⠀⠀⠀⠿⠦⠤⢦⣍⠲⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡤⣤⡞⢡⡶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⢀⣤⠴⠒⣾⠿⢟⠛⠻⣿⡿⣭⠿⠁⢰⠰⠀⠀⠀⠄⣄⣀⡀⠀⠀⠘⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⢰⣿⣿⣦⡀⠙⠛⠋⠀⠀⠉⠻⠿⢷⣦⣿⣤⣤⣤⣤⣀⣈⠉⠛⠽⣆⡒⣿⣯⣷⣄⠀⠀⠀⠀⠀⠀
-⠀⠻⣍⠻⠿⣿⣦⣄⡀⢠⣾⠑⡆⠀⠈⠉⠛⠛⢿⡿⠿⠿⢿⣿⣿⣿⣿⠟⠉⠉⢿⣟⢲⢦⣀⠀⠀
-⠀⠀⠈⠙⠲⢤⣈⠉⠛⠷⢿⣏⣀⡀⠀⠀⠀⢰⣏⣳⠀⠀⠀⠀⠀⣸⣓⣦⠀⠀⠈⠛⠟⠃⣈⣷⡀             
-⠀⠀⠀⠀⠀⠈⢿⣙⡓⣶⣤⣤⣀⡀⠀⠀⠀⠈⠛⠁⠀⠀⠀⠀⠀⠹⣿⣯⣤⣶⣶⣶⣿⠘⡿⢸⡿
-⠀⠀⠀⠀⠀⠀⠀⠙⠻⣿⡛⠻⢿⣯⣽⣷⣶⣶⣤⣤⣤⣤⣄⣀⣀⢀⣀⢀⣀⣈⣥⡤⠶⠗⠛⠋⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠓⠲⣬⣍⣉⡉⠙⠛⠛⠛⠉⠙⠉⠙⠉⣹⣿⠿⠛⠁⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠻⠗⠒⠒⠚⠋⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢀⣠⠶⠚⠋⠉⠉⠀⠀⠈⠉⠉⠛⠶⣤⡀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣠⡶⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠳⣄⠀⠀⠀⠀⠀
-⠀⠀⠀⢀⡾⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⡄⠀⠀⠀
-⠀⠀⢠⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣆⠀⠀
-⠀⢠⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡆⠀
-⠀⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⠀
-⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇
-⠸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇
-⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠁
-⠀⠸⣇⠀⣠⣶⠤⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠤⣤⣄⠀⢰⠏⠀
-⠀⠀⢹⡄⢻⣷⣶⣾⣿⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣷⣤⣾⡟⢠⡟⠀⠀
-⠀⠀⠀⢹⡌⢻⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⡟⢁⡞⠀⠀⠀
-⠀⠀⠀⠀⠹⣆⠙⠿⣿⣿⣿⣿⣷⠀⠀⠀⠀⣾⣿⣿⣿⣿⡿⠋⢠⠟⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠘⢧⡀⠈⠙⠛⠛⠋⠀⠀⠀⠀⠙⠿⠛⠋⠁⠀⣰⠋⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀⠀⠀⠀⠀⠾⠼⠄⠀⠀⠀⠀⣠⠞⠁⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀⠀⢤⣤⣤⡤⠀⠀⣠⠔⠃⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⠦⣄⣀⣀⣀⠴⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-
+                _________             .__  __   
+___  _________ /   _____/_____   ____ |__|/  |_ 
+\  \/  /\____ \\_____  \\____ \ /  _ \|  \   __\
+ >    < |  |_> >        \  |_> >  <_> )  ||  |  
+/__/\_ \|   __/_______  /   __/ \____/|__||__|  
+      \/|__|          \/|__|                    
+                                
+                                   
    '''
    clear_screen()
    for i, line in enumerate(logo_text.splitlines()):
       if i % 2 == 0:
-        print(Fore.CYAN + line)  # Blue for even lines
+        print(Fore.RED+ line)  # Blue for even lines
       else:
-        print(Fore.LIGHTCYAN_EX + line)  # White for odd lines
+        print(Fore.LIGHTRED_EX + line)  # White for odd lines
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
+import subprocess
+from colorama import Fore
+
 def run_scan(command, ip=None):
-   global exit_program, scanning_in_progress
-   scanning_in_progress = True
-   try:
-      # Display the fast loading screen
-      fast_loading_screen()
-      # Check if the command is not empty or None
-      if command:
-        print(Fore.LIGHTCYAN_EX + f"Running command: {command}")
-        # Run the scan in a subprocess
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        if stderr:
-           print(Fore.RED + "Error during scan:", stderr.decode())
+    global exit_program, scanning_in_progress
+    scanning_in_progress = True
+    try:
+        # Display the fast loading screen (this function needs to be defined elsewhere in your code)
+        fast_loading_screen()
+        
+        # Check if the command is not empty or None
+        if command:
+            print(Fore.LIGHTCYAN_EX + f"Running command: {command}")
+            
+            # Run the scan in a subprocess
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            
+            if stderr:
+                print(Fore.RED + "Error during scan:", stderr.decode())
+            else:
+                output = stdout.decode()
+                print(Fore.BLUE + "Scan Completed Successfully.")
+                print(output)
+                
+                # Save the packet data to a file
+                save_results = input(Fore.YELLOW + "Would you like to save the results of the scan and the IP? (yes/no): ").strip().lower()
+                
+                if save_results == "yes":
+                    file_name = input(Fore.LIGHTWHITE_EX + "Enter a file name to save results (e.g., results.txt): ").strip()
+                    
+                    # Save the results in the file without root privileges
+                    with open(file_name, "a") as file:
+                        file.write(f"IP: {ip}\n{output}\n\n")
+                    print(Fore.LIGHTGREEN_EX + f"Results saved to '{file_name}'.")
+                
+                elif save_results == "no":
+                    print(Fore.WHITE + "Returning to the main menu...")
+                else:
+                    print(Fore.RED + "Invalid choice, returning to the main menu.")
+                
+                # Add a prompt to ensure the user sees the output
+                input(Fore.LIGHTRED_EX + "\nPress Enter to return to the main menu...")
+        
         else:
-           output = stdout.decode()
-           print(Fore.BLUE + "Scan Completed Successfully.")
-           print(output)
-           # Save the packet data to a file
-           save_results = input(Fore.YELLOW + "Would you like to save the results of the scan and the IP? (yes/no): ").strip().lower()
-           if save_results == "yes":
-              file_name = input(Fore.LIGHTWHITE_EX + "Enter a file name to save results (e.g., results.txt): ").strip()
-              with open(file_name, "a") as file:
-                file.write(f"IP: {ip}\n{output}\n\n")
-              print(Fore.LIGHTGREEN_EX + f"Results saved to '{file_name}'.")
-           elif save_results == "no":
-              print(Fore.WHITE + "Returning to the main menu...")
-           else:
-              print(Fore.RED + "Invalid choice, returning to the main menu.")
-           # Add a prompt to ensure the user sees the output
-           input(Fore.LIGHTRED_EX + "\nPress Enter to return to the main menu...")
-      else:
-        print(Fore.RED + "Error: Invalid command!")
-   except subprocess.CalledProcessError as e:
-      print(f"Error running scan: {e}")
-   finally:
-      scanning_in_progress = False  # Clear the screen after the scan if user presses Enter
-      clear_screen()
+            print(Fore.RED + "Error: Invalid command!")
+    
+    except subprocess.CalledProcessError as e:
+        print(f"Error running scan: {e}")
+    
+    finally:
+        scanning_in_progress = False  # Clear the screen after the scan if user presses Enter
+        clear_screen()  # Ensure this function is defined elsewhere in your code
+
 
 # Function to handle IP address input with exit option
+
+import subprocess
+from colorama import Fore
+
+import subprocess
+from colorama import Fore
+
+import subprocess
+from colorama import Fore
+
 def get_ip_address():
-   ip = ""
-   while True:
-      ip = input("\nEnter IP address to scan (or press 'q' to cancel): ").strip()
-      if ip.lower() == 'q':
-        print("\nExiting IP input...")
-        break
-      try:
-        ipaddress.ip_address(ip)
-        return ip
-      except ValueError:
-        print(Fore.RED + "Invalid IP address. Please try again.")
+    """Run an Nmap scan based on the full Nmap command input by the user."""
+    try:
+        # Prompt the user to enter the full Nmap command (e.g., nmap 203.211.74.76 -vv -n)
+        command = input(Fore.CYAN + "Enter your Nmap command (e.g., nmap 203.211.74.76 -vv -n): ").strip()
+
+        if command:
+            print(Fore.GREEN + f"Running command: {command}\n")
+            
+            # Execute the Nmap command using subprocess
+            process = subprocess.Popen(
+                command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            )
+
+            # Capture the output and error
+            stdout, stderr = process.communicate()
+
+            if stderr:
+                print(Fore.RED + f"Error during Nmap scan: {stderr.strip()}")
+            else:
+                print(Fore.LIGHTCYAN_EX + "\nScan Results:")
+                print(stdout)  # Print the scan results directly to the screen
+
+                # Ask if the user wants to save the results
+                save_results = input(Fore.YELLOW + "\nWould you like to save the results to a file? (yes/no): ").strip().lower()
+                if save_results == 'yes':
+                    file_name = input(Fore.LIGHTWHITE_EX + "Enter the file name (e.g., scan_results.txt): ").strip()
+                    with open(file_name, "w") as file:
+                        file.write(stdout)  # Save the scan output to the file
+                    print(Fore.GREEN + f"Results saved to '{file_name}'.")
+                elif save_results == 'no':
+                    print(Fore.WHITE + "Results not saved.")
+                else:
+                    print(Fore.RED + "Invalid choice. Results not saved.")
+
+                # Prompt to return to the main menu after showing results
+                input(Fore.LIGHTRED_EX + "\nPress Enter to return to the main menu...")
+
+        else:
+            print(Fore.RED + "No command entered. Please try again.")
+
+    except Exception as e:
+        print(Fore.RED + f"Error running Nmap scan: {e}")
+
+# Main function will not run automatically, you call it when needed
+if __name__ == "__main__":
+    pass  # Nothing will run automatically at startup
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Function for automatic scan with default command
 def automatic_scan():
@@ -191,93 +240,51 @@ def scan_ip_0_24():
       full_command = f"nmap -T4 -n -vv {ip}/24"
       run_scan(full_command, ip)
 init(autoreset=True)
-import subprocess
-from colorama import Fore
 
-import subprocess
-from colorama import Fore
 
-import subprocess
-from colorama import Fore
 
-import subprocess
-from colorama import Fore
-
-import subprocess
-from colorama import Fore
-
-import subprocess
-from colorama import Fore
-
-import subprocess
-from colorama import Fore
-
-def get_linux_username():
-    """Fetch the Linux system's current username."""
-    try:
-        # Use the 'whoami' command to get the current user's username
-        username = subprocess.check_output("whoami", shell=True).decode().strip()
-        return username
-    except subprocess.CalledProcessError:
-        print(Fore.RED + "Error retrieving the username.")
-        return None
-
-import subprocess
 import os
-from colorama import Fore
+import subprocess
+from colorama import Fore, init
 
-def get_linux_username():
-    """Fetch the Linux system's current username."""
+init(autoreset=True)
+
+def run_subfinder():
+    """Function to open Subfinder interactively."""
     try:
-        # Use the 'whoami' command to get the current user's username
-        username = subprocess.check_output("whoami", shell=True).decode().strip()
-        return username
-    except subprocess.CalledProcessError:
-        print(Fore.RED + "Error retrieving the username.")
-        return None
+        print(Fore.GREEN + "Launching Subfinder...")
 
-def run_magicrecon():
-    """Function to launch MagicRecon directly."""
-    try:
-        # Get the system's username using the Linux method
-        username = get_linux_username()
+        # Launch Subfinder interactively
+        subprocess.run("subfinder", shell=True)
 
-        if username:
-            # Construct the path using the Linux username
-            magicrecon_path = f"/home/{username}/magicRecon/magicrecon.sh"  # Assuming MagicRecon is in the user's home directory
-
-            # Check if the script exists at the dynamically constructed path
-            if os.path.exists(magicrecon_path):
-                print(Fore.GREEN + "Launching MagicRecon...")
-
-                # Run MagicRecon directly
-                try:
-                    # Run the MagicRecon script directly using subprocess
-                    process = subprocess.Popen(f"bash {magicrecon_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-                    # Capture the output and error
-                    stdout, stderr = process.communicate()
-
-                    if process.returncode == 0:
-                        print(Fore.GREEN + "MagicRecon completed successfully.")
-                        print(Fore.LIGHTCYAN_EX + "MagicRecon Results:")
-                        print(stdout)  # Print the standard output (results)
-                    else:
-                        print(Fore.RED + "MagicRecon encountered an error.")
-                        print(Fore.YELLOW + f"Error: {stderr}")
-                except Exception as e:
-                    print(Fore.RED + f"Error running MagicRecon: {e}")
-            else:
-                print(Fore.RED + f"MagicRecon script not found at path: {magicrecon_path}")
-        else:
-            print(Fore.RED + "Could not retrieve username. Cannot proceed with MagicRecon.")
+        print(Fore.GREEN + "\nSubfinder exited. Returning to the main menu.")
 
     except Exception as e:
-        print(Fore.RED + f"Error launching MagicRecon: {e}")
+        print(Fore.RED + f"Error launching Subfinder: {e}")
 
+def save_results_to_file(file_name, content):
+    """Save results to a file in a user-writable directory."""
+    try:
+        # Get the user's home directory
+        home_dir = os.path.expanduser("~")
+        save_path = os.path.join(home_dir, file_name)
+
+        # Write content to the file
+        with open(save_path, "w") as file:
+            file.write(content)
+
+        print(Fore.GREEN + f"Results saved to '{save_path}'.")
+    except Exception as e:
+        print(Fore.RED + f"Error saving results: {e}")
+
+# Example usage
 if __name__ == "__main__":
-    # Run MagicRecon directly when the script starts
-    run_magicrecon()
+    # Example: Save a test result to a file
+    test_content = "Example Subfinder results..."
+    save_results_to_file("subfinder_results.txt", test_content)
+
+
+
 
 
 
@@ -434,9 +441,9 @@ def exiting_loading_screen():
    '''
    for i, line in enumerate(loading_text.splitlines()):
       if i % 4 == 0:
-        print(Fore.CYAN + line)  # Blue for even lines
+        print(Fore.WHITE + line)  # Blue for even lines
       else:
-        print(Fore.LIGHTCYAN_EX + line)  # White for odd lines
+        print(Fore.WHITE + line)  # White for odd lines
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
    # Display a final "Exiting..." message with a blue background and white text
    print(Fore.BLUE + Fore.WHITE + "\n")
@@ -578,74 +585,43 @@ def update_script():
 # Function to run Metasploit
 # Function to run Metasploit
 # Function to run Metasploit
-import os
-import tempfile
-from colorama import Fore
 
-import os
-from colorama import Fore
-
-import os
-from colorama import Fore
-
-import os
-from colorama import Fore
-
-import os
-from colorama import Fore
-
-import os
-from colorama import Fore
-
-import os
-from colorama import Fore
 
 def metasploit_scan():
     try:
         while True:
-            print(Fore.BLUE + "\nChoose a Metasploit option:")
-            print("1. Scan for vulnerabilities")
-            print("2. Exploit a vulnerability")
-            print("3. launch Metasploit")
-            print("4. View Network Exploits")
-            print("99. Return to main menu")
+            print(Fore.YELLOW+"99. to return to main menu")
+            print("1. launch Metasploit")
             choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
-
-            # Debugging: Print the user's choice to verify input
-            print(Fore.YELLOW + f"DEBUG: User choice input: '{choice}'")
+            
+            print(Fore.YELLOW + f"launching Metasploit...: '{choice}'")
 
             metasploit_commands = ""
             ip = ""
-
-            if choice == '1':  # Scan for vulnerabilities
+            
+            if choice == '':  # Scan for vulnerabilities
                 ip = get_ip_address()  # Assuming get_ip_address() prompts for IP
                 if not ip:
-                    print(Fore.RED + "No IP address provided. Returning to the main menu...")
+                
                     return
 
-                metasploit_commands = f"use auxiliary/scanner/http/http_version\nset RHOSTS {ip} \nrun"
-            elif choice == '2':  # Exploit a vulnerability
+                metasploit_commands = f""
+            elif choice == '':  # Exploit a vulnerability
                 ip = get_ip_address()  # Prompt for IP address
                 if not ip:
-                    print(Fore.RED + "No IP address provided. Returning to the main menu...")
+                    print(Fore.RED + "")
                     return
-                metasploit_commands = input(Fore.BLUE + "Enter your Metasploit commands (separated by newlines):\n")
-            elif choice == '3':  # Manual Metasploit
-                print(Fore.BLUE + "Launching manual Metasploit...")
+                metasploit_commands = input(Fore.BLUE + "")
+            elif choice == '1':  # Manual Metasploit
+                print(Fore.LIGHTCYAN_EX + "Launching manual Metasploit...")
                 os.system("msfconsole")
                 continue
-            elif choice == '4':  # View Network Exploits
-                print(Fore.BLUE + "\nViewing all network exploits...")
+            elif choice == '':  # View Network Exploits
+                print(Fore.BLUE + "")
 
                 # Full list of network exploits with payloads
                 exploits = {
-                    "11": "exploit/multi/http/tomcat_mgr_upload",
-                    "22": "exploit/windows/dcerpc/ms03_026_dcom",
-                    "33": "exploit/windows/smb/ms08_067_netapi",
-                    "44": "exploit/unix/ftp/vsftpd_234_backdoor",
-                    "55": "exploit/multi/http/struts2_code_exec",
-                    "66": "exploit/multi/http/jboss_deployment_scanner",
-                    "77": "exploit/windows/smb/ms17_010_eternalblue",
+                    
                 }
 
                 # Display available exploits
@@ -702,125 +678,7 @@ def metasploit_scan():
 
 
 
-# Function to run Routersploit
-# Function to run Routersploit
-def routersploit_scan():
-   global scanning_in_progress
-   ip = get_ip_address()
-   if ip:
-      scanning_in_progress = True
-      try:
-        while True:
-           print(Fore.BLUE + "\nChoose a Routersploit option:")
-           print("1. Scan for vulnerabilities")
-           print("2. Exploit a vulnerability")
-           print("3. Manual Routersploit")
-           print("4. View all Routersploit commands (-h)")
-           print("5. View Network Exploit")
-           print("99. Return to main menu")
-           choice = input(Fore.WHITE + "\nEnter your choice: ").strip()
-           if choice == '1':
-              command = f"routersploit scan {ip}"
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Routersploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Routersploit Completed Successfully.")
-                print(output)
-           elif choice == '2':
-              command = f"routersploit exploit {ip}"
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Routersploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Routersploit Completed Successfully.")
-                print(output)
-           elif choice == '3':
-              command = input(Fore.BLUE + "Enter your Routersploit command: ").strip()
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Routersploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Routersploit Completed Successfully.")
-                print(output)
-           elif choice == '4':
-              print(Fore.BLUE + "\nViewing all Routersploit commands...")
-              command = "routersploit -h"
-              print(Fore.BLUE + f"Running {command}...")
-              process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              stdout, stderr = process.communicate()
-              if stderr:
-                print(Fore.RED + "Error during Routersploit:", stderr.decode())
-              else:
-                output = stdout.decode()
-                print(Fore.BLUE + "Routersploit Commands:")
-                print(output)
-           elif choice == '5':
-              print(Fore.BLUE + "\nViewing all network exploits...")
-              exploits = {
-                "11": "exploits/cisco/ios/telnet_password_grab",
-                "22": "exploits/cisco/ios/http_config_traversal",
-                "33": "exploits/cisco/ios/ssh_password_grab",
-                "44": "exploits/linksys/e1000/e1000_auth_bypass",
-                "55": "exploits/linksys/e1200/e1200_auth_bypass",
-                "66": "exploits/netgear/r7000/r7000_auth_bypass",
-                "77": "exploits/netgear/r7500/r7500_auth_bypass",
-                "88": "exploits/dlink/dir_645/dir_645_auth_bypass",
-                "99": "exploits/dlink/dir_655/dir_655_auth_bypass",
-                "101": "exploits/tp_link/tl_wr940n/tl_wr940n_auth_bypass",
-                "102": "exploits/tp_link/tl_wr1043nd/tl_wr1043nd_auth_bypass",
-                "103": "exploits/asus/rt_n56u/rt_n56u_auth_bypass",
-                "104": "exploits/asus/rt_ac66u/rt_ac66u_auth_bypass",
-                "105": "exploits/belkin/f9k1105/f9k1105_auth_bypass",
-                "106": "exploits/belkin/f9k1115/f9k1115_auth_bypass",
-                
-              }
-              for key, value in exploits.items():
-                print(f"{key}: {value}")
-              exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
-              if exploit_choice in exploits:
-                command = f"routersploit exploit {ip} --exploit {exploits[exploit_choice]}"
-                print(Fore.BLUE + f"Running {command}...")
-                process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                stdout, stderr = process.communicate()
-                if stderr:
-                   print(Fore.RED + "Error during Routersploit:", stderr.decode())
-                else:
-                   output = stdout.decode()
-                   print(Fore.BLUE + "Routersploit Completed Successfully.")
-                   print(output)
-              else:
-                print(Fore.RED + "Invalid exploit choice.")
-           elif choice == '99':
-              scanning_in_progress = False
-              break
-           else:
-              print(Fore.RED + "Invalid choice. Please try again.")
-      except Exception as e:
-        print(Fore.RED + f"Error running Routersploit: {e}")
-      finally:
-        scanning_in_progress = False
-        clear_screen()
 
-def get_port_number():
-    while True:
-        port = input("\nEnter port number to scan (or press 'q' to cancel): ").strip()
-        if port.lower() == 'q':
-            print("\nExiting port input...")
-            return None
-        if port.isdigit() and 1 <= int(port) <= 65535:
-            return port
-        else:
-            print(Fore.RED + "Invalid port number. Please enter a number between 1 and 65535.")
 import subprocess
 from colorama import Fore
 
@@ -869,66 +727,96 @@ def run_subfinder():
     except Exception as e:
         print(Fore.RED + f"Error launching Subfinder: {e}")
 
-def run_magicrecon():
-    """Function to launch MagicRecon directly with a manually entered command."""
+import subprocess
+import os
+from colorama import Fore
+import time
+import sys
+
+def get_linux_username():
+    """Fetch the Linux system's current username."""
     try:
-        # Prompt the user to manually enter the MagicRecon command
-        print(Fore.YELLOW + "\nEnter your custom MagicRecon command (e.g., magicrecon -d example.com):")
-        command = input(Fore.CYAN + "Enter command: ").strip()
+        username = subprocess.check_output("whoami", shell=True).decode().strip()
+        return username
+    except subprocess.CalledProcessError:
+        print(Fore.RED + "Error retrieving the username.")
+        return None
 
-        if command:
-            print(Fore.GREEN + f"Running command: {command}")
-            try:
-                # Launch MagicRecon with the manually entered command
-                result = subprocess.run(command, shell=True, capture_output=True, text=True)
+def run_magicrecon():
+    """Function to launch MagicRecon directly with predefined options."""
+    try:
+        # Clear the screen when option 8 is selected
+        clear_screen()
 
-                # Check if MagicRecon executed successfully
-                if result.returncode == 0:
-                    print(Fore.GREEN + "\nMagicRecon completed successfully.")
-                    output = result.stdout
+        # Fetch the Linux username
+        username = get_linux_username()
 
-                    # Show the results from MagicRecon
-                    print(Fore.LIGHTCYAN_EX + "\nMagicRecon Results:")
-                    print(output)
+        if username:
+            magicrecon_path = f"/home/{username}/magicRecon/magicrecon.sh"  # Assuming MagicRecon is in the user's home directory
 
-                    # Ask if the user wants to save the results
-                    save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
-                    if save_results == 'yes':
-                        file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
-                        with open(file_name, "w") as file:
-                            file.write(output)
-                        print(Fore.GREEN + f"Results saved to '{file_name}'.")
-                    elif save_results == 'no':
-                        print(Fore.WHITE + "Results not saved.")
-                    else:
-                        print(Fore.RED + "Invalid choice. Results not saved.")
-                else:
-                    print(Fore.RED + "\nMagicRecon did not complete successfully.")
-                    print(Fore.YELLOW + f"Error: {result.stderr}")
+            if os.path.exists(magicrecon_path):
+                print(Fore.GREEN + "Launching MagicRecon...")
 
-            except Exception as e:
-                print(Fore.RED + f"Error running MagicRecon: {e}")
+                try:
+                    domain = input(Fore.CYAN + "Enter the domain for MagicRecon: ").strip()
+                    command = f"bash {magicrecon_path} -d {domain} -a"
+                    subprocess.Popen(command, shell=True)  # This launches MagicRecon directly without capturing output
+
+                    # Wait for user to press Enter to go back to main menu
+                    input(Fore.GREEN + "\nPress Enter to return to the main menu...")
+                except Exception as e:
+                    print(Fore.RED + f"Error running MagicRecon: {e}")
+            else:
+                print(Fore.RED + f"MagicRecon script not found at path: {magicrecon_path}")
         else:
-            print(Fore.RED + "Invalid command. Please try again.")
-
+            print(Fore.RED + "Could not retrieve username. Cannot proceed with MagicRecon.")
     except Exception as e:
         print(Fore.RED + f"Error launching MagicRecon: {e}")
+
+def clear_screen():
+    """Clear the screen based on the OS."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def main_menu():
+    while True:
+        clear_screen()  # Clear the screen before showing the menu
+        print(Fore.WHITE + "\nMain Menu:")
+        print(Fore.GREEN + "8. Run MagicRecon (Auto Command)")
+        print(Fore.RED + "9. Exit")
+
+        option = input(Fore.CYAN + "\nEnter an option: ").strip()
+
+        if option == "8":
+            run_magicrecon()  # Launch MagicRecon directly when option 8 is selected
+        elif option == "9":
+            print(Fore.GREEN + "Exiting program...")
+            break
+        else:
+            print(Fore.RED + "Invalid option. Please try again.")
+
+# DO NOT call main_menu() automatically at the start of the script
+
+
+
+
+
+
+
+
 
 
 # Main menu function with options
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.YELLOW+ "Run Root To Save Results of Nmap Scans: sudo python3 nethunt.py & Updates")
-      print(Fore.LIGHTGREEN_EX+"alot more comming soon!!! ingore routersploit for now i have not tested to see if works or not, will fix soon!!!")
+      print(Fore.YELLOW+ "sudo python3 nethunt.py To Update")
       print(Fore.LIGHTYELLOW_EX + "V 0.1 biskit@")
       print(Fore.LIGHTWHITE_EX+"1. nmap")
       print(Fore.LIGHTWHITE_EX+"2. Show All Nmap Commands")
       print(Fore.LIGHTWHITE_EX+"3. sslscan")
-      print(Fore.LIGHTWHITE_EX+"4. Routersploit")
       print(Fore.LIGHTWHITE_EX+"5. Metasploit")
       print(Fore.LIGHTWHITE_EX+"7. subfinder")
-      print(Fore.LIGHTWHITE_EX+"8. Update Script")
+      print(Fore.LIGHTWHITE_EX+"6. Update Script")
       print(Fore.LIGHTRED_EX  +"8. MagicRecon")
       print(Fore.LIGHTCYAN_EX+"99. Exit")
       choice = input(Fore.RED + "\nEnter your choice: ").strip()
@@ -938,8 +826,6 @@ def main_menu():
         normal_nmap_scan()
       elif choice == '3':
         sslscan_scan()
-      elif choice == '4':
-        routersploit_scan()
       elif choice == '5':
         metasploit_scan()
       elif choice == '6':
