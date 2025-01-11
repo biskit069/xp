@@ -615,6 +615,38 @@ def update_script():
       clear_screen()
 
 
+import subprocess
+import os
+import shutil
+from colorama import Fore
+
+def run_routersploit():
+    """Function to run RouterSploit with sudo automatically and display host info."""
+    try:
+        # Get the hostname using 'whoami' on Linux
+        hostname = subprocess.check_output("whoami", shell=True).decode().strip()
+
+        # Automatically get the path to the routersploit directory
+        path = shutil.which("rsf.py")
+        if not path:
+            print(Fore.RED + "RouterSploit is not installed or not found in the system path.")
+            return
+
+        # Change to the directory where RouterSploit is located
+        os.chdir(os.path.dirname(path))
+
+        # Run RouterSploit with sudo automatically
+        print(Fore.GREEN + f"\nRunning RouterSploit as {hostname}...")
+        subprocess.run(["sudo", "python3", "rsf.py"])
+
+        print(Fore.GREEN + "RouterSploit has been stopped. Returning to the main menu...")
+
+    except Exception as e:
+        print(Fore.RED + f"Error running RouterSploit: {e}")
+
+
+
+
 
 
 
@@ -919,6 +951,7 @@ def main_menu():
       print(Fore.LIGHTWHITE_EX+"7. subfinder")
       print(Fore.LIGHTWHITE_EX+"6. Update Script")
       print(Fore.LIGHTRED_EX  +"8. MagicRecon")
+      print(Fore.BLUE+         "88. Routersploit")
       print(Fore.LIGHTCYAN_EX+"99. Exit")
       choice = input(Fore.RED + "\nEnter your choice: ").strip()
       if choice == '2':
@@ -935,7 +968,9 @@ def main_menu():
        run_subfinder()
       elif choice == '8': 
         run_magicrecon()
-      elif choice == '99':
+      elif choice == '88':
+        run_routersploit()
+      elif choice == '99' :
         exiting_loading_screen()
       else:
         print(Fore.RED + "Invalid choice. Please try again.")
