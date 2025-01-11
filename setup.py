@@ -1,45 +1,33 @@
-from setuptools import setup  
-import subprocess  
-import sys  
-import platform  
-  
-def install_nmap():  
-   if platform.system() == "Windows":  
-      subprocess.run(["powershell", "-Command", "winget install nmap"], check=True)  
-   elif platform.system() == "Darwin":  # macOS  
-      subprocess.run(["brew", "install", "nmap"], check=True)  
-   else:  # Linux  
-      subprocess.run(["sudo", "apt-get", "install", "-y", "nmap"], check=True)  
-  
-def install_sslscan():  
-   if platform.system() == "Windows":  
-      subprocess.run(["powershell", "-Command", "winget install sslscan"], check=True)  
-   elif platform.system() == "Darwin":  # macOS  
-      subprocess.run(["brew", "install", "sslscan"], check=True)  
-   else:  # Linux  
-      subprocess.run(["sudo", "apt-get", "install", "-y", "sslscan"], check=True)  
-  
-def install_metasploit():  
-   if platform.system() == "Windows":  
-      subprocess.run(["powershell", "-Command", "choco install metasploit"], check=True)  
-   elif platform.system() == "Darwin":  # macOS  
-      subprocess.run(["brew", "install", "metasploit"], check=True)  
-   else:  # Linux  
-      subprocess.run(["sudo", "apt-get", "install", "-y", "metasploit-framework"], check=True)  
-  
-def install_routersploit():  
-   if platform.system() == "Windows":  
-      subprocess.run(["powershell", "-Command", "pip install routersploit"], check=True)  
-   elif platform.system() == "Darwin":  # macOS  
-      subprocess.run(["brew", "install", "routersploit"], check=True)  
-   else:  # Linux  
-      subprocess.run(["sudo", "apt-get", "install", "-y", "routersploit"], check=True)  
-  
-def main():  
-   install_nmap()  
-   install_sslscan()  
-   install_metasploit()  
-   install_routersploit()  
-  
-if __name__ == "__main__":  
-   main()
+from setuptools import setup, find_packages
+import os
+
+# Read the requirements.txt file if it exists
+requirements_file = "requirements.txt"
+if os.path.exists(requirements_file):
+    with open(requirements_file, "r") as f:
+        requirements = f.read().splitlines()
+else:
+    requirements = []
+
+setup(
+    name="xp",
+    version="0.1",
+    description="network kit plus web tools",
+    author="biskit",
+    author_email="no email",  # Replace with your actual email
+    url="https://github.com/biskit069/xpSpoit",
+    packages=find_packages(),
+    py_modules=["xp"],
+    install_requires=requirements,
+    entry_points={
+        "console_scripts": [
+            "xp= xp:main_menu",  # Allows running `xp` to start the main menu
+        ]
+    },
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.6",
+)
