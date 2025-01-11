@@ -563,7 +563,7 @@ def show_sslscan_commands():
 def update_script():
    try:
       print("Updated Restart Script")
-      url = "https://raw.githubusercontent.com/biskit069/nethunt/refs/heads/main/nethunt.py"
+      url = "https://raw.githubusercontent.com/biskit069/xp/refs/heads/main/xp.py"
       response = requests.get(url)
       if response.status_code == 200:
         confirm = input("Update (yes/no): ")
