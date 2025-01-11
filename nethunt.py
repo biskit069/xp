@@ -148,7 +148,7 @@ def get_ip_address():
     """Run an Nmap scan based on the full Nmap command input by the user."""
     try:
         # Prompt the user to enter the full Nmap command (e.g., nmap 203.211.74.76 -vv -n)
-        command = input(Fore.CYAN + "Enter your Nmap command (e.g., nmap 203.211.74.76 -vv -n): ").strip()
+        command = input(Fore.CYAN + "Enter your Nmap command (e.g., nmap 192.168.1.1 -vv -n): ").strip()
 
         if command:
             print(Fore.GREEN + f"Running command: {command}\n")
