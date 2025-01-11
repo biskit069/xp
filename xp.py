@@ -10,6 +10,7 @@ import re
 import ipaddress
 import requests
 import sys
+import shutil
 # Initialize colorama
 init(autoreset=True)
 
@@ -282,6 +283,7 @@ if __name__ == "__main__":
 
 # Function to show all Nmap commands
 def show_all_nmap_commands():
+    """Displays a list of all Nmap commands."""
     clear_screen()
     commands = [
         "nmap 192.168.1.1 -sS TCP SYN port scan (Default)",
@@ -352,17 +354,11 @@ def show_all_nmap_commands():
     # Printing the commands for the user
     for command in commands:
         print(command)
+    
+    print(Fore.LIGHTCYAN_EX + "\nPress any key to return to the menu...")
+    input()  # Wait for the user to press a key to return to the menu
+    return  # Return to the main menu
 
-# Function to show OS scan commands
-def show_os_scan_commands():
-   clear_screen()
-   commands = [
-      "OS Scan Commands:",
-      "nmap -O 192.168.1.1 Enable OS detection",
-      "nmap -A 192.168.1.1 Aggressive scan with OS detection",
-      "nmap --osscan-guess Guess the OS if exact match is not found"
-   ]
-   show_submenu(commands)
 
 # Function to show NSE script commands
 def show_nse_script_commands():
@@ -536,20 +532,56 @@ def show_sslscan_commands():
     clear_screen()
     ssl_commands = [
         "SSLScan Command List:",
-        "sslscan {ip}                   Basic SSL Scan (scans the SSL certificate and protocol support)",
-        "sslscan --full {ip}            Full SSL Scan (performs a more thorough scan, including supported cipher suites)",
-        "sslscan --cert {ip}            SSL Certificate Details (displays certificate information)",
-        "sslscan --tls1_2 {ip}          Check TLS 1.2 Support (specifically checks for TLS 1.2 support)",
-        "sslscan --tls1_3 {ip}          Check TLS 1.3 Support (specifically checks for TLS 1.3 support)",
-        "sslscan --bugs {ip}            Vulnerability Scan (scans for known SSL vulnerabilities)",
-        "sslscan --no-failed {ip}       Skip failed connections (avoids showing failed connections)",
-        "sslscan --ip {ip}              Scan an IP address directly",
-        "sslscan --no-check-certificate {ip}  Skip certificate verification (useful for testing)",
-        "sslscan --ssl2 {ip}            Check for SSLv2 Support (older and less secure SSL protocol)",
-        "sslscan --ssl3 {ip}            Check for SSLv3 Support (older SSL protocol, vulnerable to attacks)",
-        "sslscan --show-ciphers {ip}    Show Supported Ciphers (lists the ciphers supported by the server)",
-        "sslscan --starttls {protocol} {ip} Start TLS scan for specific protocols (e.g., smtp, imap)",
-        "sslscan --connect {ip} {port}  Connect to a specific port (useful for scanning non-standard SSL ports)"
+        "--targets=<file>     A file containing a list of hosts to check.",
+        "--sni-name=<name>    Hostname for SNI",
+        "--ipv4, -4           Only use IPv4",
+        "--ipv6, -6           Only use IPv6",
+        "--show-certificate   Show full certificate information",
+        "--show-client-cas    Show trusted CAs for TLS client auth",
+        "--no-check-certificate  Don't warn about weak certificate algorithm or keys",
+        "--ocsp               Request OCSP response from server",
+        "--pk=<file>          A file containing the private key or a PKCS#12 file containing a private key/certificate pair",
+        "--pkpass=<password>  The password for the private key or PKCS#12 file",
+        "--certs=<file>       A file containing PEM/ASN1 formatted client certificates",
+        "--ssl2               Only check if SSLv2 is enabled",
+        "--ssl3               Only check if SSLv3 is enabled",
+        "--tls10              Only check TLSv1.0 ciphers",
+        "--tls11              Only check TLSv1.1 ciphers",
+        "--tls12              Only check TLSv1.2 ciphers",
+        "--tls13              Only check TLSv1.3 ciphers",
+        "--tlsall             Only check TLS ciphers (all versions)",
+        "--show-ciphers       Show supported client ciphers",
+        "--show-cipher-ids    Show cipher ids",
+        "--show-times         Show handshake times in milliseconds",
+        "--no-cipher-details  Disable EC curve names and EDH/RSA key lengths output",
+        "--no-ciphersuites    Do not check for supported ciphersuites",
+        "--no-compression     Do not check for TLS compression (CRIME)",
+        "--no-fallback        Do not check for TLS Fallback SCSV",
+        "--no-groups          Do not enumerate key exchange groups",
+        "--no-heartbleed      Do not check for OpenSSL Heartbleed (CVE-2014-0160)",
+        "--no-renegotiation   Do not check for TLS renegotiation",
+        "--show-sigs          Enumerate signature algorithms",
+        "--starttls-ftp       STARTTLS setup for FTP",
+        "--starttls-imap      STARTTLS setup for IMAP",
+        "--starttls-irc       STARTTLS setup for IRC",
+        "--starttls-ldap      STARTTLS setup for LDAP",
+        "--starttls-mysql     STARTTLS setup for MYSQL",
+        "--starttls-pop3      STARTTLS setup for POP3",
+        "--starttls-psql      STARTTLS setup for PostgreSQL",
+        "--starttls-smtp      STARTTLS setup for SMTP",
+        "--starttls-xmpp      STARTTLS setup for XMPP",
+        "--xmpp-server        Use a server-to-server XMPP handshake",
+        "--rdp                Send RDP preamble before starting scan",
+        "--bugs               Enable SSL implementation bug work-arounds",
+        "--no-colour          Disable coloured output",
+        "--sleep=<msec>       Pause between connection requests. Default is disabled",
+        "--timeout=<sec>      Set socket timeout. Default is 3s",
+        "--verbose            Display verbose output",
+        "--version            Display the program version",
+        "--xml=<file>         Output results to an XML file. Use - for STDOUT.",
+        "--help               Display the help text you are now reading",
+        "Example: sslscan 127.0.0.1",
+        "Example: sslscan [::1]"
     ]
     
     print(Fore.GREEN + "\nAvailable SSLScan Commands:")
@@ -558,6 +590,7 @@ def show_sslscan_commands():
     print(Fore.LIGHTCYAN_EX + "\nPress any key to return to the menu...")
     input()  # Wait for the user to press a key to return to the menu
     return  # Return to the main menu
+
 
 
 
@@ -679,6 +712,8 @@ def metasploit_scan():
 
 
 
+
+
 def run_subfinder():
     """Function to launch Subfinder directly with a manually entered command."""
     try:
@@ -706,6 +741,11 @@ def run_subfinder():
             if command:
                 print(Fore.GREEN + f"Running command: {command}")
                 try:
+                    # Ensure subfinder is in the system path
+                    if not shutil.which("subfinder"):
+                        print(Fore.RED + "Subfinder is not installed or not found in the system path.")
+                        return
+                    
                     # Launch Subfinder with the manually entered command
                     result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
@@ -747,16 +787,35 @@ def show_subfinder_commands():
     clear_screen()
     subfinder_commands = [
         "Subfinder Command List:",
-        "subfinder -d example.com -t 50 -timeout 3            Basic Subdomain Scan (specify domain and number of threads)",
-        "subfinder -d example.com -silent                    Silent mode (suppresses output)",
-        "subfinder -d example.com -o subdomains.txt           Output to a file",
-        "subfinder -d example.com -v                          Verbose mode (shows more details)",
-        "subfinder -d example.com -t 100                      Increase number of threads",
-        "subfinder -d example.com -timeout 5                  Set a custom timeout for the scan",
-        "subfinder -d example.com -all                         Show all subdomains found",
-        "subfinder -d example.com -r resolvers.txt            Use custom DNS resolvers from a file",
-        "subfinder -d example.com -max-ips 100                Limit the number of IP addresses to resolve",
-        "subfinder -d example.com -o subdomains.json           Output results in JSON format"
+        "-d <domains>                  Domains to find subdomains for",
+        "-dL <file>                    File containing list of domains for subdomain discovery",
+        "-s <sources>                  Specific sources to use for discovery (e.g., crtsh, github)",
+        "-recursive                    Use only sources that can handle subdomains recursively",
+        "-all                          Use all sources for enumeration (slow)",
+        "-es <exclude-sources>         Sources to exclude from enumeration",
+        "-m <match>                    Subdomain or list of subdomains to match",
+        "-f <filter>                   Subdomain or list of subdomains to filter",
+        "-rl <rate-limit>              Maximum number of HTTP requests to send per second",
+        "-t <concurrent>               Number of concurrent goroutines for resolving (default 10)",
+        "-o <output>                   File to write output to",
+        "-oJ                           Write output in JSONL format",
+        "-oD <output-dir>              Directory to write output",
+        "-cs                           Include all sources in the output",
+        "-oI                           Include host IP in output",
+        "-config <file>                Flag config file (default $HOME/.config/subfinder/config.yaml)",
+        "-pc <provider-config>         Provider config file",
+        "-r <resolvers>                List of resolvers to use",
+        "-rL <rlist>                   File containing list of resolvers to use",
+        "-nW                           Display active subdomains only",
+        "-proxy <proxy>                HTTP proxy to use",
+        "-ei                           Exclude IPs from the list of domains",
+        "-silent                       Show only subdomains in output",
+        "-version                      Show version of subfinder",
+        "-v                            Show verbose output",
+        "-nc                           Disable color in output",
+        "-ls                           List all available sources",
+        "-timeout <seconds>            Seconds to wait before timing out",
+        "-max-time <minutes>           Minutes to wait for enumeration results"
     ]
     
     print(Fore.GREEN + "\nAvailable Subfinder Commands:")
@@ -770,6 +829,8 @@ def show_subfinder_commands():
 def clear_screen():
     """Clears the terminal screen."""
     subprocess.call('clear' if os.name == 'posix' else 'cls', shell=True)
+
+
 
 
 
