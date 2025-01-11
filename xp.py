@@ -9,7 +9,7 @@ import os
 import re
 import ipaddress
 import requests
-
+import sys
 # Initialize colorama
 init(autoreset=True)
 
@@ -78,8 +78,7 @@ ___  _________ /   _____/_____   ____ |__|/  |_
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
-import subprocess
-from colorama import Fore
+
 
 def run_scan(command, ip=None):
     global exit_program, scanning_in_progress
@@ -135,14 +134,7 @@ def run_scan(command, ip=None):
 
 # Function to handle IP address input with exit option
 
-import subprocess
-from colorama import Fore
 
-import subprocess
-from colorama import Fore
-
-import subprocess
-from colorama import Fore
 
 def get_ip_address():
     """Run an Nmap scan based on the full Nmap command input by the user."""
@@ -242,10 +234,6 @@ def scan_ip_0_24():
 init(autoreset=True)
 
 
-
-import os
-import subprocess
-from colorama import Fore, init
 
 init(autoreset=True)
 
@@ -453,14 +441,7 @@ def exiting_loading_screen():
    sys.exit()  # Exit the program
 
 # Function to run SSLScan on a given IP with command selection
-import subprocess
-from colorama import Fore
 
-import subprocess
-from colorama import Fore
-
-import subprocess
-from colorama import Fore
 
 def sslscan_scan():
     global scanning_in_progress
@@ -581,10 +562,7 @@ def update_script():
       clear_screen()
 
 
-# Function to run Routersploit
-# Function to run Metasploit
-# Function to run Metasploit
-# Function to run Metasploit
+
 
 
 def metasploit_scan():
@@ -679,8 +657,7 @@ def metasploit_scan():
 
 
 
-import subprocess
-from colorama import Fore
+
 
 def run_subfinder():
     """Function to launch Subfinder directly with a manually entered command."""
@@ -727,11 +704,7 @@ def run_subfinder():
     except Exception as e:
         print(Fore.RED + f"Error launching Subfinder: {e}")
 
-import subprocess
-import os
-from colorama import Fore
-import time
-import sys
+
 
 def get_linux_username():
     """Fetch the Linux system's current username."""
