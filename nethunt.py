@@ -212,41 +212,72 @@ from colorama import Fore
 import subprocess
 from colorama import Fore
 
-def run_subfinder():
-    """Function to launch Subfinder directly with a manually entered command."""
+def get_linux_username():
+    """Fetch the Linux system's current username."""
     try:
-        # Prompt the user to manually enter the Subfinder command
-        print(Fore.YELLOW + "\nsubfinder -d example.com (subfinder -d -recursive -all, copy and paste if you would like) :")
-        command = input(Fore.CYAN + "Enter command: ").strip()
+        # Use the 'whoami' command to get the current user's username
+        username = subprocess.check_output("whoami", shell=True).decode().strip()
+        return username
+    except subprocess.CalledProcessError:
+        print(Fore.RED + "Error retrieving the username.")
+        return None
 
-        if command:
-            print(Fore.GREEN + f"Running command: {command}")
-            try:
-                # Launch Subfinder with the manually entered command
-                result = subprocess.run(command, shell=True)
+import subprocess
+import os
+from colorama import Fore
 
-                # If the command was successful, it will return to the shell (Subfinder environment)
-                if result.returncode == 0:
-                    print(Fore.GREEN + "\nSubfinder completed successfully.")
-                else:
-                    print(Fore.RED + "\nSubfinder did not complete successfully.")
+def get_linux_username():
+    """Fetch the Linux system's current username."""
+    try:
+        # Use the 'whoami' command to get the current user's username
+        username = subprocess.check_output("whoami", shell=True).decode().strip()
+        return username
+    except subprocess.CalledProcessError:
+        print(Fore.RED + "Error retrieving the username.")
+        return None
 
-                # Prompt the user to return to the main menu (inside Subfinder environment)
-                return_choice = input(Fore.YELLOW + "\nReturn To Main Menu: ").strip()
-                if return_choice == '99':
-                    print(Fore.CYAN + "Returning to Main Menu...")
-                    return  # Exit the function and go back to the main menu
-                else:
-                    print(Fore.CYAN + "Exiting Subfinder...")
+def run_magicrecon():
+    """Function to launch MagicRecon directly."""
+    try:
+        # Get the system's username using the Linux method
+        username = get_linux_username()
 
-            except Exception as e:
-                print(Fore.RED + f"Error running Subfinder: {e}")
+        if username:
+            # Construct the path using the Linux username
+            magicrecon_path = f"/home/{username}/magicRecon/magicrecon.sh"  # Assuming MagicRecon is in the user's home directory
+
+            # Check if the script exists at the dynamically constructed path
+            if os.path.exists(magicrecon_path):
+                print(Fore.GREEN + "Launching MagicRecon...")
+
+                # Run MagicRecon directly
+                try:
+                    # Run the MagicRecon script directly using subprocess
+                    process = subprocess.Popen(f"bash {magicrecon_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+                    # Capture the output and error
+                    stdout, stderr = process.communicate()
+
+                    if process.returncode == 0:
+                        print(Fore.GREEN + "MagicRecon completed successfully.")
+                        print(Fore.LIGHTCYAN_EX + "MagicRecon Results:")
+                        print(stdout)  # Print the standard output (results)
+                    else:
+                        print(Fore.RED + "MagicRecon encountered an error.")
+                        print(Fore.YELLOW + f"Error: {stderr}")
+                except Exception as e:
+                    print(Fore.RED + f"Error running MagicRecon: {e}")
+            else:
+                print(Fore.RED + f"MagicRecon script not found at path: {magicrecon_path}")
         else:
-            print(Fore.RED + "Invalid command. Please try again.")
+            print(Fore.RED + "Could not retrieve username. Cannot proceed with MagicRecon.")
 
     except Exception as e:
-        print(Fore.RED + f"Error launching Subfinder: {e}")
+        print(Fore.RED + f"Error launching MagicRecon: {e}")
 
+if __name__ == "__main__":
+    # Run MagicRecon directly when the script starts
+    run_magicrecon()
 
 
 
