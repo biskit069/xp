@@ -281,9 +281,6 @@ if __name__ == "__main__":
 
 
 # Function to show all Nmap commands
-def show_all_nmap_commands():
-   clear_screen()
-   commands = [
      def show_all_nmap_commands():
     clear_screen()
     commands = [
