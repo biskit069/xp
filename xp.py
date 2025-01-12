@@ -873,7 +873,7 @@ def main_menu():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.LIGHTYELLOW_EX+ "sudo python3 xp.py To Update")
+      print(Fore.LIGHTYELLOW_EX+ "sudo python3 xp.py To Update, Then Exit The Program")
       print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")
       print(Fore.LIGHTRED_EX+"1. nmap")
       print(Fore.BLUE+"2. Show All Nmap Commands")
