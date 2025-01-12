@@ -27,21 +27,17 @@ def clear_screen():
 # Function to show the main menu logo with blue and white mix
 def show_main_menu_logo():
    logo_text = r'''
-                _________             .__  __   
-___  _________ /   _____/_____   ____ |__|/  |_ 
-\  \/  /\____ \\_____  \\____ \ /  _ \|  \   __\
- >    < |  |_> >        \  |_> >  <_> )  ||  |  
-/__/\_ \|   __/_______  /   __/ \____/|__||__|  
-      \/|__|          \/|__|                    
-                                
-                                   
+         __     __      
+|\/| /\ |__)|  |_   \_/ 
+|  |/--\|   |__|__  / \ 
+                                                          
    '''
    clear_screen()
    for i, line in enumerate(logo_text.splitlines()):
       if i % 2 == 0:
         print(Fore.LIGHTWHITE_EX+ line)  # Blue for even lines
       else:
-        print(Fore.LIGHTBLACK_EX + line)  # White for odd lines
+        print(Fore.LIGHTBLUE_EX + line)  # White for odd lines
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
@@ -302,23 +298,22 @@ def exiting_loading_screen():
    clear_screen()
    loading_text = '''
 
-  _             _             
- | |__ _  _ ___| |__ _  _ ___ 
- | '_ \ || / -_) '_ \ || / -_)
- |_.__/\_, \___|_.__/\_, \___|
-       |__/          |__/     
+ __     __   __     __ 
+|__)\_/|_   |__)\_/|_  
+|__) | |__  |__) | |__ 
+                       
 
    '''
    for i, line in enumerate(loading_text.splitlines()):
       if i % 4 == 0:
-        print(Fore.LIGHTWHITE_EX + line)  # Blue for even lines
+        print(Fore.LIGHTCYAN_EX + line)  # Blue for even lines
       else:
-        print(Fore.LIGHTBLACK_EX + line)  # White for odd lines
+        print(Fore.CYAN + line)  # White for odd lines
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
    # Display a final "Exiting..." message with a blue background and white text
    print(Fore.BLUE + Fore.WHITE + "\n")
    time.sleep(1)  # Wait for a second before program exit
-   print(Fore.YELLOW + "Credits! biskit")
+   print(Fore.LIGHTWHITE_EX + "Credits! biskit")
    # Final message
    sys.exit()  # Exit the program
 
@@ -870,18 +865,18 @@ def main_menu():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.LIGHTYELLOW_EX+ "sudo python3 xp.py To Update, Then Exit Program")
-      print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")
-      print(Fore.LIGHTRED_EX+"1. nmap")
-      print(Fore.BLUE+"2. Show All Nmap Commands")
-      print(Fore.LIGHTCYAN_EX+"3. sslscan")
-      print(Fore.LIGHTRED_EX+"5. Metasploit")
-      print(Fore.BLUE+"7. subfinder")
-      print(Fore.LIGHTCYAN_EX+"6. Update Script")
-      print(Fore.LIGHTRED_EX  +"8. MagicRecon")
-      print(Fore.BLUE+         "88. Routersploit")
-      print(Fore.LIGHTCYAN_EX+"99. Exit")
-      choice = input(Fore.LIGHTBLACK_EX + "\nEnter your choice: ").strip()
+      print(Fore.LIGHTWHITE_EX+ "sudo python3 xp.py To Update, Then Exit Program")
+      print(Fore.LIGHTBLUE_EX + "V 0.1 biskit@")
+      print(Fore.LIGHTWHITE_EX+"1. nmap")
+      print(Fore.LIGHTBLUE_EX+"2. Show All Nmap Commands")
+      print(Fore.LIGHTWHITE_EX+"3. sslscan")
+      print(Fore.LIGHTBLUE_EX+"5. Metasploit")
+      print(Fore.LIGHTWHITE_EX+"7. subfinder")
+      print(Fore.LIGHTBLUE_EX+"6. Update Script")
+      print(Fore.LIGHTBLUE_EX  +"8. MagicRecon")
+      print(Fore.LIGHTWHITE_EX+         "88. Routersploit")
+      print(Fore.LIGHTBLUE_EX+"99. Exit")
+      choice = input(Fore.LIGHTWHITE_EX + "\nEnter your choice: ").strip()
       if choice == '2':
         show_all_nmap_commands()
       elif choice == '1':
