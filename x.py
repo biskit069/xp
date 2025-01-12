@@ -12,8 +12,18 @@ import requests
 import sys
 import shutil
 # Initialize colorama
-init(autoreset=True)
 
+
+import subprocess
+import shutil
+import os
+from colorama import Fore
+from colorama import init, Fore, Style
+import os
+import platform
+import time
+
+init(autoreset=True)
 
 # Register the signal handler
 
@@ -24,28 +34,23 @@ def clear_screen():
    else:
       os.system("clear")
 
-# Function to show the main menu logo with blue and white mix
+# Function to show the main menu logo with rainbow colors
 def show_main_menu_logo():
    logo_text = r'''
-         __     __      
-|\/| /\ |__)|  |_   \_/ 
-|  |/--\|   |__|__  / \ 
-                                                          
+███████╗██████╗ ██╗      ██████╗ ██╗████████╗███████╗███╗   ██╗██╗██████╗ ██████╗ ██████╗ 
+██╔════╝██╔══██╗██║     ██╔═══██╗██║╚══██╔══╝██╔════╝████╗  ██║██║██╔══██╗╚════██╗██╔══██╗
+███████╗██████╔╝██║     ██║   ██║██║   ██║   ███████╗██╔██╗ ██║██║██████╔╝ █████╔╝██████╔╝
+╚════██║██╔═══╝ ██║     ██║   ██║██║   ██║   ╚════██║██║╚██╗██║██║██╔═══╝  ╚═══██╗██╔══██╗
+███████║██║     ███████╗╚██████╔╝██║   ██║   ███████║██║ ╚████║██║██║     ██████╔╝██║  ██║
+╚══════╝╚═╝     ╚══════╝ ╚═════╝ ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝     ╚═════╝ ╚═╝  ╚═╝                                                                                                                                                                      
    '''
    clear_screen()
+   colors = [Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX]
    for i, line in enumerate(logo_text.splitlines()):
-      if i % 2 == 0:
-        print(Fore.LIGHTWHITE_EX+ line)  # Blue for even lines
-      else:
-        print(Fore.LIGHTBLUE_EX + line)  # White for odd lines
+      print(colors[i % len(colors)] + line)  # Cycle through rainbow colors
       time.sleep(0.1)  # Medium delay (0.3 seconds per line)
 
 # Function to run a scan with a given command
-
-import subprocess
-import shutil
-import os
-from colorama import Fore
 
 def run_nmap():
     """Function to launch Nmap with a custom command."""
@@ -293,29 +298,30 @@ def show_submenu(commands):
 
 
 
-# Exiting loading screen with blue and white color scheme
 def exiting_loading_screen():
    clear_screen()
    loading_text = '''
 
- __     __   __     __ 
-|__)\_/|_   |__)\_/|_  
-|__) | |__  |__) | |__ 
-                       
+██████╗ ██╗   ██╗███████╗██████╗ ██╗   ██╗███████╗
+██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗╚██╗ ██╔╝██╔════╝
+██████╔╝ ╚████╔╝ █████╗  ██████╔╝ ╚████╔╝ █████╗  
+██╔══██╗  ╚██╔╝  ██╔══╝  ██╔══██╗  ╚██╔╝  ██╔══╝  
+██████╔╝   ██║   ███████╗██████╔╝   ██║   ███████╗
+╚═════╝    ╚═╝   ╚══════╝╚═════╝    ╚═╝   ╚══════╝
+                                                  
 
    '''
+   colors = [Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX]
    for i, line in enumerate(loading_text.splitlines()):
-      if i % 4 == 0:
-        print(Fore.LIGHTCYAN_EX + line)  # Blue for even lines
-      else:
-        print(Fore.CYAN + line)  # White for odd lines
+      print(colors[i % len(colors)] + line)  # Cycle through rainbow colors
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
-   # Display a final "Exiting..." message with a blue background and white text
-   print(Fore.BLUE + Fore.WHITE + "\n")
+   # Display a final "Exiting..." message with a rainbow background and white text
+   print(Fore.LIGHTWHITE_EX + "\n")
    time.sleep(1)  # Wait for a second before program exit
    print(Fore.LIGHTWHITE_EX + "Credits! biskit")
    # Final message
    sys.exit()  # Exit the program
+
 
 # Function to run SSLScan on a given IP with command selection
 
@@ -861,21 +867,25 @@ def main_menu():
 
 
 
-# Main menu function with options
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.LIGHTWHITE_EX+ "sudo python3 xp.py To Update, Then Exit Program")
-      print(Fore.LIGHTBLUE_EX + "V 0.1 biskit@")
-      print(Fore.LIGHTWHITE_EX+"1. nmap")
-      print(Fore.LIGHTBLUE_EX+"2. Show All Nmap Commands")
-      print(Fore.LIGHTWHITE_EX+"3. sslscan")
-      print(Fore.LIGHTBLUE_EX+"5. Metasploit")
-      print(Fore.LIGHTWHITE_EX+"7. subfinder")
-      print(Fore.LIGHTBLUE_EX+"6. Update Script")
-      print(Fore.LIGHTBLUE_EX  +"8. MagicRecon")
-      print(Fore.LIGHTWHITE_EX+         "88. Routersploit")
-      print(Fore.LIGHTBLUE_EX+"99. Exit")
+      print(Fore.LIGHTMAGENTA_EX + "sudo python3 xp.py To Update, Then Exit Program")
+      print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")
+      colors = [Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX]
+      options = [
+         "1. nmap",
+         "2. Show All Nmap Commands",
+         "3. sslscan",
+         "5. Metasploit",
+         "7. subfinder",
+         "6. Update Script",
+         "8. MagicRecon",
+         "88. Routersploit",
+         "99. Exit"
+      ]
+      for i, option in enumerate(options):
+         print(colors[i % len(colors)] + option)
       choice = input(Fore.LIGHTWHITE_EX + "\nEnter your choice: ").strip()
       if choice == '2':
         show_all_nmap_commands()
