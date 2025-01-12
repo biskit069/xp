@@ -980,6 +980,7 @@ def main_menu():
          "6. Update Script",
          "8. MagicRecon",
          "88. Routersploit",
+         "22. tracepath",
          "99. Exit"
       ]
       for i, option in enumerate(options):
@@ -1001,8 +1002,11 @@ def main_menu():
         run_magicrecon()
       elif choice == '88':
         run_routersploit()
-      elif choice == '99' :
+      elif choice == '22':
+        run_tracepath()
+      elif choice == '99':
         exiting_loading_screen()
+      
       else:
         print(Fore.RED + "Invalid choice. Please try again.")
 
