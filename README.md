@@ -2,6 +2,9 @@
 
 
 ```bash
- install setup file: sudo python3 setup.py 
 
- How To install: sudo git clone https://github.com/biskit069/xp 
+How To install: git clone https://github.com/biskit069/sploitsnip3r
+
+Install Setup File: sudo python3 setup.py 
+
+How To Run: python3 sploitsnip3r
