@@ -361,7 +361,7 @@ def sslscan_scan():
             command = f""
         elif choice == '':
             command = f""
-        elif choice == '':
+        elif choice == '4':
             print(Fore.YELLOW + "\nExample of Manual SSLScan command:")
             print(Fore.YELLOW + "sslscan --bugs 192.168.1.1")
             command = input(Fore.BLUE + "Enter your SSLScan command: ").strip()
