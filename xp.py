@@ -329,11 +329,8 @@ def sslscan_scan():
     global scanning_in_progress
     try:
         print(Fore.BLUE + "\nChoose an SSLScan command:")
-        print("1. Basic SSL Scan")
-        print("2. Full SSL Scan")
-        print("3. SSL Certificate Details")
+        
         print("4. Manual SSLScan")
-        print("5. Vuln Scan")
         print("6. Show SSLScan Command List")  # Option to show the SSLScan command list
         print("99. Return to Main Menu")  # Option to return to the main menu
         choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
@@ -359,12 +356,12 @@ def sslscan_scan():
 
         # Define the SSLScan command based on the user's choice
         if choice == '1':
-            command = f"sslscan {ip}"
-        elif choice == '2':
-            command = f"sslscan --full {ip}"
-        elif choice == '3':
-            command = f"sslscan --cert {ip}"
-        elif choice == '4':
+            command = f""
+        elif choice == '':
+            command = f""
+        elif choice == '':
+            command = f""
+        elif choice == '':
             print(Fore.YELLOW + "\nExample of Manual SSLScan command:")
             print(Fore.YELLOW + "sslscan --bugs 192.168.1.1")
             command = input(Fore.BLUE + "Enter your SSLScan command: ").strip()
@@ -372,8 +369,8 @@ def sslscan_scan():
                 print(Fore.RED + "No command entered. Returning to menu.")
                 return  # Exit if no command is entered
             print(Fore.GREEN + f"Running custom SSLScan command: {command}")  # Debug print
-        elif choice == '5':
-            command = f"sslscan --bugs {ip}"  # New command for Vuln Scan
+        elif choice == '':
+            command = f""  # New command for Vuln Scan
         else:
             print(Fore.RED + "Invalid choice. Exiting SSLScan.")
             return
