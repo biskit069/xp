@@ -856,6 +856,106 @@ def main_menu():
             print(Fore.RED + "Invalid option. Please try again.")
 
 
+def clear_screen():
+    """Clear the screen based on the OS."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def run_tracepath():
+    """Function to run tracepath interactively."""
+    try:
+        clear_screen()
+        print(Fore.GREEN + "Tracepath Utility\n")
+        
+        # Get the target domain or IP
+        target = input(Fore.CYAN + "Enter the target domain or IP for tracepath: ").strip()
+        if not target:
+            print(Fore.RED + "No target specified. Returning to the main menu.")
+            return
+        
+        print(Fore.GREEN + f"\nRunning tracepath on {target}...\n")
+        
+        # Run the tracepath command
+        result = subprocess.run(["tracepath", target], text=True, capture_output=True)
+        
+        # Display the output
+        if result.returncode == 0:
+            print(Fore.LIGHTWHITE_EX + result.stdout)
+        else:
+            print(Fore.RED + f"Error running tracepath: {result.stderr}")
+        
+        # Wait for user to press Enter before returning
+        input(Fore.GREEN + "\nPress Enter to return to the main menu...")
+    
+    except Exception as e:
+        print(Fore.RED + f"Error running tracepath: {e}")
+
+def clear_screen():
+    """Clear the screen based on the OS."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def run_tracepath():
+    """Function to run tracepath interactively."""
+    try:
+        clear_screen()
+        print(Fore.GREEN + "Tracepath Utility\n")
+        
+        # Get the target domain or IP
+        target = input(Fore.CYAN + "Enter the target domain or IP for tracepath: ").strip()
+        if not target:
+            print(Fore.RED + "No target specified. Returning to the main menu.")
+            return
+        
+        print(Fore.GREEN + f"\nRunning tracepath on {target}...\n")
+        
+        # Run the tracepath command
+        result = subprocess.run(["tracepath", target], text=True, capture_output=True)
+        
+        # Display the output
+        if result.returncode == 0:
+            print(Fore.LIGHTWHITE_EX + result.stdout)
+        else:
+            print(Fore.RED + f"Error running tracepath: {result.stderr}")
+        
+        # Wait for user to press Enter before returning
+        input(Fore.GREEN + "\nPress Enter to return to the main menu...")
+    
+    except Exception as e:
+        print(Fore.RED + f"Error running tracepath: {e}")
+
+def show_tracepath_commands():
+    """Function to display all tracepath-related commands."""
+    clear_screen()
+    print(Fore.GREEN + "Available Tracepath Commands\n")
+    print(Fore.LIGHTWHITE_EX + """
+    tracepath <target>
+        - Traces the path packets take to reach the target domain or IP.
+
+    Examples:
+        tracepath google.com
+        tracepath 8.8.8.8
+    """)
+    input(Fore.GREEN + "\nPress Enter to return to the main menu...")
+
+def main_menu():
+    """Main menu for the script."""
+    while True:
+        clear_screen()
+        print(Fore.WHITE + "Main Menu")
+        print(Fore.GREEN + "1. Run Tracepath")
+        print(Fore.BLUE + "2. Show Tracepath Commands")
+        print(Fore.RED + "9. Exit")
+        
+        choice = input(Fore.CYAN + "\nEnter your choice: ").strip()
+        
+        if choice == "1":
+            run_tracepath()
+        elif choice == "2":
+            show_tracepath_commands()
+        elif choice == "9":
+            print(Fore.GREEN + "Exiting program...")
+            break
+        else:
+            print(Fore.RED + "Invalid choice. Please try again.")
 
 
 
