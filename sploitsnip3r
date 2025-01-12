@@ -497,7 +497,7 @@ def show_sslscan_commands():
 def update_script():
    try:
       print("Updated Restart Script")
-      url = "https://raw.githubusercontent.com/biskit069/xp/refs/heads/main/xp.py"
+      url = "https://raw.githubusercontent.com/biskit069/sploitsnip3r/refs/heads/main/sploitsnip3r"
       response = requests.get(url)
       if response.status_code == 200:
         confirm = input("Update (yes/no): ")
@@ -870,7 +870,7 @@ def main_menu():
 def main_menu():
    while True:
       show_main_menu_logo()
-      print(Fore.LIGHTMAGENTA_EX + "sudo python3 xp.py To Update, Then Exit Program")
+      print(Fore.LIGHTMAGENTA_EX + "sudo python3 sploitsnip3r To Update, Then Exit Program")
       print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")
       colors = [Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX]
       options = [
