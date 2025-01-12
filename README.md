@@ -1,4 +1,4 @@
-<img src="screenshot.png" alt="Main Menu Screenshot" width="600">
+<img src="ss.png" alt="Main Menu Screenshot" width="600">
 
 
 ```bash
