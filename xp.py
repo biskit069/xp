@@ -355,7 +355,7 @@ def sslscan_scan():
                 return
 
         # Define the SSLScan command based on the user's choice
-        if choice == '1':
+        if choice == '':
             command = f""
         elif choice == '':
             command = f""
