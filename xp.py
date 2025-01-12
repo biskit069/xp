@@ -329,8 +329,11 @@ def sslscan_scan():
     global scanning_in_progress
     try:
         print(Fore.BLUE + "\nChoose an SSLScan command:")
-        
-        print("4. Run SSLScan")
+        print("1. Basic SSL Scan")
+        print("2. Full SSL Scan")
+        print("3. SSL Certificate Details")
+        print("4. Manual SSLScan")
+        print("5. Vuln Scan")
         print("6. Show SSLScan Command List")  # Option to show the SSLScan command list
         print("99. Return to Main Menu")  # Option to return to the main menu
         choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
@@ -355,22 +358,22 @@ def sslscan_scan():
                 return
 
         # Define the SSLScan command based on the user's choice
-        if choice == '':
-            command = f""
-        elif choice == '':
-            command = f""
-        elif choice == '':
-            command = f""
+        if choice == '1':
+            command = f"sslscan {ip}"
+        elif choice == '2':
+            command = f"sslscan --full {ip}"
+        elif choice == '3':
+            command = f"sslscan --cert {ip}"
         elif choice == '4':
-            print(Fore.CYAN + "\nExample of Manual SSLScan command:")
-            print(Fore.LIGHTCYAN + "sslscan --bugs 192.168.1.1")
+            print(Fore.YELLOW + "\nExample of Manual SSLScan command:")
+            print(Fore.YELLOW + "sslscan --bugs 192.168.1.1")
             command = input(Fore.BLUE + "Enter your SSLScan command: ").strip()
             if not command:
                 print(Fore.RED + "No command entered. Returning to menu.")
                 return  # Exit if no command is entered
             print(Fore.GREEN + f"Running custom SSLScan command: {command}")  # Debug print
-        elif choice == '':
-            command = f""  # New command for Vuln Scan
+        elif choice == '5':
+            command = f"sslscan --bugs {ip}"  # New command for Vuln Scan
         else:
             print(Fore.RED + "Invalid choice. Exiting SSLScan.")
             return
@@ -764,7 +767,6 @@ def clear_screen():
 
 
 
-
 def get_linux_username():
     """Fetch the Linux system's current username."""
     try:
@@ -775,7 +777,7 @@ def get_linux_username():
         return None
 
 def run_magicrecon():
-    """Function to launch MagicRecon directly with predefined options."""
+    """Function to launch MagicRecon directly with predefined options or a custom command."""
     try:
         # Clear the screen when option 8 is selected
         clear_screen()
@@ -784,20 +786,49 @@ def run_magicrecon():
         username = get_linux_username()
 
         if username:
+            # Automatically construct the MagicRecon path using the username
             magicrecon_path = f"/home/{username}/magicRecon/magicrecon.sh"  # Assuming MagicRecon is in the user's home directory
 
             if os.path.exists(magicrecon_path):
                 print(Fore.GREEN + "Launching MagicRecon...")
 
-                try:
-                    domain = input(Fore.CYAN + "Enter the domain for MagicRecon: ").strip()
-                    command = f"bash {magicrecon_path} -d {domain} -a"
-                    subprocess.Popen(command, shell=True)  # This launches MagicRecon directly without capturing output
+                # Show the options for MagicRecon
+                print(Fore.BLUE + "\nChoose a MagicRecon option:")
+                print("1. Run MagicRecon -d example.com -a Auto Command")
+                print("2. Run MagicRecon")
+                print("99. Return to Main Menu")
 
-                    # Wait for user to press Enter to go back to main menu
-                    input(Fore.GREEN + "\nPress Enter to return to the main menu...")
-                except Exception as e:
-                    print(Fore.RED + f"Error running MagicRecon: {e}")
+                choice = input(Fore.CYAN + "\nEnter your choice: ").strip()
+
+                if choice == '99':
+                    print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
+                    return
+
+                if choice == '1':
+                    try:
+                        domain = input(Fore.CYAN + "Enter the domain for MagicRecon: ").strip()
+                        command = f"bash {magicrecon_path} -d {domain} -a"
+                        subprocess.Popen(command, shell=True)  # This launches MagicRecon directly without capturing output
+
+                        # Wait for user to press Enter to go back to main menu
+                        input(Fore.GREEN + "\nPress Enter to return to the main menu...")
+                    except Exception as e:
+                        print(Fore.RED + f"Error running MagicRecon: {e}")
+
+                elif choice == '2':
+                    try:
+                        custom_command = input(Fore.CYAN + "Enter your custom MagicRecon command (without path): ").strip()
+                        # Prepend the MagicRecon path to the custom command if needed
+                        custom_command_with_path = f"bash {magicrecon_path} {custom_command}"
+                        subprocess.Popen(custom_command_with_path, shell=True)  # Launch the custom command directly
+
+                        # Wait for user to press Enter to go back to main menu
+                        input(Fore.GREEN + "\nPress Enter to return to the main menu...")
+                    except Exception as e:
+                        print(Fore.RED + f"Error running custom MagicRecon command: {e}")
+
+                else:
+                    print(Fore.RED + "Invalid choice. Returning to the main menu.")
             else:
                 print(Fore.RED + f"MagicRecon script not found at path: {magicrecon_path}")
         else:
@@ -813,7 +844,7 @@ def main_menu():
     while True:
         clear_screen()  # Clear the screen before showing the menu
         print(Fore.WHITE + "\nMain Menu:")
-        print(Fore.GREEN + "8. Run MagicRecon (Auto Command)")
+        print(Fore.GREEN + "8. Run MagicRecon")
         print(Fore.RED + "9. Exit")
 
         option = input(Fore.CYAN + "\nEnter an option: ").strip()
@@ -827,6 +858,7 @@ def main_menu():
             print(Fore.RED + "Invalid option. Please try again.")
 
 # DO NOT call main_menu() automatically at the start of the script
+
 
 
 
