@@ -1,4 +1,4 @@
-<img src="sploitsnip3r screenshot.png" alt="Main Menu Screenshot" width="600">
+<img src="sploitsnip3r sploitsnip3r.gif" alt="Main Menu Screenshot" width="600">
 
 
 ```bash
