@@ -12,9 +12,8 @@ else:
 setup(
     name="xp",
     version="0.1",
-    description="network kit plus web tools",
+    description="network kit",
     author="biskit",
-    author_email="no email",  # Replace with your actual email
     url="https://github.com/biskit069/xp",
     packages=find_packages(),
     py_modules=["xp"],
