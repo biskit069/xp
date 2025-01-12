@@ -743,9 +743,6 @@ def get_linux_username():
 def run_magicrecon():
     """Function to launch MagicRecon directly with predefined options or a custom command."""
     try:
-        # Clear the screen when option 8 is selected
-        clear_screen()
-
         # Fetch the Linux username
         username = get_linux_username()
 
@@ -757,42 +754,79 @@ def run_magicrecon():
                 print(Fore.GREEN + "Launching MagicRecon...")
 
                 # Show the options for MagicRecon
-                print(Fore.BLUE + "\nChoose a MagicRecon option:")
-                print("1. Run MagicRecon -d example.com -a Auto Command")
-                print("2. Run MagicRecon")
-                print("99. Return to Main Menu")
+                while True:
+                    clear_screen()  # Clear the screen before showing the options again
+                    print(Fore.BLUE + "\nChoose a MagicRecon option:")
+                    print(Fore.CYAN + "1. Run MagicRecon -d example.com -a Auto Command")
+                    print(Fore.CYAN + "2. Run MagicRecon")
+                    print(Fore.CYAN + "3. View MagicRecon Commands List")
+                    print(Fore.RED + "99. Return to Main Menu")
 
-                choice = input(Fore.CYAN + "\nEnter your choice: ").strip()
+                    choice = input(Fore.CYAN + "\nEnter your choice: ").strip()
 
-                if choice == '99':
-                    print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
-                    return
+                    if choice == '99':
+                        print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
+                        return
 
-                if choice == '1':
-                    try:
-                        domain = input(Fore.CYAN + "Enter the domain for MagicRecon: ").strip()
-                        command = f"bash {magicrecon_path} -d {domain} -a"
-                        subprocess.Popen(command, shell=True)  # This launches MagicRecon directly without capturing output
+                    elif choice == '1':
+                        try:
+                            domain = input(Fore.CYAN + "Enter the domain for MagicRecon: ").strip()
+                            command = f"bash {magicrecon_path} -d {domain} -a"
+                            subprocess.Popen(command, shell=True)  # This launches MagicRecon directly without capturing output
 
-                        # Wait for user to press Enter to go back to main menu
-                        input(Fore.GREEN + "\nPress Enter to return to the main menu...")
-                    except Exception as e:
-                        print(Fore.RED + f"Error running MagicRecon: {e}")
+                            # Wait for user to press Enter to go back to the options
+                            input(Fore.GREEN + "\nPress Enter to return to the options menu...")
+                        except Exception as e:
+                            print(Fore.RED + f"Error running MagicRecon: {e}")
 
-                elif choice == '2':
-                    try:
-                        custom_command = input(Fore.CYAN + "Enter your custom MagicRecon command (without path): ").strip()
-                        # Prepend the MagicRecon path to the custom command if needed
-                        custom_command_with_path = f"bash {magicrecon_path} {custom_command}"
-                        subprocess.Popen(custom_command_with_path, shell=True)  # Launch the custom command directly
+                    elif choice == '2':
+                        try:
+                            custom_command = input(Fore.CYAN + "Enter Command (Make Sure To Use bash (magicrecon.sh): Then Enter Command): ").strip()
+                            # Prepend the MagicRecon path to the custom command if needed
+                            custom_command_with_path = f"bash {magicrecon_path} {custom_command}"
+                            subprocess.Popen(custom_command_with_path, shell=True)  # Launch the custom command directly
 
-                        # Wait for user to press Enter to go back to main menu
-                        input(Fore.GREEN + "\nPress Enter to return to the main menu...")
-                    except Exception as e:
-                        print(Fore.RED + f"Error running custom MagicRecon command: {e}")
+                            # Wait for user to press Enter to go back to the options
+                            input(Fore.GREEN + "\nPress Enter to return to the options menu...")
+                        except Exception as e:
+                            print(Fore.RED + f"Error running custom MagicRecon command: {e}")
 
-                else:
-                    print(Fore.RED + "Invalid choice. Returning to the main menu.")
+                    elif choice == '3':
+                        # Show the list of available MagicRecon commands
+                        print(Fore.YELLOW + "\nMagicRecon Commands List:")
+                        print(Fore.CYAN + "-d domain.com     Target domain")
+                        print(Fore.CYAN + "-w domain.com     Wildcard domain")
+                        print(Fore.CYAN + "-l list.txt       Target list")
+                        print(Fore.CYAN + "-a, --all         All mode - Full scan with full target recognition and vulnerability scanning")
+                        print(Fore.CYAN + "-p, --passive     Passive reconnaissance (Footprinting) - Performs only passive recon with multiple tools")
+                        print(Fore.CYAN + "-x, --active      Active reconnaissance (Fingerprinting) - Performs only active recon with multiple tools")
+                        print(Fore.CYAN + "-r, --recon       Reconnaissance - Perform active and passive reconnaissance")
+                        print(Fore.CYAN + "-v, --vulnerabilities  Vulnerabilities - Check multiple vulnerabilities in the domain/list domains")
+                        print(Fore.CYAN + "-m, --massive     Massive recon - Massive vulnerability analysis with repetitions every X seconds")
+                        print(Fore.CYAN + "-n, --notify      Notify - This option is used to receive notifications via Discord, Telegram or Slack")
+                        print(Fore.CYAN + "-h, --help        Help - Show this help")
+
+                        print(Fore.GREEN + "\nEXAMPLES:")
+                        print(Fore.CYAN + "All:")
+                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -a")
+                        print(Fore.CYAN + "Passive reconnaissance to a list of domains:")
+                        print(Fore.GREEN + "./magicrecon.sh -l domainlist.txt -p")
+                        print(Fore.CYAN + "Active reconnaissance to a domain:")
+                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -x")
+                        print(Fore.CYAN + "Full reconnaissance:")
+                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -r")
+                        print(Fore.CYAN + "Full reconnaissance and vulnerabilities scanning:")
+                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -r -v")
+                        print(Fore.CYAN + "Full reconnaissance and vulnerabilities scanning to a wildcard:")
+                        print(Fore.GREEN + "./magicrecon.sh -w domain.com")
+                        print(Fore.CYAN + "Massive reconnaissance and vulnerabilities scanning:")
+                        print(Fore.GREEN + "./magicrecon.sh -w domain.com -m")
+
+                        # Wait for user to press Enter to go back to the options
+                        input(Fore.GREEN + "\nPress Enter to return to the options menu...")
+
+                    else:
+                        print(Fore.RED + "Invalid choice. Please try again.")
             else:
                 print(Fore.RED + f"MagicRecon script not found at path: {magicrecon_path}")
         else:
@@ -820,8 +854,6 @@ def main_menu():
             break
         else:
             print(Fore.RED + "Invalid option. Please try again.")
-
-# DO NOT call main_menu() automatically at the start of the script
 
 
 
