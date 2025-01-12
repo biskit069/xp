@@ -3,7 +3,6 @@ import sys
 import platform
 import subprocess
 import threading
-from colorama import Fore, init
 import time
 import os
 import re
@@ -11,17 +10,10 @@ import ipaddress
 import requests
 import sys
 import shutil
-# Initialize colorama
-
-
 import subprocess
-import shutil
-import os
-from colorama import Fore
 from colorama import init, Fore, Style
-import os
-import platform
-import time
+
+
 
 init(autoreset=True)
 
@@ -513,13 +505,6 @@ def update_script():
       print(f"Error updating script: {e}")
    finally:
       clear_screen()
-
-
-import subprocess
-import os
-import shutil
-from colorama import Fore
-
 def run_routersploit():
     """Function to run RouterSploit with sudo automatically and display host info."""
     try:
@@ -543,13 +528,6 @@ def run_routersploit():
 
     except Exception as e:
         print(Fore.RED + f"Error running RouterSploit: {e}")
-
-
-
-
-
-
-
 def metasploit_scan():
     try:
         while True:
@@ -634,18 +612,6 @@ def metasploit_scan():
 
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
-
-
-
-
-
-
-
-
-
-
-
-
 def run_subfinder():
     """Function to launch Subfinder directly with a manually entered command."""
     try:
