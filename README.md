@@ -1,4 +1,4 @@
-![Screenshot](https://github.com/biskit069/sploitsnip3r/raw/main/screenshot.png)
+![Screenshot](https://github.com/biskit069/sploitsnip3r/raw/main/Screenshot.png)
 ```bash
 
 How To install: git clone https://github.com/biskit069/sploitsnip3r
