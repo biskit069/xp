@@ -1,4 +1,7 @@
 <p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=F7F7F7&background=6C25FF&width=435&lines=metasploit+routersploit+Auto+Exploit+;Commands+Coming+Soon!!!" alt="Typing SVG">
+</p>
+<p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=F7F7F7&background=FD20FF&width=435&lines=unfinished+hacking+kit" alt="Typing SVG">
 </p>
 
