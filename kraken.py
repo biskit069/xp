@@ -1032,8 +1032,8 @@ def main_menu():
             "77. airgeddon",
             "12. Netdiscover",
             "22. pwncat",
-            "99. To Exit",
             "6. Update Script",
+            "99. To Exit",
         ]
         # Alternate between light purple and white for each option
         for i, option in enumerate(options):
