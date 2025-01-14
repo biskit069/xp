@@ -12,7 +12,7 @@ else:
 setup(
     name="xp",
     version="0.1",
-    description="random tool",
+    description="network kit",
     author="biskit",
     url="https://github.com/biskit069/kraken",
     packages=find_packages(),
