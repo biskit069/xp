@@ -959,11 +959,29 @@ def main_menu():
 
 
 
+init(autoreset=True)
 
+def find_g2l_script():
+    """Search for the g2l.py script in the system."""
+    for root, dirs, files in os.walk('/'):  # Start from the root directory
+        if 'g2l.py' in files:
+            script_path = os.path.join(root, 'g2l.py')
+            return script_path
+    return None  # Return None if the script is not found
 
-
-
-
+def execute_python_script():
+    """Find the g2l.py script automatically and execute it."""
+    script_path = find_g2l_script()
+    
+    if script_path:
+        try:
+            # Execute the Python script using subprocess
+            print(Fore.GREEN + f"Executing the script at {script_path}...")
+            subprocess.run(["python3", script_path], check=True)
+        except subprocess.CalledProcessError as e:
+            print(Fore.RED + f"Error executing script: {e}")
+    else:
+        print(Fore.RED + "g2l.py script not found on the system.")
 
 def main_menu():
    while True:
@@ -981,7 +999,8 @@ def main_menu():
          "8. MagicRecon",
          "88. Routersploit",
          "22. tracepath",
-         "99. Exit"
+         "99. To Exit"
+         "11. Accurate ip look up",
       ]
       for i, option in enumerate(options):
          print(colors[i % len(colors)] + option)
@@ -1004,6 +1023,8 @@ def main_menu():
         run_routersploit()
       elif choice == '22':
         run_tracepath()
+      elif choice == '11':
+       execute_python_script()
       elif choice == '99':
         exiting_loading_screen()
       
