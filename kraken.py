@@ -1025,17 +1025,16 @@ def main_menu():
             "2. Show All Nmap Commands",
             "3. sslscan",
             "5. Metasploit",
-            "6. Update Script",
             "88. Routersploit",
             "22. tracepath",
             "11. Accurate ip look up",
             "33. asnmap",
             "77. airgeddon",
             "12. Netdiscover",
-            "99. To Exit",
             "22. pwncat",
+            "99. To Exit",
+            "6. Update Script",
         ]
-
         # Alternate between light purple and white for each option
         for i, option in enumerate(options):
             if i % 2 == 0:
