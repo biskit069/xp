@@ -12,9 +12,9 @@ else:
 setup(
     name="xp",
     version="0.1",
-    description="network kit",
+    description="random tool",
     author="biskit",
-    url="https://github.com/biskit069/xp",
+    url="https://github.com/biskit069/kraken",
     packages=find_packages(),
     py_modules=["xp"],
     install_requires=requirements,
