@@ -952,7 +952,68 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
+def find_pwncat_dir():
+    """Automatically find the directory containing pwncat's pyproject.toml."""
+    possible_dirs = [
+        os.path.expanduser("~/pwncat"),  # Common directories to check
+        "/opt/pwncat",  # Alternative path
+    ]
+    
+    for directory in possible_dirs:
+        for root, dirs, files in os.walk(directory):
+            if "pyproject.toml" in files:
+                return root
+    return None
 
+def get_hostname():
+    """Get the current Linux hostname."""
+    try:
+        return subprocess.check_output("whoami", shell=True, text=True).strip()
+    except subprocess.CalledProcessError as e:
+        print(f"Error retrieving hostname: {e}")
+        return None
+
+def run_pwncat():
+    """Run pwncat-cs directly after navigating to the pwncat directory."""
+    pwncat_dir = find_pwncat_dir()
+    if not pwncat_dir:
+        print("Pwncat directory not found.")
+        return
+
+    hostname = get_hostname()
+    if not hostname:
+        print("Hostname retrieval failed.")
+        return
+
+    try:
+        # Change to the pwncat directory
+        os.chdir(pwncat_dir)
+
+        # Run pwncat-cs directly
+        print(f"Running pwncat-cs with hostname: {hostname}")
+        command = f"pwncat-cs {hostname}"
+        subprocess.run(command, shell=True, check=True)
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error running pwncat-cs: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    finally:
+        os.chdir(os.path.expanduser("~"))
+
+def pwncat_menu():
+    while True:
+        print("\n1. Run Pwncat")
+        print("2. Return to Main Menu")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            run_pwncat()
+        elif choice == "2":
+            break
+        else:
+            print("Invalid choice.")
 def main_menu():
     while True:
         show_main_menu_logo()
@@ -972,6 +1033,7 @@ def main_menu():
             "77. airgeddon",
             "12. Netdiscover",
             "99. To Exit",
+            "22. pwncat",
         ]
 
         # Alternate between light purple and white for each option
@@ -1007,6 +1069,8 @@ def main_menu():
             run_airgeddon()        
         elif choice == '33':
             asnmap_menu()
+        elif choice == '9':
+            run_pwncat()
         elif choice == '99':
             exiting_loading_screen()
         else:
