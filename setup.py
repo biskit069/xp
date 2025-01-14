@@ -10,7 +10,7 @@ else:
     requirements = []
 
 setup(
-    name="xp",
+    name="kraken",
     version="0.1",
     description="network kit",
     author="biskit",
