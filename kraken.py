@@ -1031,7 +1031,7 @@ def main_menu():
             "33. asnmap",
             "77. airgeddon",
             "12. Netdiscover",
-            "22. pwncat",
+            "9. pwncat",
             "6. Update Script",
             "99. To Exit",
         ]
