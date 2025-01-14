@@ -652,7 +652,7 @@ def run_subfinder():
 
         # Run Subfinder with custom command if selected
         if choice == '1':
-            print(Fore.YELLOW + "\nEnter your custom Subfinder command (e.g., subfinder -d example.com/ no need to save file after scan it will ask you to save domains into a txt):")
+            print(Fore.YELLOW + "\nEnter your custom Subfinder command (e.g., subfinder -d example.com/ no need to save file after scan it will ask you to save domains into a txt / and don't type in .txt it will auto do it):")
             command = input(Fore.CYAN + "Enter command: ").strip()
 
             if command:
