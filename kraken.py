@@ -631,250 +631,6 @@ def metasploit_scan():
 
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
-def run_subfinder():
-    """Function to launch Subfinder directly with a manually entered command."""
-    try:
-        print(Fore.BLUE + "\nChoose a Subfinder option:")
-        print("1. Run Subfinder with Custom Command")
-        print("2. Show Subfinder Command List")  # Option to show Subfinder command list
-        print("99. Return to Main Menu")  # Option to return to the main menu
-        choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
-
-        # Return to the main menu if the user selects option 99
-        if choice == '99':
-            print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
-            return  # Exits the function and goes back to the main menu
-
-        # Show Subfinder command list if selected
-        if choice == '2':
-            show_subfinder_commands()
-            return
-
-        # Run Subfinder with custom command if selected
-        if choice == '1':
-            print(Fore.YELLOW + "\nEnter your custom Subfinder command (e.g., subfinder -d example.com/ no need to save file after scan it will ask you to save domains into a txt / and don't type in .txt it will auto do it):")
-            command = input(Fore.CYAN + "Enter command: ").strip()
-
-            if command:
-                print(Fore.GREEN + f"Running command: {command}")
-                try:
-                    # Ensure subfinder is in the system path
-                    if not shutil.which("subfinder"):
-                        print(Fore.RED + "Subfinder is not installed or not found in the system path.")
-                        return
-                    
-                    # Launch Subfinder with the manually entered command
-                    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-
-                    # Check if Subfinder executed successfully
-                    if result.returncode == 0:
-                        print(Fore.GREEN + "\nSubfinder completed successfully.")
-                        output = result.stdout
-
-                        # Show the results from Subfinder
-                        print(Fore.LIGHTCYAN_EX + "\nSubfinder Results:")
-                        print(output)
-
-                        # Ask if the user wants to save the results
-                        save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
-                        if save_results == 'yes':
-                            file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
-                            with open(file_name, "w") as file:
-                                file.write(output)
-                            print(Fore.GREEN + f"Results saved to '{file_name}'.")
-                        elif save_results == 'no':
-                            print(Fore.WHITE + "Results not saved.")
-                        else:
-                            print(Fore.RED + "Invalid choice. Results not saved.")
-                    else:
-                        print(Fore.RED + "\nSubfinder did not complete successfully.")
-                        print(Fore.YELLOW + f"Error: {result.stderr}")
-
-                except Exception as e:
-                    print(Fore.RED + f"Error running Subfinder: {e}")
-            else:
-                print(Fore.RED + "Invalid command. Please try again.")
-
-    except Exception as e:
-        print(Fore.RED + f"Error launching Subfinder: {e}")
-
-
-def show_subfinder_commands():
-    """Displays a list of common Subfinder commands."""
-    clear_screen()
-    subfinder_commands = [
-        "Subfinder Command List:",
-        "-d <domains>                  Domains to find subdomains for",
-        "-dL <file>                    File containing list of domains for subdomain discovery",
-        "-s <sources>                  Specific sources to use for discovery (e.g., crtsh, github)",
-        "-recursive                    Use only sources that can handle subdomains recursively",
-        "-all                          Use all sources for enumeration (slow)",
-        "-es <exclude-sources>         Sources to exclude from enumeration",
-        "-m <match>                    Subdomain or list of subdomains to match",
-        "-f <filter>                   Subdomain or list of subdomains to filter",
-        "-rl <rate-limit>              Maximum number of HTTP requests to send per second",
-        "-t <concurrent>               Number of concurrent goroutines for resolving (default 10)",
-        "-o <output>                   File to write output to",
-        "-oJ                           Write output in JSONL format",
-        "-oD <output-dir>              Directory to write output",
-        "-cs                           Include all sources in the output",
-        "-oI                           Include host IP in output",
-        "-config <file>                Flag config file (default $HOME/.config/subfinder/config.yaml)",
-        "-pc <provider-config>         Provider config file",
-        "-r <resolvers>                List of resolvers to use",
-        "-rL <rlist>                   File containing list of resolvers to use",
-        "-nW                           Display active subdomains only",
-        "-proxy <proxy>                HTTP proxy to use",
-        "-ei                           Exclude IPs from the list of domains",
-        "-silent                       Show only subdomains in output",
-        "-version                      Show version of subfinder",
-        "-v                            Show verbose output",
-        "-nc                           Disable color in output",
-        "-ls                           List all available sources",
-        "-timeout <seconds>            Seconds to wait before timing out",
-        "-max-time <minutes>           Minutes to wait for enumeration results"
-    ]
-    
-    print(Fore.GREEN + "\nAvailable Subfinder Commands:")
-    for command in subfinder_commands:
-        print(Fore.YELLOW + command)
-    print(Fore.LIGHTCYAN_EX + "\nPress any key to return to the menu...")
-    input()  # Wait for the user to press a key to return to the menu
-    return  # Return to the main menu
-
-
-def clear_screen():
-    """Clears the terminal screen."""
-    subprocess.call('clear' if os.name == 'posix' else 'cls', shell=True)
-
-
-
-
-def get_linux_username():
-    """Fetch the Linux system's current username."""
-    try:
-        username = subprocess.check_output("whoami", shell=True).decode().strip()
-        return username
-    except subprocess.CalledProcessError:
-        print(Fore.RED + "Error retrieving the username.")
-        return None
-
-def run_magicrecon():
-    """Function to launch MagicRecon directly with predefined options or a custom command."""
-    try:
-        # Fetch the Linux username
-        username = get_linux_username()
-
-        if username:
-            # Automatically construct the MagicRecon path using the username
-            magicrecon_path = f"/home/{username}/magicRecon/magicrecon.sh"  # Assuming MagicRecon is in the user's home directory
-
-            if os.path.exists(magicrecon_path):
-                print(Fore.GREEN + "Launching MagicRecon...")
-
-                # Show the options for MagicRecon
-                while True:
-                    clear_screen()  # Clear the screen before showing the options again
-                    print(Fore.BLUE + "\nChoose a MagicRecon option:")
-                    print(Fore.CYAN + "1. Run MagicRecon -d example.com -a Auto Command")
-                    print(Fore.CYAN + "2. Run MagicRecon")
-                    print(Fore.CYAN + "3. View MagicRecon Commands List")
-                    print(Fore.RED + "99. Return to Main Menu")
-
-                    choice = input(Fore.CYAN + "\nEnter your choice: ").strip()
-
-                    if choice == '99':
-                        print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
-                        return
-
-                    elif choice == '1':
-                        try:
-                            domain = input(Fore.CYAN + "Enter the domain for MagicRecon: ").strip()
-                            command = f"bash {magicrecon_path} -d {domain} -a"
-                            subprocess.Popen(command, shell=True)  # This launches MagicRecon directly without capturing output
-
-                            # Wait for user to press Enter to go back to the options
-                            input(Fore.GREEN + "\nPress Enter to return to the options menu...")
-                        except Exception as e:
-                            print(Fore.RED + f"Error running MagicRecon: {e}")
-
-                    elif choice == '2':
-                        try:
-                            custom_command = input(Fore.CYAN + "Enter Command (Make Sure To Use bash (magicrecon.sh): Then Enter Command): ").strip()
-                            # Prepend the MagicRecon path to the custom command if needed
-                            custom_command_with_path = f"bash {magicrecon_path} {custom_command}"
-                            subprocess.Popen(custom_command_with_path, shell=True)  # Launch the custom command directly
-
-                            # Wait for user to press Enter to go back to the options
-                            input(Fore.GREEN + "\nPress Enter to return to the options menu...")
-                        except Exception as e:
-                            print(Fore.RED + f"Error running custom MagicRecon command: {e}")
-
-                    elif choice == '3':
-                        # Show the list of available MagicRecon commands
-                        print(Fore.YELLOW + "\nMagicRecon Commands List:")
-                        print(Fore.CYAN + "-d domain.com     Target domain")
-                        print(Fore.CYAN + "-w domain.com     Wildcard domain")
-                        print(Fore.CYAN + "-l list.txt       Target list")
-                        print(Fore.CYAN + "-a, --all         All mode - Full scan with full target recognition and vulnerability scanning")
-                        print(Fore.CYAN + "-p, --passive     Passive reconnaissance (Footprinting) - Performs only passive recon with multiple tools")
-                        print(Fore.CYAN + "-x, --active      Active reconnaissance (Fingerprinting) - Performs only active recon with multiple tools")
-                        print(Fore.CYAN + "-r, --recon       Reconnaissance - Perform active and passive reconnaissance")
-                        print(Fore.CYAN + "-v, --vulnerabilities  Vulnerabilities - Check multiple vulnerabilities in the domain/list domains")
-                        print(Fore.CYAN + "-m, --massive     Massive recon - Massive vulnerability analysis with repetitions every X seconds")
-                        print(Fore.CYAN + "-n, --notify      Notify - This option is used to receive notifications via Discord, Telegram or Slack")
-                        print(Fore.CYAN + "-h, --help        Help - Show this help")
-
-                        print(Fore.GREEN + "\nEXAMPLES:")
-                        print(Fore.CYAN + "All:")
-                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -a")
-                        print(Fore.CYAN + "Passive reconnaissance to a list of domains:")
-                        print(Fore.GREEN + "./magicrecon.sh -l domainlist.txt -p")
-                        print(Fore.CYAN + "Active reconnaissance to a domain:")
-                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -x")
-                        print(Fore.CYAN + "Full reconnaissance:")
-                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -r")
-                        print(Fore.CYAN + "Full reconnaissance and vulnerabilities scanning:")
-                        print(Fore.GREEN + "./magicrecon.sh -d domain.com -r -v")
-                        print(Fore.CYAN + "Full reconnaissance and vulnerabilities scanning to a wildcard:")
-                        print(Fore.GREEN + "./magicrecon.sh -w domain.com")
-                        print(Fore.CYAN + "Massive reconnaissance and vulnerabilities scanning:")
-                        print(Fore.GREEN + "./magicrecon.sh -w domain.com -m")
-
-                        # Wait for user to press Enter to go back to the options
-                        input(Fore.GREEN + "\nPress Enter to return to the options menu...")
-
-                    else:
-                        print(Fore.RED + "Invalid choice. Please try again.")
-            else:
-                print(Fore.RED + f"MagicRecon script not found at path: {magicrecon_path}")
-        else:
-            print(Fore.RED + "Could not retrieve username. Cannot proceed with MagicRecon.")
-    except Exception as e:
-        print(Fore.RED + f"Error launching MagicRecon: {e}")
-
-def clear_screen():
-    """Clear the screen based on the OS."""
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-def main_menu():
-    while True:
-        clear_screen()  # Clear the screen before showing the menu
-        print(Fore.WHITE + "\nMain Menu:")
-        print(Fore.GREEN + "8. Run MagicRecon")
-        print(Fore.RED + "9. Exit")
-
-        option = input(Fore.CYAN + "\nEnter an option: ").strip()
-
-        if option == "8":
-            run_magicrecon()  # Launch MagicRecon directly when option 8 is selected
-        elif option == "9":
-            print(Fore.GREEN + "Exiting program...")
-            break
-        else:
-            print(Fore.RED + "Invalid option. Please try again.")
-
-
 def clear_screen():
     """Clear the screen based on the OS."""
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -1066,6 +822,136 @@ def execute_python_script():
             print(Fore.RED + f"Error executing script: {e}")
     else:
         print(Fore.RED + "g2l.py script not found on the system.")
+def run_airgeddon():
+    try:
+        print("Running Airgeddon with sudo...")
+        os.system('sudo airgeddon')
+    except KeyboardInterrupt:
+        print("\nAirgeddon was interrupted.")
+        return  # Return to the main menu
+
+def main_menu():
+    while True:
+        print("\nMain Menu:")
+        print("1. Run Airgeddon")
+        print("2. Exit")
+        
+        choice = input("Choose an option: ")
+        
+        if choice == "1":
+            run_airgeddon()
+        elif choice == "2":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice, please try again.")
+def show_asnmap_commands():
+    print("""
+    Usage:
+    asnmap [flags]
+
+    Flags:
+    INPUT:
+       -a, -asn string[]     target asn to lookup, example: -a AS5650
+       -i, -ip string[]      target ip to lookup, example: -i 100.19.12.21, -i 2a10:ad40::
+       -d, -domain string[]  target domain to lookup, example: -d google.com, -d facebook.com
+       -org string[]         target organization to lookup, example: -org GOOGLE
+       -f, -file string[]    targets to lookup from file
+
+    CONFIGURATIONS:
+       -auth                    configure ProjectDiscovery Cloud Platform (PDCP) api key (default true)
+       -config string           path to the asnmap configuration file
+       -r, -resolvers string[]  list of resolvers to use
+       -p, -proxy string[]      list of proxy to use (comma separated or file input)
+
+    UPDATE:
+       -up, -update                 update asnmap to latest version
+       -duc, -disable-update-check  disable automatic asnmap update check
+
+    OUTPUT:
+       -o, -output string  file to write output to
+       -j, -json           display json format output
+       -c, -csv            display csv format output
+       -v6                 display ipv6 cidr ranges in cli output
+       -v, -verbose        display verbose output
+       -silent             display silent output
+       -version            show version of the project
+    """)
+
+def run_asnmap(api_key=None, asn=None, save_to_file=False):
+    try:
+        command = "asnmap"
+        if asn:
+            command += f" -a {asn}"
+        if api_key:
+            command += f" -auth {api_key}"
+
+        if save_to_file:
+            filename = f"{asn}_asnmap_results.txt"
+            command += f" -o {filename}"
+            print(f"Running asnmap and saving results to {filename}")
+        else:
+            print("Running asnmap without saving the results.")
+
+        os.system(command)
+    except KeyboardInterrupt:
+        print("\nasnmap was interrupted.")
+        return  # Return to the main menu
+
+def auto_run_asnmap():
+    asn = input("Enter the ASN to look up with asnmap (e.g., AS5650): ")
+    if asn:
+        save_choice = input("Would you like to save the results to a file? (y/n): ").lower()
+        save_to_file = save_choice == "y"
+        run_asnmap(asn=asn, save_to_file=save_to_file)
+    else:
+        print("No ASN entered. Returning to the menu.")
+
+def enter_api_key():
+    api_key = input("Enter your API key for asnmap: ")
+    return api_key
+
+def asnmap_menu():
+    while True:
+        print("\nASNMap Menu:")
+        print("1. Show asnmap Commands")
+        print("2. Run asnmap")
+        print("3. Auto Run asnmap")
+        print("4. Enter API Key for asnmap")
+        print("5. Return to Main Menu")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            show_asnmap_commands()
+        elif choice == "2":
+            api_key = input("Enter API key (leave blank for default): ")
+            run_asnmap(api_key if api_key else None)
+        elif choice == "3":
+            auto_run_asnmap()
+        elif choice == "4":
+            api_key = enter_api_key()
+            print(f"API key entered: {api_key}")
+        elif choice == "5":
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+def main_menu():
+    while True:
+        print("\nMain Menu:")
+        print("1. Run ASNMap")
+        print("2. Exit")
+        
+        choice = input("Choose an option: ")
+        
+        if choice == "1":
+            asnmap_menu()
+        elif choice == "2":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice, please try again.")
 
 def main_menu():
     while True:
@@ -1078,12 +964,12 @@ def main_menu():
             "2. Show All Nmap Commands",
             "3. sslscan",
             "5. Metasploit",
-            "7. subfinder",
             "6. Update Script",
-            "8. MagicRecon",
             "88. Routersploit",
             "22. tracepath",
             "11. Accurate ip look up",
+            "33. asnmap",
+            "77. airgeddon",
             "12. Netdiscover",
             "99. To Exit",
         ]
@@ -1109,10 +995,6 @@ def main_menu():
             metasploit_scan()
         elif choice == '6':
             update_script()
-        elif choice == '7':
-            run_subfinder()
-        elif choice == '8':
-            run_magicrecon()
         elif choice == '88':
             run_routersploit()
         elif choice == '22':
@@ -1121,6 +1003,10 @@ def main_menu():
             execute_python_script()
         elif choice == '12':
             netdiscover_menu()
+        elif choice == '77':   
+            run_airgeddon()        
+        elif choice == '33':
+            asnmap_menu()
         elif choice == '99':
             exiting_loading_screen()
         else:
