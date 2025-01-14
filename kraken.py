@@ -975,7 +975,72 @@ def main_menu():
             break
         else:
             print(Fore.RED + "Invalid choice. Please try again.")
+def clear_screen():
+    # This function clears the terminal screen
+    os.system('clear' if os.name == 'posix' else 'cls')
 
+def show_netdiscover_commands():
+    clear_screen()  # Clear the screen before showing the commands
+    print("Netdiscover Usage:")
+    print("""
+Usage: netdiscover [-i device] [-r range | -l file | -p] [-m file] [-F filter] [-s time] [-c count] [-n node] [-dfPLNS]
+
+  -i device: your network device
+  -r range: scan a given range instead of auto scan. 192.168.6.0/24,/16,/8
+  -l file: scan the list of ranges contained into the given file
+  -p passive mode: do not send anything, only sniff
+  -m file: scan a list of known MACs and host names
+  -F filter: customize pcap filter expression (default: "arp")
+  -s time: time to sleep between each ARP request (milliseconds)
+  -c count: number of times to send each ARP request (for nets with packet loss)
+  -n node: last source IP octet used for scanning (from 2 to 253)
+  -d ignore home config files for autoscan and fast mode
+  -f enable fastmode scan, saves a lot of time, recommended for auto
+  -P print results in a format suitable for parsing by another program and stop after active scan
+  -L similar to -P but continue listening after the active scan is completed
+  -N Do not print header. Only valid when -P or -L is enabled.
+  -S enable sleep time suppression between each request (hardcore mode)
+
+If -r, -l or -p are not enabled, netdiscover will scan for common LAN addresses.
+    """)
+    input("\nPress Enter to return to the menu...")  # Wait for user input to return to menu
+
+def run_auto_netdiscover(ip):
+    try:
+        print(f"Running: sudo netdiscover -r {ip}")
+        subprocess.run(['sudo', 'netdiscover', '-r', ip], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running Netdiscover: {e}")
+
+def run_manual_netdiscover():
+    manual_command = input("Enter your manual Netdiscover command: ")
+    try:
+        print(f"Running: {manual_command}")
+        subprocess.run(manual_command.split(), check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running the manual Netdiscover command: {e}")
+
+def netdiscover_menu():
+    while True:
+        clear_screen()  # Clear the screen every time the menu is shown
+        print("\nNetdiscover Menu:")
+        print("1. Show Netdiscover Commands")
+        print("2. Run Auto Netdiscover (16 IPs scan)")
+        print("3. Run Manual Netdiscover Command")
+        print("4. Return to Main Menu")
+        choice = input("Choose an option: ")
+
+        if choice == '1':
+            show_netdiscover_commands()
+        elif choice == '2':
+            ip = input("Enter an IP or IP range (e.g., 192.168.1.0/28 for 16 IPs): ")
+            run_auto_netdiscover(ip)
+        elif choice == '3':
+            run_manual_netdiscover()
+        elif choice == '4':
+            break
+        else:
+            print("Invalid choice, please try again.")
 
 
 init(autoreset=True)
@@ -1019,6 +1084,7 @@ def main_menu():
             "88. Routersploit",
             "22. tracepath",
             "11. Accurate ip look up",
+            "12. Netdiscover",
             "99. To Exit",
         ]
 
@@ -1053,6 +1119,8 @@ def main_menu():
             run_tracepath()
         elif choice == '11':
             execute_python_script()
+        elif choice == '12':
+            netdiscover_menu()
         elif choice == '99':
             exiting_loading_screen()
         else:
