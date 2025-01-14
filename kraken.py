@@ -13,39 +13,59 @@ import shutil
 import subprocess
 from colorama import init, Fore, Style
 
-
-
 init(autoreset=True)
 
-# Register the signal handler
-
-# Function to clear the screen (teleportation effect)
+# Function to clear the screen
 def clear_screen():
-   if platform.system() == "Windows":
-      os.system("cls")
-   else:
-      os.system("clear")
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
 
-# Function to show the main menu logo with rainbow colors
+# Function to show the main menu logo
 def show_main_menu_logo():
-   logo_text = r'''
-███████╗██████╗ ██╗      ██████╗ ██╗████████╗███████╗███╗   ██╗██╗██████╗ ██████╗ ██████╗ 
-██╔════╝██╔══██╗██║     ██╔═══██╗██║╚══██╔══╝██╔════╝████╗  ██║██║██╔══██╗╚════██╗██╔══██╗
-███████╗██████╔╝██║     ██║   ██║██║   ██║   ███████╗██╔██╗ ██║██║██████╔╝ █████╔╝██████╔╝
-╚════██║██╔═══╝ ██║     ██║   ██║██║   ██║   ╚════██║██║╚██╗██║██║██╔═══╝  ╚═══██╗██╔══██╗
-███████║██║     ███████╗╚██████╔╝██║   ██║   ███████║██║ ╚████║██║██║     ██████╔╝██║  ██║
-╚══════╝╚═╝     ╚══════╝ ╚═════╝ ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═══╝╚═╝╚═╝     ╚═════╝ ╚═╝  ╚═╝                                                                                                                                                                      
-   '''
-   clear_screen()
-   colors = [Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX]
-   for i, line in enumerate(logo_text.splitlines()):
-      print(colors[i % len(colors)] + line)  # Cycle through rainbow colors
-      time.sleep(0.1)  # Medium delay (0.3 seconds per line)
+    kra = r'''
+██╗  ██╗██████╗  █████╗ 
+██║ ██╔╝██╔══██╗██╔══██╗
+█████╔╝ ██████╔╝███████║
+██╔═██╗ ██╔══██╗██╔══██║
+██║  ██╗██║  ██║██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝
+'''
+    ken = r'''
+██╗  ██╗███████╗███╗   ██╗
+██║ ██╔╝██╔════╝████╗  ██║
+█████╔╝ █████╗  ██╔██╗ ██║
+██╔═██╗ ██╔══╝  ██║╚██╗██║
+██║  ██╗███████╗██║ ╚████║
+╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝
+'''
 
-# Function to run a scan with a given command
+    clear_screen()
 
+    # Define colors
+    light_purple = '\033[38;5;13m'  # Light Purple (256-color code)
+    faded_white = Fore.WHITE + Style.BRIGHT
+
+    # Combine kra and ken together on one line, side by side
+    kra_lines = kra.strip().split("\n")
+    ken_lines = ken.strip().split("\n")
+
+    # Merge them line by line, ensuring no space in between
+    for kra_line, ken_line in zip(kra_lines, ken_lines):
+        print(f"{light_purple}{kra_line}{faded_white}{ken_line}")
+        time.sleep(0.1)  # Add delay for the effect
+
+# Main function to ensure everything runs only once
+def main():
+    print("Starting script...")  # Debugging print to track execution
+    show_main_menu_logo()
+
+# Ensure this script only runs once by using the __name__ guard
+if __name__ == "__main__":
+    main()
 def run_nmap():
-    """Function to launch Nmap with a custom command."""
+    """Function to launch Nmap with a Command."""
     try:
         print(Fore.LIGHTWHITE_EX + "\nChoose an Nmap option:")
         print("1. Run Nmap")
@@ -294,16 +314,15 @@ def exiting_loading_screen():
    clear_screen()
    loading_text = '''
 
-██████╗ ██╗   ██╗███████╗██████╗ ██╗   ██╗███████╗
-██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗╚██╗ ██╔╝██╔════╝
-██████╔╝ ╚████╔╝ █████╗  ██████╔╝ ╚████╔╝ █████╗  
-██╔══██╗  ╚██╔╝  ██╔══╝  ██╔══██╗  ╚██╔╝  ██╔══╝  
-██████╔╝   ██║   ███████╗██████╔╝   ██║   ███████╗
-╚═════╝    ╚═╝   ╚══════╝╚═════╝    ╚═╝   ╚══════╝
+  _             _             
+ | |__ _  _ ___| |__ _  _ ___ 
+ | '_ \ || / -_) '_ \ || / -_)
+ |_.__/\_, \___|_.__/\_, \___|
+       |__/          |__/     
                                                   
 
    '''
-   colors = [Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX]
+   colors = [Fore.LIGHTWHITE_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTWHITE_EX]
    for i, line in enumerate(loading_text.splitlines()):
       print(colors[i % len(colors)] + line)  # Cycle through rainbow colors
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
@@ -984,52 +1003,61 @@ def execute_python_script():
         print(Fore.RED + "g2l.py script not found on the system.")
 
 def main_menu():
-   while True:
-      show_main_menu_logo()
-      print(Fore.LIGHTMAGENTA_EX + "sudo python3 sploitsnip3r To Update, Then Exit Program")
-      print(Fore.LIGHTCYAN_EX + "V 0.1 biskit@")
-      colors = [Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTRED_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX]
-      options = [
-         "1. nmap",
-         "2. Show All Nmap Commands",
-         "3. sslscan",
-         "5. Metasploit",
-         "7. subfinder",
-         "6. Update Script",
-         "8. MagicRecon",
-         "88. Routersploit",
-         "22. tracepath",
-         "99. To Exit"
-         "11. Accurate ip look up",
-      ]
-      for i, option in enumerate(options):
-         print(colors[i % len(colors)] + option)
-      choice = input(Fore.LIGHTWHITE_EX + "\nEnter your choice: ").strip()
-      if choice == '2':
-        show_all_nmap_commands()
-      elif choice == '1':
-       run_nmap()
-      elif choice == '3':
-        sslscan_scan()
-      elif choice == '5':
-        metasploit_scan()
-      elif choice == '6':
-        update_script()
-      elif choice == '7':
-       run_subfinder()
-      elif choice == '8': 
-        run_magicrecon()
-      elif choice == '88':
-        run_routersploit()
-      elif choice == '22':
-        run_tracepath()
-      elif choice == '11':
-       execute_python_script()
-      elif choice == '99':
-        exiting_loading_screen()
-      
-      else:
-        print(Fore.RED + "Invalid choice. Please try again.")
+    while True:
+        show_main_menu_logo()
+        print('\033[96m' + "sudo python3 kraken To Update, Then Exit Program")
+        print('\033[96m' + "V 0.1")
+        print('\033[38;2;255;182;193m' + "Go To https://github.com/biskit069/g2l To install ip tool",)
+        options = [
+            "1. nmap",
+            "2. Show All Nmap Commands",
+            "3. sslscan",
+            "5. Metasploit",
+            "7. subfinder",
+            "6. Update Script",
+            "8. MagicRecon",
+            "88. Routersploit",
+            "22. tracepath",
+            "11. Accurate ip look up",
+            "99. To Exit",
+        ]
 
+        # Alternate between light purple and white for each option
+        for i, option in enumerate(options):
+            if i % 2 == 0:
+                print('\033[38;5;13m' + option)  # Light purple for even options
+            else:
+                print('\033[97m' + option)  # White for odd options
+
+        # User input for the choice
+        choice = input('\033[97m' + "\nEnter your choice: ").strip()
+
+        # Handle the user's choice
+        if choice == '2':
+            show_all_nmap_commands()
+        elif choice == '1':
+            run_nmap()
+        elif choice == '3':
+            sslscan_scan()
+        elif choice == '5':
+            metasploit_scan()
+        elif choice == '6':
+            update_script()
+        elif choice == '7':
+            run_subfinder()
+        elif choice == '8':
+            run_magicrecon()
+        elif choice == '88':
+            run_routersploit()
+        elif choice == '22':
+            run_tracepath()
+        elif choice == '11':
+            execute_python_script()
+        elif choice == '99':
+            exiting_loading_screen()
+        else:
+            print('\033[91m' + "Invalid choice. Please try again.")
+
+# Main entry point
 if __name__ == "__main__":
-   main_menu()
+    main_menu()
