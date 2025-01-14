@@ -508,7 +508,7 @@ def show_sslscan_commands():
 def update_script():
    try:
       print("Updated Restart Script")
-      url = "https://raw.githubusercontent.com/biskit069/sploitsnip3r/refs/heads/main/sploitsnip3r"
+      url = "https://raw.githubusercontent.com/biskit069/kraken/refs/heads/main/kraken.py"
       response = requests.get(url)
       if response.status_code == 200:
         confirm = input("Update (yes/no): ")
