@@ -1043,7 +1043,7 @@ def main_menu():
                 print('\033[97m' + option)  # White for odd options
 
         # User input for the choice
-        choice = input('\033[97m' + "\nEnter your choice: ").strip()
+        choice = input('\033[97m' + "\nkraken$").strip()
 
         # Handle the user's choice
         if choice == '2':
