@@ -9,18 +9,34 @@ if os.path.exists(requirements_file):
 else:
     requirements = []
 
+# Additional dependencies to install
+additional_requirements = [
+    "subfinder",
+    "asnmap",
+    "pwncat",
+    "airgeddon",
+    "tracepath",
+    "sslscan",
+    "nmap",
+    "netdiscover",
+    "routersploit",
+]
+
+# Merge with the ones from requirements.txt
+requirements.extend(additional_requirements)
+
 setup(
     name="kraken",
     version="0.1",
-    description="network kit",
+    description="network hacking kit",
     author="biskit",
     url="https://github.com/biskit069/kraken",
     packages=find_packages(),
-    py_modules=["xp"],
+    py_modules=["kraken"],
     install_requires=requirements,
     entry_points={
         "console_scripts": [
-            "xp= xp:main_menu",  # Allows running `xp` to start the main menu
+            "kraken= kraken:main_menu",  # Allows running `xp` to start the main menu
         ]
     },
     classifiers=[
