@@ -873,6 +873,32 @@ def clear_screen():
     else:
         os.system("clear")
 
+import os
+import subprocess
+import platform
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+import os
+import subprocess
+import platform
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
 def show_asnmap_commands():
     clear_screen()
     print("""
@@ -938,7 +964,16 @@ def auto_run_asnmap():
         print("No ASN entered. Returning to the menu.")
 
 def enter_api_key():
-    return input("Enter your API key for asnmap: ")
+    api_key = input("Enter your API key for asnmap: ").strip()
+    if api_key:
+        try:
+            subprocess.run(["asnmap", "-auth", api_key], check=True)
+            print("Signed in successfully with the provided API key.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to sign in with the provided API key: {e}")
+    else:
+        print("No API key entered.")
+    input("\nPress Enter to return to the menu: ")
 
 def asnmap_menu():
     while True:
@@ -948,7 +983,7 @@ def asnmap_menu():
         print("2. Run asnmap (Manual Command)")
         print("3. Auto Run asnmap")
         print("4. Enter API Key for asnmap")
-        print("99. Return to Main Menu")
+        print("5. Return to Main Menu")
 
         choice = input("Choose an option: ")
 
@@ -959,9 +994,8 @@ def asnmap_menu():
         elif choice == "3":
             auto_run_asnmap()
         elif choice == "4":
-            api_key = enter_api_key()
-            print("API key saved.")
-        elif choice == "99":
+            enter_api_key()
+        elif choice == "5":
             break
         else:
             print("Invalid choice, please try again.")
@@ -982,6 +1016,7 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
+
 def find_pwncat_dir():
     """Automatically find the directory containing pwncat's pyproject.toml."""
     possible_dirs = [
