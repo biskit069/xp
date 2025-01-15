@@ -845,7 +845,36 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
+import os
+import subprocess
+import platform
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
 def show_asnmap_commands():
+    clear_screen()
     print("""
     Usage:
     asnmap [flags]
@@ -877,74 +906,75 @@ def show_asnmap_commands():
        -silent             display silent output
        -version            show version of the project
     """)
+    input("\nPress Enter to return to the menu: ")
 
-def run_asnmap(api_key=None, asn=None, save_to_file=False):
+def run_asnmap_manual():
     try:
-        command = "asnmap"
-        if asn:
-            command += f" -a {asn}"
-        if api_key:
-            command += f" -auth {api_key}"
-
-        if save_to_file:
-            filename = f"{asn}_asnmap_results.txt"
-            command += f" -o {filename}"
-            print(f"Running asnmap and saving results to {filename}")
-        else:
-            print("Running asnmap without saving the results.")
-
-        os.system(command)
+        while True:
+            command = input("Enter asnmap command (or press Enter to return to the menu): ").strip()
+            if not command:
+                break
+            subprocess.run(command, shell=True)
     except KeyboardInterrupt:
-        print("\nasnmap was interrupted.")
-        return  # Return to the main menu
+        print("\nReturning to the menu.")
 
 def auto_run_asnmap():
     asn = input("Enter the ASN to look up with asnmap (e.g., AS5650): ")
     if asn:
-        save_choice = input("Would you like to save the results to a file? (y/n): ").lower()
-        save_to_file = save_choice == "y"
-        run_asnmap(asn=asn, save_to_file=save_to_file)
+        try:
+            subprocess.run(["asnmap", "-a", asn], check=True)
+            save_choice = input("Would you like to save the results to a file? (y/n): ").lower()
+            if save_choice == "y":
+                filename = input("Enter the file name to save results (e.g., results.txt): ").strip()
+                if not filename.endswith(".txt"):
+                    filename += ".txt"
+                with open(filename, "w") as file:
+                    result = subprocess.run(["asnmap", "-a", asn], capture_output=True, text=True)
+                    file.write(result.stdout)
+                print(f"Results saved to {filename}")
+        except subprocess.CalledProcessError as e:
+            print(f"Error running asnmap: {e}")
     else:
         print("No ASN entered. Returning to the menu.")
 
 def enter_api_key():
-    api_key = input("Enter your API key for asnmap: ")
-    return api_key
+    return input("Enter your API key for asnmap: ")
 
 def asnmap_menu():
     while True:
+        clear_screen()
         print("\nASNMap Menu:")
         print("1. Show asnmap Commands")
-        print("2. Run asnmap")
+        print("2. Run asnmap (Manual Command)")
         print("3. Auto Run asnmap")
         print("4. Enter API Key for asnmap")
-        print("5. Return to Main Menu")
+        print("99. Return to Main Menu")
 
         choice = input("Choose an option: ")
 
         if choice == "1":
             show_asnmap_commands()
         elif choice == "2":
-            api_key = input("Enter API key (leave blank for default): ")
-            run_asnmap(api_key if api_key else None)
+            run_asnmap_manual()
         elif choice == "3":
             auto_run_asnmap()
         elif choice == "4":
             api_key = enter_api_key()
-            print(f"API key entered: {api_key}")
-        elif choice == "5":
+            print("API key saved.")
+        elif choice == "99":
             break
         else:
             print("Invalid choice, please try again.")
 
 def main_menu():
     while True:
+        clear_screen()
         print("\nMain Menu:")
         print("1. Run ASNMap")
         print("2. Exit")
-        
+
         choice = input("Choose an option: ")
-        
+
         if choice == "1":
             asnmap_menu()
         elif choice == "2":
@@ -1021,19 +1051,19 @@ def main_menu():
         print('\033[96m' + "V 0.1")
         print('\033[38;2;255;182;193m' + "Go To https://github.com/biskit069/g2l To install ip tool",)
         options = [
-            "1. nmap",
-            "2. Show All Nmap Commands",
-            "3. sslscan",
-            "5. Metasploit",
-            "88. Routersploit",
-            "22. tracepath",
-            "11. Accurate ip look up",
-            "33. asnmap",
-            "77. airgeddon",
-            "12. Netdiscover",
-            "9. pwncat",
-            "6. Update Script",
-            "99. To Exit",
+            "[1] nmap",
+            "[2] Show All Nmap Commands",
+            "[3] sslscan",
+            "[5] Metasploit",
+            "[88] Routersploit",
+            "[22] tracepath",
+            "[11] Accurate ip look up",
+            "[33] asnmap",
+            "[77].airgeddon",
+            "[12] Netdiscover",
+            "[9]pwncat",
+            "[6] Update Script",
+            "[99] To Exit",
         ]
         # Alternate between light purple and white for each option
         for i, option in enumerate(options):
@@ -1043,7 +1073,7 @@ def main_menu():
                 print('\033[97m' + option)  # White for odd options
 
         # User input for the choice
-        choice = input('\033[97m' + "\nkraken$").strip()
+        choice = input('\033[97m' + "\nkraken$ ").strip()
 
         # Handle the user's choice
         if choice == '2':
