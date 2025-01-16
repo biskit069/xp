@@ -40,6 +40,14 @@ def install_pwncat(home_dir):
     else:
         print(f"Failed to install pwncat-cs: {result.stderr}")
 
+    # Install distutils module
+    print("Installing distutils module...")
+    result = subprocess.run(["pip", "install", "distutils"], cwd=repo_path, text=True, capture_output=True)
+    if result.returncode == 0:
+        print("distutils installed successfully.")
+    else:
+        print(f"Failed to install distutils: {result.stderr}")
+
     # Install dependencies with poetry in the pwncat directory
     result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
     if result.returncode == 0:
