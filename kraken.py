@@ -1317,7 +1317,7 @@ def main_menu():
             "[12] Netdiscover",
             "[9] pwncat",
             "[15] hostname to private ip",
-            "[25] cerbrutus",
+            "[25] network brute force tool / cerbrutus",
             "[6] Update Script",
             "[99] To Exit",
             "[13] ping ip",
