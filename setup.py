@@ -18,7 +18,7 @@ def install_system_packages():
         else:
             print(f"Failed to install {package}: {result.stderr}")
 
-# Function to install pwncat
+# Function to install pwncat and pwncat-cs
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -31,6 +31,14 @@ def install_pwncat(home_dir):
             print(f"Failed to clone pwncat: {result.stderr}")
             return
         print(f"Cloned pwncat into {repo_path}.")
+
+    # Install pwncat-cs in the pwncat directory
+    print("Installing pwncat-cs...")
+    result = subprocess.run(["pip", "install", "pwncat-cs"], cwd=repo_path, text=True, capture_output=True)
+    if result.returncode == 0:
+        print("pwncat-cs installed successfully.")
+    else:
+        print(f"Failed to install pwncat-cs: {result.stderr}")
 
     # Install dependencies with poetry in the pwncat directory
     result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
@@ -124,7 +132,7 @@ def main():
     # Install system dependencies
     install_system_packages()
 
-    # Install pwncat
+    # Install pwncat and pwncat-cs
     install_pwncat(home_dir)
 
     # Install other tools
