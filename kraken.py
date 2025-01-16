@@ -682,14 +682,23 @@ def run_tracepath():
         
         print(Fore.GREEN + f"\nRunning tracepath on {target}...\n")
         
-        # Run the tracepath command
-        result = subprocess.run(["tracepath", target], text=True, capture_output=True)
+        # Run the tracepath command and stream the output
+        process = subprocess.Popen(
+            ["tracepath", target],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
         
-        # Display the output
-        if result.returncode == 0:
-            print(Fore.LIGHTWHITE_EX + result.stdout)
-        else:
-            print(Fore.RED + f"Error running tracepath: {result.stderr}")
+        # Display the output line by line as it is produced
+        for line in process.stdout:
+            print(Fore.LIGHTWHITE_EX + line.strip())
+        
+        # Wait for the process to complete and check for errors
+        process.wait()
+        if process.returncode != 0:
+            error_message = process.stderr.read()
+            print(Fore.RED + f"Error running tracepath: {error_message.strip()}")
         
         # Wait for user to press Enter before returning
         input(Fore.GREEN + "\nPress Enter to return to the main menu...")
@@ -731,8 +740,9 @@ def main_menu():
             break
         else:
             print(Fore.RED + "Invalid choice. Please try again.")
+
 def clear_screen():
-    # This function clears the terminal screen
+    """Clears the terminal screen."""
     os.system('clear' if os.name == 'posix' else 'cls')
 
 def show_netdiscover_commands():
@@ -1079,6 +1089,168 @@ def pwncat_menu():
             break
         else:
             print("Invalid choice.")
+def run_cerbrutus():
+    """Function to run Cerbrutus with options for manual and automatic mode."""
+    while True:
+        clear_screen()
+        print("\nCerbrutus Menu:")
+        print("1. Show Cerbrutus Help")
+        print("2. Run Cerbrutus in Auto Mode (Default Wordlist Path: /opt/wordlists/<name>.txt)")
+        print("3. Run Cerbrutus in Auto Mode 2 (Custom Wordlist Path)")
+        print("4. Run Cerbrutus with Custom Command")
+        print("5. Return to Main Menu")
+
+        choice = input("\nChoose an option: ").strip()
+
+        if choice == '1':
+            # Display Cerbrutus help
+            print("\nPython-based Network Brute Forcing Tool!")
+            print("""
+positional arguments:
+  Host                  The host to connect to - in IP or VHOST/Domain Name form
+  Service               The service to brute force (currently implemented 'SSH')
+
+options:
+  -h, --help            show this help message and exit
+  -U USERS, --users USERS
+                        Either a single user, or the path to the file of users you wish to use
+  -P PASSWORDS, --passwords PASSWORDS
+                        Either a single password, or the path to the password list you wish to use
+  -p PORT, --port PORT  The port you wish to target (only required if running on a non-standard port)
+  -t THREADS, --threads THREADS
+                        Number of threads to use
+  -q [QUIET ...], --quiet [QUIET ...]
+            """)
+            input("\nPress Enter to return to the menu...")
+
+        elif choice == '2':
+            # Auto Mode 1: Default Wordlist Path
+            target_ip = input("Enter the target IP address: ").strip()
+            username = input("Enter the username to brute force: ").strip()
+            wordlist_name = input("Enter the name of the password list (without '.txt'): ").strip()
+            threads = input("Enter the number of threads to use (default is 10): ").strip()
+
+            threads = threads if threads.isdigit() else "10"
+
+            if target_ip and username and wordlist_name:
+                wordlist_path = f"/opt/wordlists/{wordlist_name}.txt"
+                command = [
+                    "python3", "cerbrutus.py", target_ip, "SSH",
+                    "-U", username,
+                    "-P", wordlist_path,
+                    "-t", threads
+                ]
+
+                try:
+                    subprocess.run(command)
+                except Exception as e:
+                    print(f"Error running Cerbrutus: {e}")
+            else:
+                print("IP address, username, and password list are required.")
+
+        elif choice == '3':
+            # Auto Mode 2: Custom Wordlist Path
+            target_ip = input("Enter the target IP address: ").strip()
+            username = input("Enter the username to brute force: ").strip()
+            wordlist_file = input("Enter the name of the password list file (e.g., 'c.txt'): ").strip()
+            threads = input("Enter the number of threads to use (default is 10): ").strip()
+
+            threads = threads if threads.isdigit() else "10"
+
+            if target_ip and username and wordlist_file:
+                command = [
+                    "python3", "cerbrutus.py", target_ip, "SSH",
+                    "-U", username,
+                    "-P", wordlist_file,
+                    "-t", threads
+                ]
+
+                try:
+                    subprocess.run(command)
+                except Exception as e:
+                    print(f"Error running Cerbrutus: {e}")
+            else:
+                print("IP address, username, and password list are required.")
+
+        elif choice == '4':
+            # Run Cerbrutus with a custom command
+            custom_command = input("Enter your Cerbrutus command: ").strip()
+            if custom_command:
+                try:
+                    subprocess.run(custom_command, shell=True)
+                except Exception as e:
+                    print(f"Error running Cerbrutus: {e}")
+            else:
+                print("No command entered.")
+
+        elif choice == '5':
+            # Return to the main menu
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+def signal_handler(sig, frame):
+    print("\nExiting...")
+    sys.exit(0)
+
+# Set up the signal handler to catch Ctrl+C
+signal.signal(signal.SIGINT, signal_handler)
+
+def ping_ip():
+    """Prompt for an IP address and ping it."""
+    while True:
+        ip = input("Enter IP address to ping (or press 99 to return to the main menu): ")
+
+        # Check if the user pressed 99 to return to the menu
+        if ip == '99':
+            return  # Return to the main menu
+
+        # Detect the operating system
+        os_type = platform.system().lower()
+
+        try:
+            # For Windows, use -n for count
+            if os_type == "windows":
+                response = subprocess.run(["ping", "-n", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
+            else:
+                # For Linux/macOS, use -c for count
+                response = subprocess.run(["ping", "-c", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
+
+            # Check if the ping was successful
+            if response.returncode == 0:
+                print(f"\nPing to {ip} successful!")
+                print(response.stdout.decode())  # Display detailed ping result
+            else:
+                print("\nPing failed!")
+                print(response.stderr.decode())  # Display error message
+
+        except subprocess.TimeoutExpired:
+            print("\nPing request timed out.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        # After showing the result, prompt to return to the main menu or try again
+        return_to_menu = input("\nPress 99 to return to the main menu, or Enter to try another IP: ")
+        if return_to_menu == '99':
+            return  # Return to the main menu
+
+# Menu function where the user selects options
+def menu():
+    while True:
+        print("\nSelect an option:")
+        print("1. Ping an IP address")
+        print("2. Exit")
+        
+        choice = input("Enter your choice: ")
+        
+        if choice == '1':
+            ping_ip()  # Call ping_ip when option 1 is selected
+        elif choice == '2':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid option, please try again.")
+
 def main_menu():
     while True:
         show_main_menu_logo()
@@ -1094,11 +1266,14 @@ def main_menu():
             "[22] tracepath",
             "[11] Accurate ip look up",
             "[33] asnmap",
-            "[77].airgeddon",
+            "[77] airgeddon",
             "[12] Netdiscover",
-            "[9]pwncat",
+            "[9] pwncat",
+            "[15] hostname to private ip",
+            "[25] cerbrutus",
             "[6] Update Script",
             "[99] To Exit",
+            "[13] ping ip",
         ]
         # Alternate between light purple and white for each option
         for i, option in enumerate(options):
@@ -1135,6 +1310,12 @@ def main_menu():
             asnmap_menu()
         elif choice == '9':
             run_pwncat()
+        elif choice == '15':
+          scan_hostname_to_ip()
+        elif choice == '25':
+            run_cerbrutus()
+        elif choice == '13':
+             ping_ip()
         elif choice == '99':
             exiting_loading_screen()
         else:
