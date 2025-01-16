@@ -46,16 +46,15 @@ def install_asnmap(home_dir):
     if result.returncode == 0:
         print("asnmap installed successfully.")
         
-        # Wait for a few seconds to ensure asnmap is fully installed
-        time.sleep(4)
+        # Wait for 2 seconds to ensure asnmap is fully installed
+        time.sleep(2)
 
-        # Find the asnmap binary and copy it to the desired directory
+        # Change to /bin directory and copy asnmap binary to /home/host
         asnmap_binary = shutil.which("asnmap")
         if asnmap_binary:
-            target_path = os.path.join(home_dir, "asnmap")  # Path to copy the asnmap binary
-            print(f"Copying asnmap binary to {target_path}...")
-            subprocess.run(f"cp {asnmap_binary} {target_path}", shell=True)
-            print(f"asnmap binary copied to {target_path}.")
+            print(f"Copying asnmap binary from {asnmap_binary} to /home/host...")
+            subprocess.run(f"cp {asnmap_binary} /home/host", shell=True)
+            print("asnmap binary copied successfully.")
         else:
             print("asnmap binary not found after installation.")
     else:
