@@ -84,6 +84,13 @@ def install_pwncat_cs(home_dir):
         print(f"Failed to run poetry lock: {result.stderr}")
         return
 
+    # Explicitly add pwncat-cs to poetry if it's not already listed
+    print("Adding pwncat-cs to poetry...")
+    result = subprocess.run(["poetry", "add", "pwncat-cs"], text=True, capture_output=True)
+    if result.returncode != 0:
+        print(f"Failed to add pwncat-cs to poetry: {result.stderr}")
+        return
+
     # Install pwncat-cs using poetry
     print("Running poetry install...")
     result = subprocess.run(["poetry", "install"], text=True, capture_output=True)
