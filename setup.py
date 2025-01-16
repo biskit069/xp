@@ -62,6 +62,7 @@ def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
 # Function to install pwncat-cs
 def install_pwncat_cs(home_dir):
     print("Installing pwncat-cs...")
+
     repo_url = "https://github.com/calebstewart/pwncat"
     repo_path = os.path.join(home_dir, "pwncat")
 
@@ -73,14 +74,19 @@ def install_pwncat_cs(home_dir):
             return
         print(f"Cloned pwncat into {repo_path}.")
 
-    # Run poetry lock --no-update
-    result = subprocess.run(["poetry", "lock", "--no-update"], cwd=repo_path, text=True, capture_output=True)
+    # Change to the pwncat directory
+    os.chdir(repo_path)
+
+    # Install poetry dependencies
+    print("Running poetry lock --no-update...")
+    result = subprocess.run(["poetry", "lock", "--no-update"], text=True, capture_output=True)
     if result.returncode != 0:
         print(f"Failed to run poetry lock: {result.stderr}")
         return
 
-    # Install pwncat-cs dependencies
-    result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
+    # Install pwncat-cs using poetry
+    print("Running poetry install...")
+    result = subprocess.run(["poetry", "install"], text=True, capture_output=True)
     if result.returncode == 0:
         print("pwncat-cs installed successfully.")
     else:
