@@ -9,6 +9,7 @@ def install_system_packages():
         "airgeddon",
         "iputils-tracepath",
         "python3-venv",  # Added venv for pwncat
+        "python3-poetry",  # Added poetry for pwncat
         "golang"
     ]
 
@@ -61,14 +62,25 @@ def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
 # Function to install pwncat
 def install_pwncat(home_dir):
     print("Installing pwncat...")
+    repo_url = "https://github.com/calebstewart/pwncat"
+    repo_path = os.path.join(home_dir, "pwncat")
+
+    # Clone the pwncat repository
+    if not os.path.exists(repo_path):
+        result = subprocess.run(["git", "clone", repo_url, repo_path], text=True, capture_output=True)
+        if result.returncode != 0:
+            print(f"Failed to clone pwncat: {result.stderr}")
+            return
+        print(f"Cloned pwncat into {repo_path}.")
+
     # Create a virtual environment for pwncat
     venv_dir = os.path.join(home_dir, "pwncat-env")
     if not os.path.exists(venv_dir):
         subprocess.run(["python3", "-m", "venv", venv_dir], check=True)
 
-    # Activate the virtual environment and install pwncat-cs
+    # Activate the virtual environment and install dependencies
     activate_script = os.path.join(venv_dir, "bin", "activate")
-    result = subprocess.run(["bash", "-c", f"source {activate_script} && pip install pwncat-cs"], shell=True, text=True, capture_output=True)
+    result = subprocess.run(["bash", "-c", f"source {activate_script} && pip install pwncat-cs && poetry install"], shell=True, text=True, capture_output=True)
     if result.returncode == 0:
         print("pwncat installed successfully in virtual environment.")
     else:
