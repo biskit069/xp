@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 import sys
@@ -15,42 +14,65 @@ def install_system_packages():
 
     for package in packages:
         print(f"Installing {package}...")
-        subprocess.run(["sudo", "apt", "install", "-y", package], check=True)
+        result = subprocess.run(["sudo", "apt", "install", "-y", package], text=True, capture_output=True)
+        if result.returncode == 0:
+            print(f"{package} installed successfully.")
+        else:
+            print(f"Failed to install {package}: {result.stderr}")
 
 # Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
     print("Installing asnmap...")
-    subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], check=True)
-
-    # Move the binary to the desired directory
-    asnmap_binary = shutil.which("asnmap")
-    if asnmap_binary:
-        target_path = os.path.join(home_dir, "asnmap")
-        shutil.copy(asnmap_binary, target_path)
-        print(f"asnmap installed and copied to {target_path}.")
+    result = subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, capture_output=True)
+    if result.returncode == 0:
+        print("asnmap installed successfully.")
+        asnmap_binary = shutil.which("asnmap")
+        if asnmap_binary:
+            target_path = os.path.join(home_dir, "asnmap")
+            shutil.copy(asnmap_binary, target_path)
+            print(f"asnmap binary copied to {target_path}.")
+        else:
+            print("asnmap binary not found after installation.")
+    else:
+        print(f"Failed to install asnmap: {result.stderr}")
 
 # Function to clone repositories and run their setup
 def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
     print(f"Cloning {repo_name}...")
     clone_path = target_dir if target_dir else os.getcwd()
-    subprocess.run(["git", "clone", repo_url, os.path.join(clone_path, repo_name)], check=True)
-
     repo_path = os.path.join(clone_path, repo_name)
-    if setup_command:
-        print(f"Setting up {repo_name}...")
-        subprocess.run(setup_command, cwd=repo_path, shell=True, check=True)
+
+    if not os.path.exists(repo_path):
+        result = subprocess.run(["git", "clone", repo_url, repo_path], text=True, capture_output=True)
+        if result.returncode == 0:
+            print(f"Cloned {repo_name} into {repo_path}.")
+            if setup_command:
+                print(f"Setting up {repo_name}...")
+                setup_result = subprocess.run(setup_command, cwd=repo_path, shell=True, text=True, capture_output=True)
+                if setup_result.returncode == 0:
+                    print(f"{repo_name} setup completed successfully.")
+                else:
+                    print(f"Failed to set up {repo_name}: {setup_result.stderr}")
+        else:
+            print(f"Failed to clone {repo_name}: {result.stderr}")
+    else:
+        print(f"{repo_name} already exists in {repo_path}. Skipping clone.")
 
 # Function to install pwncat
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     # Create a virtual environment for pwncat
     venv_dir = os.path.join(home_dir, "pwncat-env")
-    subprocess.run(["python3", "-m", "venv", venv_dir], check=True)
+    if not os.path.exists(venv_dir):
+        subprocess.run(["python3", "-m", "venv", venv_dir], check=True)
 
     # Activate the virtual environment and install pwncat-cs
     activate_script = os.path.join(venv_dir, "bin", "activate")
-    subprocess.run(["bash", "-c", f"source {activate_script} && pip install pwncat-cs"], shell=True, check=True)
-    print("pwncat installed in virtual environment.")
+    result = subprocess.run(["bash", "-c", f"source {activate_script} && pip install pwncat-cs"], shell=True, text=True, capture_output=True)
+    if result.returncode == 0:
+        print("pwncat installed successfully in virtual environment.")
+    else:
+        print(f"Failed to install pwncat: {result.stderr}")
 
 # Function to install routersploit
 def install_routersploit(home_dir):
@@ -99,7 +121,7 @@ def main():
     # Add tools to PATH
     add_tools_to_path(home_dir)
 
-    print("Setup complete! All tools are installed in the directory: {home_dir}.")
+    print(f"Setup complete! All tools are installed in the directory: {home_dir}.")
 
 if __name__ == "__main__":
     main()
