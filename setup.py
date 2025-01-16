@@ -100,6 +100,7 @@ def install_pwncat_cs(home_dir):
         return
 
     print("pwncat-cs installation completed successfully in the pwncat-cs directory.")
+
 # Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
