@@ -59,21 +59,21 @@ def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
     else:
         print(f"{repo_name} already exists in {repo_path}. Skipping clone.")
 
-def install_pwncat(home_dir):
-    print("Installing pwncat...")
-    repo_url = "https://github.com/calebstewart/pwncat"
-    repo_path = os.path.join(home_dir, "pwncat")
+def install_pwncat_cs(home_dir):
+    print("Installing pwncat-cs...")
+    repo_url = "https://github.com/pwncat/pwncat-cs"
+    repo_path = os.path.join(home_dir, "pwncat-cs")
 
-    # Clone the pwncat repository
+    # Clone the pwncat-cs repository
     if not os.path.exists(repo_path):
         result = subprocess.run(["git", "clone", repo_url, repo_path], text=True, capture_output=True)
         if result.returncode != 0:
-            print(f"Failed to clone pwncat: {result.stderr}")
+            print(f"Failed to clone pwncat-cs: {result.stderr}")
             return
-        print(f"Cloned pwncat into {repo_path}.")
+        print(f"Cloned pwncat-cs into {repo_path}.")
 
-    # Navigate to the pwncat directory and ensure Poetry is set up
-    print("Setting up Poetry environment...")
+    # Navigate to the pwncat-cs directory and ensure Poetry is set up
+    print("Setting up Poetry environment for pwncat-cs...")
     poetry_install_result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
     if poetry_install_result.returncode == 0:
         print("Poetry dependencies installed successfully.")
@@ -81,34 +81,25 @@ def install_pwncat(home_dir):
         print(f"Failed to install dependencies with poetry: {poetry_install_result.stderr}")
         return
 
-    # Install pwncat-cs via pip inside the pwncat directory
-    print("Installing pwncat-cs...")
-    pip_install_result = subprocess.run(["pip", "install", "pwncat-cs"], cwd=repo_path, text=True, capture_output=True)
-    if pip_install_result.returncode == 0:
-        print("pwncat-cs installed successfully.")
-    else:
-        print(f"Failed to install pwncat-cs: {pip_install_result.stderr}")
-        return
-
-    # Run poetry lock --no-update in the pwncat directory
-    print("Running poetry lock --no-update...")
+    # Run poetry lock --no-update in the pwncat-cs directory
+    print("Running poetry lock --no-update for pwncat-cs...")
     poetry_lock_result = subprocess.run(["poetry", "lock", "--no-update"], cwd=repo_path, text=True, capture_output=True)
     if poetry_lock_result.returncode == 0:
-        print("Poetry lock completed successfully.")
+        print("Poetry lock completed successfully for pwncat-cs.")
     else:
         print(f"Failed to run poetry lock: {poetry_lock_result.stderr}")
         return
 
     # Install all dependencies using poetry (if not already installed)
-    print("Installing all dependencies with Poetry...")
+    print("Installing all dependencies with Poetry for pwncat-cs...")
     poetry_install_result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
     if poetry_install_result.returncode == 0:
-        print("Poetry installation completed successfully.")
+        print("Poetry installation completed successfully for pwncat-cs.")
     else:
         print(f"Failed to install dependencies with poetry: {poetry_install_result.stderr}")
         return
 
-    print("pwncat installation completed successfully in the pwncat directory.")
+    print("pwncat-cs installation completed successfully in the pwncat-cs directory.")
 # Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
