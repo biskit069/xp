@@ -1,6 +1,7 @@
 import os
 import subprocess
 import shutil
+import time
 
 # Function to install system dependencies
 def install_system_packages():
@@ -16,15 +17,6 @@ def install_system_packages():
             print(f"{package} installed successfully.")
         else:
             print(f"Failed to install {package}: {result.stderr}")
-
-# Function to install pwncat-cs via pip
-def install_pwncat_cs():
-    print("Installing pwncat-cs...")
-    result = subprocess.run(["pip", "install", "pwncat-cs"], text=True, capture_output=True)
-    if result.returncode == 0:
-        print("pwncat-cs installed successfully.")
-    else:
-        print(f"Failed to install pwncat-cs: {result.stderr}")
 
 # Function to install pwncat
 def install_pwncat(home_dir):
@@ -54,10 +46,13 @@ def install_asnmap(home_dir):
     if result.returncode == 0:
         print("asnmap installed successfully.")
         
-        # Copy the binary from /bin to the host directory
-        asnmap_binary = "/bin/asnmap"
-        target_path = os.path.join(home_dir, "asnmap")  # Path to copy the asnmap binary
-        if os.path.exists(asnmap_binary):
+        # Wait for a few seconds to ensure asnmap is fully installed
+        time.sleep(4)
+
+        # Find the asnmap binary and copy it to the desired directory
+        asnmap_binary = shutil.which("asnmap")
+        if asnmap_binary:
+            target_path = os.path.join(home_dir, "asnmap")  # Path to copy the asnmap binary
             print(f"Copying asnmap binary to {target_path}...")
             subprocess.run(f"cp {asnmap_binary} {target_path}", shell=True)
             print(f"asnmap binary copied to {target_path}.")
@@ -129,9 +124,6 @@ def main():
 
     # Install system dependencies
     install_system_packages()
-
-    # Install pwncat-cs first
-    install_pwncat_cs()
 
     # Install pwncat
     install_pwncat(home_dir)
