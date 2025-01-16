@@ -98,6 +98,12 @@ def install_cerbrutus(home_dir):
     repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
     setup_repository(repo_url, "cerbrutus", None, home_dir)
 
+# Function to install g2l
+def install_g2l(home_dir):
+    print("Installing g2l...")
+    repo_url = "https://github.com/biskit069/g2l"
+    setup_repository(repo_url, "g2l", "python3 setup.py install", home_dir)
+
 # Function to add tools to PATH
 def add_tools_to_path(home_dir):
     bashrc_path = os.path.expanduser("~/.bashrc")
@@ -129,6 +135,7 @@ def main():
     install_pwncat(home_dir)
     install_routersploit(home_dir)
     install_cerbrutus(home_dir)
+    install_g2l(home_dir)
 
     # Add tools to PATH
     add_tools_to_path(home_dir)
