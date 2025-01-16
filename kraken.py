@@ -12,7 +12,7 @@ import sys
 import shutil
 import subprocess
 from colorama import init, Fore, Style
-
+import socket
 init(autoreset=True)
 
 # Function to clear the screen
@@ -1196,6 +1196,108 @@ def menu():
             break
         else:
             print("Invalid choice. Please try again.")
+def signal_handler(sig, frame):
+    print("\nExiting...")
+    sys.exit(0)
+
+# Set up the signal handler to catch Ctrl+C
+signal.signal(signal.SIGINT, signal_handler)
+
+def ping_ip():
+    """Prompt for an IP address and ping it."""
+    while True:
+        ip = input("Enter IP address to ping (or press 99 to return to the main menu): ")
+
+        # Check if the user pressed 99 to return to the menu
+        if ip == '99':
+            return  # Return to the main menu
+
+        # Detect the operating system
+        os_type = platform.system().lower()
+
+        try:
+            # For Windows, use -n for count
+            if os_type == "windows":
+                response = subprocess.run(["ping", "-n", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
+            else:
+                # For Linux/macOS, use -c for count
+                response = subprocess.run(["ping", "-c", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
+
+            # Check if the ping was successful
+            if response.returncode == 0:
+                print(f"\nPing to {ip} successful!")
+                print(response.stdout.decode())  # Display detailed ping result
+            else:
+                print("\nPing failed!")
+                print(response.stderr.decode())  # Display error message
+
+        except subprocess.TimeoutExpired:
+            print("\nPing request timed out.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        # After showing the result, prompt to return to the main menu or try again
+        return_to_menu = input("\nPress 99 to return to the main menu, or Enter to try another IP: ")
+        if return_to_menu == '99':
+            return  # Return to the main menu
+
+# Menu function where the user selects options
+def menu():
+    while True:
+        print("\nSelect an option:")
+        print("1. Ping an IP address")
+        print("2. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            ping_ip()  # Call ping_ip when option 1 is selected
+        elif choice == '2':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid option, please try again.")
+def hostname_to_ip(hostname):
+    try:
+        # Resolve the hostname to an IP address
+        ip_address = socket.gethostbyname(hostname)
+        return ip_address
+    except socket.gaierror:
+        # Handle errors if the hostname cannot be resolved
+        return f"Error: Unable to resolve hostname {hostname}"
+
+# Function to handle the hostname to IP scan
+def scan_hostname_to_ip():
+    hostname = input("Enter a hostname to resolve to IP: ")
+    ip_address = hostname_to_ip(hostname)
+    print(f"The IP address for hostname {hostname} is {ip_address}")
+    return_to_main_menu()
+
+# Function to return to the main menu
+def return_to_main_menu():
+    print("\nReturn to main menu")
+    input("Press Enter to continue...")
+
+# Main menu function where you choose what to do
+def main_menu():
+    while True:
+        print("\nMain Menu:")
+        print("1. Scan hostname to IP")
+        print("2. Exit")
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            scan_hostname_to_ip()  # Run the hostname-to-IP scan when chosen
+        elif choice == "2":
+            print("Exiting the script.")
+            break
+        else:
+            print("Invalid option, please choose again.")
+# Function to handle exiting gracefully with Ctrl+C
+def signal_handler(sig, frame):
+    print("\nExiting...")
+    sys.exit(0)
+
 def main_menu():
     while True:
         show_main_menu_logo()
