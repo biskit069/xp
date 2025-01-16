@@ -100,6 +100,28 @@ def install_pwncat(home_dir):
     else:
         print(f"Failed to run poetry lock: {result.stderr}")
 
+# Function to clone repositories and run their setup
+def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
+    print(f"Cloning {repo_name}...")
+    clone_path = target_dir if target_dir else os.getcwd()
+    repo_path = os.path.join(clone_path, repo_name)
+
+    if not os.path.exists(repo_path):
+        result = subprocess.run(["git", "clone", repo_url, repo_path], text=True, capture_output=True)
+        if result.returncode == 0:
+            print(f"Cloned {repo_name} into {repo_path}.")
+            if setup_command:
+                print(f"Setting up {repo_name}...")
+                setup_result = subprocess.run(setup_command, cwd=repo_path, shell=True, text=True, capture_output=True)
+                if setup_result.returncode == 0:
+                    print(f"{repo_name} setup completed successfully.")
+                else:
+                    print(f"Failed to set up {repo_name}: {setup_result.stderr}")
+        else:
+            print(f"Failed to clone {repo_name}: {result.stderr}")
+    else:
+        print(f"{repo_name} already exists in {repo_path}. Skipping clone.")
+
 # Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
