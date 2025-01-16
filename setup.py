@@ -19,9 +19,11 @@ def install_poetry():
     print("Checking if Poetry is installed...")
     try:
         subprocess.run(["poetry", "--version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Poetry is already installed.")
     except subprocess.CalledProcessError:
         print("Poetry not found. Installing Poetry...")
-        subprocess.run(["curl", "-sSL", "https://install.python-poetry.org | python3 -"], shell=True)
+        # Install Poetry using the official installer
+        subprocess.run(["curl", "-sSL", "https://install.python-poetry.org | python3 -"], shell=True, check=True)
 
 # Function to clone the GitHub repositories
 def clone_git_repositories():
