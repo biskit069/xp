@@ -53,21 +53,16 @@ def install_asnmap(home_dir):
     result = subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, capture_output=True)
     if result.returncode == 0:
         print("asnmap installed successfully.")
-
-        # Get the GOPATH directory to find the binary
-        result = subprocess.run(["go", "env", "GOBIN"], text=True, capture_output=True)
-        if result.returncode == 0:
-            go_bin_dir = result.stdout.strip()
-            asnmap_binary = os.path.join(go_bin_dir, "asnmap")
-
-            if os.path.exists(asnmap_binary):
-                target_path = "/home/host/asnmap"  # Path to copy the asnmap binary
-                shutil.copy(asnmap_binary, target_path)
-                print(f"asnmap binary copied to {target_path}.")
-            else:
-                print("asnmap binary not found after installation.")
+        
+        # Copy the binary from /bin to the host directory
+        asnmap_binary = "/bin/asnmap"
+        target_path = os.path.join(home_dir, "asnmap")  # Path to copy the asnmap binary
+        if os.path.exists(asnmap_binary):
+            print(f"Copying asnmap binary to {target_path}...")
+            subprocess.run(f"cp {asnmap_binary} {target_path}", shell=True)
+            print(f"asnmap binary copied to {target_path}.")
         else:
-            print(f"Failed to find GOPATH: {result.stderr}")
+            print("asnmap binary not found after installation.")
     else:
         print(f"Failed to install asnmap: {result.stderr}")
 
