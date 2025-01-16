@@ -72,7 +72,17 @@ def install_pwncat(home_dir):
             return
         print(f"Cloned pwncat into {repo_path}.")
 
-    # Step 1: Install pwncat-cs using pip in the pwncat directory
+    # Navigate to the pwncat directory and ensure Poetry is set up
+    print("Setting up Poetry environment...")
+    poetry_install_result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
+    if poetry_install_result.returncode == 0:
+        print("Poetry dependencies installed successfully.")
+    else:
+        print(f"Failed to install dependencies with poetry: {poetry_install_result.stderr}")
+        return
+
+    # Install pwncat-cs via pip inside the pwncat directory
+    print("Installing pwncat-cs...")
     pip_install_result = subprocess.run(["pip", "install", "pwncat-cs"], cwd=repo_path, text=True, capture_output=True)
     if pip_install_result.returncode == 0:
         print("pwncat-cs installed successfully.")
@@ -80,7 +90,7 @@ def install_pwncat(home_dir):
         print(f"Failed to install pwncat-cs: {pip_install_result.stderr}")
         return
 
-    # Step 2: Run poetry lock --no-update in the pwncat directory
+    # Run poetry lock --no-update in the pwncat directory
     print("Running poetry lock --no-update...")
     poetry_lock_result = subprocess.run(["poetry", "lock", "--no-update"], cwd=repo_path, text=True, capture_output=True)
     if poetry_lock_result.returncode == 0:
@@ -89,15 +99,16 @@ def install_pwncat(home_dir):
         print(f"Failed to run poetry lock: {poetry_lock_result.stderr}")
         return
 
-    # Step 3: Install other dependencies using poetry
+    # Install all dependencies using poetry (if not already installed)
+    print("Installing all dependencies with Poetry...")
     poetry_install_result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
     if poetry_install_result.returncode == 0:
-        print("Poetry dependencies installed successfully.")
+        print("Poetry installation completed successfully.")
     else:
         print(f"Failed to install dependencies with poetry: {poetry_install_result.stderr}")
         return
 
-    print("pwncat installed successfully in the pwncat directory.")
+    print("pwncat installation completed successfully in the pwncat directory.")
 # Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
