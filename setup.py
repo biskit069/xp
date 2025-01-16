@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+import shutil  # Ensure shutil is imported
 
 # Function to install system packages
 def install_system_packages():
@@ -12,6 +13,15 @@ def install_system_packages():
     for package in packages:
         print(f"Installing {package}...")
         subprocess.run(["sudo", "apt", "install", "-y", package])
+
+# Function to install Poetry
+def install_poetry():
+    print("Checking if Poetry is installed...")
+    try:
+        subprocess.run(["poetry", "--version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except subprocess.CalledProcessError:
+        print("Poetry not found. Installing Poetry...")
+        subprocess.run(["curl", "-sSL", "https://install.python-poetry.org | python3 -"], shell=True)
 
 # Function to clone the GitHub repositories
 def clone_git_repositories():
@@ -76,6 +86,9 @@ def install_python_packages():
 def main():
     print("Setting up your environment...")
     
+    # Install Poetry
+    install_poetry()
+
     # Install system packages
     install_system_packages()
 
