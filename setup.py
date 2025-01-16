@@ -69,33 +69,7 @@ def add_tools_to_path(home_dir):
         bashrc.write(f"export PATH=\"$PATH:{home_dir}\"\n")
 
     print(f"Tools directory {home_dir} added to PATH. Please restart your terminal for changes to take effect.")
-
-# Main setup function
-def main():
-    print("Setting up tools...")
-
-    # Get the home directory based on the current user
-    home_dir = os.path.expanduser(f"/home/{os.getlogin()}")
-
-    # Ensure the home directory exists
-    if not os.path.exists(home_dir):
-        os.makedirs(home_dir)
-
-    # Install system dependencies
-    install_system_packages()
-
-    # Install asnmap
-    install_asnmap(home_dir)
-
-    # Install other tools
-    install_pwncat(home_dir)
-    install_routersploit(home_dir)
-    install_cerbrutus(home_dir)
-    install_g2l(home_dir)
-
-    # Add tools to PATH
-    add_tools_to_path(home_dir)
-
+    
     print(f"Setup complete! All tools are installed in the directory: {home_dir}.")
 
 if __name__ == "__main__":
