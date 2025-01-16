@@ -16,10 +16,21 @@ def install_system_packages():
         print(f"Installing {package}...")
         subprocess.run(["sudo", "apt", "install", "-y", package])
 
-# Function to install asnmap using Go
+# Function to install asnmap using Go and copy to tools directory
 def install_asnmap():
     print("Installing asnmap...")
     subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"])
+
+    # After installation, move the binary to the tools directory
+    home_dir = os.path.expanduser("~")
+    tools_dir = os.path.join(home_dir, "tools")
+    
+    if not os.path.exists(tools_dir):
+        os.mkdir(tools_dir)
+    
+    asnmap_binary = shutil.which("asnmap")
+    if asnmap_binary:
+        shutil.move(asnmap_binary, tools_dir)
 
 # Function to clone the GitHub repositories
 def clone_git_repositories():
