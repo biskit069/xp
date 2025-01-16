@@ -1311,7 +1311,7 @@ def main_menu():
             "[5] Metasploit",
             "[88] Routersploit",
             "[22] tracepath",
-            "[11] Accurate ip look up",
+            "[11] Accurate ip look up / asn",
             "[33] asnmap",
             "[77] airgeddon",
             "[12] Netdiscover",
