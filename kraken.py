@@ -1089,23 +1089,46 @@ def pwncat_menu():
             break
         else:
             print("Invalid choice.")
+def find_cerbrutus_dir():
+    """Automatically find the Cerbrutus directory."""
+    try:
+        home_dir = os.path.expanduser("~")
+        cerbrutus_dir = os.path.join(home_dir, "cerbrutus")  # Cerbrutus directory
+
+        if os.path.exists(cerbrutus_dir):
+            return cerbrutus_dir
+        else:
+            print("Cerbrutus directory not found!")
+            return None
+    except Exception as e:
+        print(f"Error finding Cerbrutus directory: {e}")
+        return None
+
+def clear_screen():
+    """Clears the terminal screen."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def run_cerbrutus():
-    """Function to run Cerbrutus with options for manual and automatic mode."""
+    """Function to run Cerbrutus with options for manual mode."""
+    cerbrutus_dir = find_cerbrutus_dir()  # Find Cerbrutus directory
+
+    if cerbrutus_dir is None:
+        print("Cerbrutus not found. Exiting...")
+        return
+
     while True:
         clear_screen()
         print("\nCerbrutus Menu:")
         print("1. Show Cerbrutus Help")
-        print("2. Run Cerbrutus in Auto Mode (Default Wordlist Path: /opt/wordlists/<name>.txt)")
-        print("3. Run Cerbrutus in Auto Mode 2 (Custom Wordlist Path)")
-        print("4. Run Cerbrutus with Custom Command")
-        print("5. Return to Main Menu")
+        print("2. Run Cerbrutus with Custom Command")
+        print("3. Return to Main Menu")
 
         choice = input("\nChoose an option: ").strip()
 
         if choice == '1':
             # Display Cerbrutus help
             print("\nPython-based Network Brute Forcing Tool!")
-            print("""
+            print("""\nUsage: cerbrutus.py [options]
 positional arguments:
   Host                  The host to connect to - in IP or VHOST/Domain Name form
   Service               The service to brute force (currently implemented 'SSH')
@@ -1124,71 +1147,31 @@ options:
             input("\nPress Enter to return to the menu...")
 
         elif choice == '2':
-            # Auto Mode 1: Default Wordlist Path
-            target_ip = input("Enter the target IP address: ").strip()
-            username = input("Enter the username to brute force: ").strip()
-            wordlist_name = input("Enter the name of the password list (without '.txt'): ").strip()
-            threads = input("Enter the number of threads to use (default is 10): ").strip()
-
-            threads = threads if threads.isdigit() else "10"
-
-            if target_ip and username and wordlist_name:
-                wordlist_path = f"/opt/wordlists/{wordlist_name}.txt"
-                command = [
-                    "python3", "cerbrutus.py", target_ip, "SSH",
-                    "-U", username,
-                    "-P", wordlist_path,
-                    "-t", threads
-                ]
-
-                try:
-                    subprocess.run(command)
-                except Exception as e:
-                    print(f"Error running Cerbrutus: {e}")
-            else:
-                print("IP address, username, and password list are required.")
-
-        elif choice == '3':
-            # Auto Mode 2: Custom Wordlist Path
-            target_ip = input("Enter the target IP address: ").strip()
-            username = input("Enter the username to brute force: ").strip()
-            wordlist_file = input("Enter the name of the password list file (e.g., 'c.txt'): ").strip()
-            threads = input("Enter the number of threads to use (default is 10): ").strip()
-
-            threads = threads if threads.isdigit() else "10"
-
-            if target_ip and username and wordlist_file:
-                command = [
-                    "python3", "cerbrutus.py", target_ip, "SSH",
-                    "-U", username,
-                    "-P", wordlist_file,
-                    "-t", threads
-                ]
-
-                try:
-                    subprocess.run(command)
-                except Exception as e:
-                    print(f"Error running Cerbrutus: {e}")
-            else:
-                print("IP address, username, and password list are required.")
-
-        elif choice == '4':
             # Run Cerbrutus with a custom command
-            custom_command = input("Enter your Cerbrutus command: ").strip()
+            custom_command = input("Enter your Cerbrutus command (excluding 'python3 cerbrutus.py'): ").strip()
             if custom_command:
+                full_command = f"python3 {os.path.join(cerbrutus_dir, 'cerbrutus.py')} {custom_command}"
+                print(f"Running custom command: {full_command}")
                 try:
-                    subprocess.run(custom_command, shell=True)
-                except Exception as e:
+                    # Run the command and wait until it finishes before continuing
+                    result = subprocess.run(full_command, shell=True, cwd=cerbrutus_dir, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    # Output the results
+                    print(result.stdout.decode())
+                    if result.stderr:
+                        print(result.stderr.decode())
+                    input("\nPress Enter to return to the menu...")
+                except subprocess.CalledProcessError as e:
                     print(f"Error running Cerbrutus: {e}")
             else:
                 print("No command entered.")
 
-        elif choice == '5':
+        elif choice == '3':
             # Return to the main menu
             break
 
         else:
             print("Invalid choice. Please try again.")
+
 def signal_handler(sig, frame):
     print("\nExiting...")
     sys.exit(0)
@@ -1196,61 +1179,23 @@ def signal_handler(sig, frame):
 # Set up the signal handler to catch Ctrl+C
 signal.signal(signal.SIGINT, signal_handler)
 
-def ping_ip():
-    """Prompt for an IP address and ping it."""
-    while True:
-        ip = input("Enter IP address to ping (or press 99 to return to the main menu): ")
-
-        # Check if the user pressed 99 to return to the menu
-        if ip == '99':
-            return  # Return to the main menu
-
-        # Detect the operating system
-        os_type = platform.system().lower()
-
-        try:
-            # For Windows, use -n for count
-            if os_type == "windows":
-                response = subprocess.run(["ping", "-n", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
-            else:
-                # For Linux/macOS, use -c for count
-                response = subprocess.run(["ping", "-c", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
-
-            # Check if the ping was successful
-            if response.returncode == 0:
-                print(f"\nPing to {ip} successful!")
-                print(response.stdout.decode())  # Display detailed ping result
-            else:
-                print("\nPing failed!")
-                print(response.stderr.decode())  # Display error message
-
-        except subprocess.TimeoutExpired:
-            print("\nPing request timed out.")
-        except Exception as e:
-            print(f"An error occurred: {e}")
-
-        # After showing the result, prompt to return to the main menu or try again
-        return_to_menu = input("\nPress 99 to return to the main menu, or Enter to try another IP: ")
-        if return_to_menu == '99':
-            return  # Return to the main menu
-
-# Menu function where the user selects options
+# Main menu function to select options
 def menu():
     while True:
-        print("\nSelect an option:")
-        print("1. Ping an IP address")
+        clear_screen()
+        print("\nMain Menu:")
+        print("1. Run Cerbrutus")
         print("2. Exit")
-        
-        choice = input("Enter your choice: ")
-        
+
+        choice = input("\nChoose an option: ").strip()
+
         if choice == '1':
-            ping_ip()  # Call ping_ip when option 1 is selected
+            run_cerbrutus()
         elif choice == '2':
             print("Exiting...")
             break
         else:
-            print("Invalid option, please try again.")
-
+            print("Invalid choice. Please try again.")
 def main_menu():
     while True:
         show_main_menu_logo()
