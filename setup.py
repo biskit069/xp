@@ -17,6 +17,15 @@ def install_system_packages():
         else:
             print(f"Failed to install {package}: {result.stderr}")
 
+# Function to install pwncat-cs via pip
+def install_pwncat_cs():
+    print("Installing pwncat-cs...")
+    result = subprocess.run(["pip", "install", "pwncat-cs"], text=True, capture_output=True)
+    if result.returncode == 0:
+        print("pwncat-cs installed successfully.")
+    else:
+        print(f"Failed to install pwncat-cs: {result.stderr}")
+
 # Function to install pwncat
 def install_pwncat(home_dir):
     print("Installing pwncat...")
@@ -38,7 +47,7 @@ def install_pwncat(home_dir):
     else:
         print(f"Failed to install pwncat dependencies: {result.stderr}")
 
-# Function to install asnmap via Go and copy to the desired directory
+# Function to install asnmap via Go and copy to the specified directory
 def install_asnmap(home_dir):
     print("Installing asnmap...")
     result = subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, capture_output=True)
@@ -46,7 +55,7 @@ def install_asnmap(home_dir):
         print("asnmap installed successfully.")
         asnmap_binary = shutil.which("asnmap")
         if asnmap_binary:
-            target_path = os.path.join(home_dir, "asnmap")
+            target_path = "/home/host/asnmap"  # Path to copy the asnmap binary
             shutil.copy(asnmap_binary, target_path)
             print(f"asnmap binary copied to {target_path}.")
         else:
@@ -117,6 +126,9 @@ def main():
 
     # Install system dependencies
     install_system_packages()
+
+    # Install pwncat-cs first
+    install_pwncat_cs()
 
     # Install pwncat
     install_pwncat(home_dir)
