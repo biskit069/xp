@@ -8,22 +8,18 @@ def install_system_packages():
     packages = [
         "airgeddon",
         "iputils-tracepath",
+        "python3-poetry",  # Installing poetry via apt
+        "golang",  # Ensure Go is installed for asnmap installation
     ]
     
     for package in packages:
         print(f"Installing {package}...")
         subprocess.run(["sudo", "apt", "install", "-y", package])
 
-# Function to install Poetry
-def install_poetry():
-    print("Checking if Poetry is installed...")
-    try:
-        subprocess.run(["poetry", "--version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print("Poetry is already installed.")
-    except subprocess.CalledProcessError:
-        print("Poetry not found. Installing Poetry...")
-        # Install Poetry using the official installer
-        subprocess.run(["curl", "-sSL", "https://install.python-poetry.org | python3 -"], shell=True, check=True)
+# Function to install asnmap using Go
+def install_asnmap():
+    print("Installing asnmap...")
+    subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"])
 
 # Function to clone the GitHub repositories
 def clone_git_repositories():
@@ -31,7 +27,6 @@ def clone_git_repositories():
         ("https://github.com/Cerbrutus-BruteForcer/cerbrutus", "cerbrutus"),
         ("https://github.com/calebstewart/pwncat", "pwncat"),
         ("https://github.com/threat9/routersploit", "routersploit"),
-        ("https://github.com/projectdiscovery/asnmap", "asnmap"),
     ]
     
     for repo_url, repo_name in repos:
@@ -52,9 +47,12 @@ def setup_repo(repo_name):
     # Additional setup if required (e.g., poetry, dependencies)
     if repo_name == "pwncat":
         subprocess.run(["poetry", "install"], cwd=repo_path)
-    
-    # Other tools may have specific installation instructions (e.g., `make` or other scripts)
-    # You can add specific commands here for other tools if needed
+
+    # Handle setup for routersploit
+    if repo_name == "routersploit":
+        print(f"Setting up {repo_name}...")
+        # Routersploit might need additional dependencies (installing them)
+        subprocess.run([sys.executable, "-m", "pip", "install", "-r", os.path.join(repo_path, "requirements.txt")])
 
 # Function to add the tools to the PATH (for global usage)
 def add_tools_to_path():
@@ -65,7 +63,7 @@ def add_tools_to_path():
         os.mkdir(tools_dir)
     
     # Move the cloned tools to the tools directory
-    for tool in ["cerbrutus", "pwncat", "routersploit", "asnmap"]:
+    for tool in ["cerbrutus", "pwncat", "routersploit"]:
         tool_path = os.path.join(os.getcwd(), tool)
         if os.path.exists(tool_path):
             shutil.move(tool_path, tools_dir)
@@ -88,11 +86,11 @@ def install_python_packages():
 def main():
     print("Setting up your environment...")
     
-    # Install Poetry
-    install_poetry()
-
     # Install system packages
     install_system_packages()
+
+    # Install asnmap via Go
+    install_asnmap()
 
     # Clone git repositories
     clone_git_repositories()
