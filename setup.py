@@ -1,6 +1,5 @@
 import os
 import subprocess
-import time
 import shutil
 
 # Function to install system dependencies
@@ -27,7 +26,8 @@ def install_asnmap(home_dir):
     result = subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, capture_output=True)
     if result.returncode == 0:
         print("asnmap installed successfully.")
-        time.sleep(2)  # Wait for installation to complete
+        # Wait 2 seconds to ensure the installation completes
+        subprocess.run(["sleep", "2"], text=True)
         asnmap_binary = shutil.which("asnmap")
         if asnmap_binary:
             target_path = os.path.join(home_dir, "asnmap")
@@ -38,67 +38,47 @@ def install_asnmap(home_dir):
     else:
         print(f"Failed to install asnmap: {result.stderr}")
 
-# Function to install pwncat
+# Function to install pwncat from GitHub
 def install_pwncat(home_dir):
     print("Installing pwncat...")
 
-    # Clone the pwncat repository
     repo_url = "https://github.com/calebstewart/pwncat"
     repo_path = os.path.join(home_dir, "pwncat")
 
+    # Clone the pwncat repository
     if not os.path.exists(repo_path):
-        print("Cloning pwncat repository...")
         result = subprocess.run(["git", "clone", repo_url, repo_path], text=True, capture_output=True)
         if result.returncode != 0:
             print(f"Failed to clone pwncat: {result.stderr}")
             return
         print(f"Cloned pwncat into {repo_path}.")
-    else:
-        print(f"pwncat already exists in {repo_path}. Skipping clone.")
 
-    # Install pwncat-cs in the pwncat directory
+    # Change to the pwncat directory
+    os.chdir(repo_path)
+
+    # Install pwncat-cs
     print("Installing pwncat-cs...")
-    result = subprocess.run(["pip", "install", "pwncat-cs"], cwd=repo_path, text=True, capture_output=True)
+    result = subprocess.run(["pip", "install", "pwncat-cs"], text=True, capture_output=True)
     if result.returncode == 0:
         print("pwncat-cs installed successfully.")
     else:
         print(f"Failed to install pwncat-cs: {result.stderr}")
 
-    # Install distutils module via apt (for Ubuntu-based systems)
-    print("Installing distutils module...")
-    result = subprocess.run(["sudo", "apt", "install", "-y", "python3-distutils"], text=True, capture_output=True)
+    # Install other dependencies
+    print("Installing dependencies from requirements.txt...")
+    result = subprocess.run(["pip", "install", "-r", "requirements.txt"], text=True, capture_output=True)
     if result.returncode == 0:
-        print("distutils installed successfully.")
+        print("Dependencies installed successfully.")
     else:
-        print(f"Failed to install distutils: {result.stderr}")
+        print(f"Failed to install dependencies: {result.stderr}")
 
-    # Ensure poetry is installed and working
-    print("Checking if poetry is installed...")
-    result = subprocess.run(["poetry", "--version"], text=True, capture_output=True)
+    # Run poetry install if needed (assuming poetry is used in the project)
+    print("Running poetry install...")
+    result = subprocess.run(["poetry", "install"], text=True, capture_output=True)
     if result.returncode == 0:
-        print(f"Poetry version: {result.stdout.strip()}")
+        print("Poetry installation completed.")
     else:
-        print(f"Poetry not installed or not found: {result.stderr}")
-        return
-
-    # Install dependencies with poetry in the pwncat directory
-    print("Installing dependencies using poetry...")
-    result = subprocess.run(["poetry", "install"], cwd=repo_path, text=True, capture_output=True)
-    if result.returncode == 0:
-        print("pwncat dependencies installed successfully.")
-    else:
-        print(f"Failed to install pwncat dependencies: {result.stderr}")
-
-    # Give some time to ensure everything is installed properly
-    time.sleep(4)
-
-    # Run poetry lock --no-update to ensure the lock file is up-to-date
-    print("Running poetry lock --no-update...")
-    result = subprocess.run(["poetry", "lock", "--no-update"], cwd=repo_path, text=True, capture_output=True)
-    if result.returncode == 0:
-        print("poetry lock completed successfully.")
-    else:
-        print(f"Failed to run poetry lock: {result.stderr}")
+        print(f"Failed to run poetry install: {result.stderr}")
 
 # Function to clone repositories and run their setup
 def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
@@ -170,7 +150,7 @@ def main():
     # Install pwncat
     install_pwncat(home_dir)
 
-    # Install other tools (routersploit, cerbrutus, g2l)
+    # Install other tools
     install_routersploit(home_dir)
     install_cerbrutus(home_dir)
     install_g2l(home_dir)
