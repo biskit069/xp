@@ -78,14 +78,36 @@ def install_pwncat(home_dir):
     if not os.path.exists(venv_dir):
         subprocess.run(["python3", "-m", "venv", venv_dir], check=True)
 
-    # Activate the virtual environment and install dependencies
-    activate_script = os.path.join(venv_dir, "bin", "activate")
-    result = subprocess.run(["bash", "-c", f"source {activate_script} && pip install pwncat-cs && poetry install"], shell=True, text=True, capture_output=True)
-    if result.returncode == 0:
-        print("pwncat installed successfully in virtual environment.")
-    else:
-        print(f"Failed to install pwncat: {result.stderr}")
+    # Install dependencies directly using the virtual environment's pip and poetry
+    pip_path = os.path.join(venv_dir, "bin", "pip")
+    poetry_path = os.path.join(venv_dir, "bin", "poetry")
 
+    # Step 1: Install pwncat-cs using pip
+    pip_install_result = subprocess.run([pip_path, "install", "pwncat-cs"], text=True, capture_output=True)
+    if pip_install_result.returncode == 0:
+        print("pwncat-cs installed successfully.")
+    else:
+        print(f"Failed to install pwncat-cs: {pip_install_result.stderr}")
+        return
+
+    # Step 2: Run poetry lock --no-update in the pwncat directory
+    print("Running poetry lock --no-update...")
+    poetry_lock_result = subprocess.run([poetry_path, "lock", "--no-update"], cwd=repo_path, text=True, capture_output=True)
+    if poetry_lock_result.returncode == 0:
+        print("Poetry lock completed successfully.")
+    else:
+        print(f"Failed to run poetry lock: {poetry_lock_result.stderr}")
+        return
+
+    # Step 3: Install other dependencies using poetry
+    poetry_install_result = subprocess.run([poetry_path, "install"], cwd=repo_path, text=True, capture_output=True)
+    if poetry_install_result.returncode == 0:
+        print("Poetry dependencies installed successfully.")
+    else:
+        print(f"Failed to install dependencies with poetry: {poetry_install_result.stderr}")
+        return
+
+    print("pwncat installed successfully in virtual environment.")
 # Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
