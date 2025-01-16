@@ -54,7 +54,7 @@ def show_main_menu_logo():
     # Merge them line by line, ensuring no space in between
     for kra_line, ken_line in zip(kra_lines, ken_lines):
         print(f"{light_purple}{kra_line}{faded_white}{ken_line}")
-        time.sleep(0.1)  # Add delay for the effect
+        # Add delay for the effect
 
 # Main function to ensure everything runs only once
 def main():
@@ -328,7 +328,7 @@ def exiting_loading_screen():
       time.sleep(0.1)  # Short delay (0.1 seconds per line)
    # Display a final "Exiting..." message with a rainbow background and white text
    print(Fore.LIGHTWHITE_EX + "\n")
-   time.sleep(1)  # Wait for a second before program exit
+   time.sleep(0.1)  # Wait for a second before program exit
    print(Fore.LIGHTWHITE_EX + "Credits! biskit")
    # Final message
    sys.exit()  # Exit the program
