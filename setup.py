@@ -2,24 +2,6 @@ import os
 import subprocess
 import shutil
 
-# Function to install system dependencies
-def install_system_packages():
-    packages = [
-        "airgeddon",
-        "iputils-tracepath",
-        "python3-venv",  # Added venv for pwncat
-        "python3-poetry",  # Added poetry for pwncat
-        "golang"
-    ]
-
-    for package in packages:
-        print(f"Installing {package}...")
-        result = subprocess.run(["sudo", "apt", "install", "-y", package], text=True, capture_output=True)
-        if result.returncode == 0:
-            print(f"{package} installed successfully.")
-        else:
-            print(f"Failed to install {package}: {result.stderr}")
-
 # Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
     print("Installing asnmap...")
@@ -140,9 +122,6 @@ def main():
     # Ensure the home directory exists
     if not os.path.exists(home_dir):
         os.makedirs(home_dir)
-
-    # Install system dependencies
-    install_system_packages()
 
     # Install asnmap
     install_asnmap(home_dir)
