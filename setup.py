@@ -106,10 +106,23 @@ def install_pwncat(home_dir):
     print("Running poetry lock --no-update in the pwncat directory...")
     subprocess.run(["poetry", "lock", "--no-update"], cwd=repo_path, check=True)
 
-    # Now run poetry install in the pwncat directory
-    subprocess.run(["poetry", "install"], cwd=repo_path, check=True)
+    # Now run poetry install in the pwncat directory and capture output
+    print("Running poetry install...")
+    result = subprocess.run(
+        ["poetry", "install"],
+        cwd=repo_path,
+        check=False,  # Don't exit on error, we want to capture the error
+        text=True,
+        capture_output=True
+    )
 
-    print("pwncat setup completed.")
+    # Output the result of poetry install
+    if result.returncode != 0:
+        print("Poetry install failed with error:")
+        print(result.stderr)
+    else:
+        print("pwncat setup completed successfully.")
+
 
 
     if not os.path.exists(repo_path):
