@@ -20,20 +20,19 @@ def install_golang():
             print(f"Failed to install golang: {e}")
             return False
 
-# Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
     print("Installing asnmap...")
     try:
         # Ensure the GOPATH is set correctly
-        go_path = os.path.expanduser("~") + "/go"  # Use the default GOPATH location
+        go_path = os.path.join(home_dir, "go")
         os.environ["GOPATH"] = go_path
-        os.environ["PATH"] += f":{os.path.join(go_path, 'bin')}"
+        os.environ["GOBIN"] = os.path.join(go_path, "bin")  # Set GOBIN for Go binary location
+        os.environ["PATH"] += f":{os.environ['GOBIN']}"  # Add GOBIN to PATH
 
         # Create GOPATH directory if it doesn't exist
         os.makedirs(go_path, exist_ok=True)
 
         # Install asnmap using go install
-        print("Installing asnmap using Go...")
         subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, check=True, timeout=300)
         print("asnmap installed successfully.")
 
@@ -41,17 +40,13 @@ def install_asnmap(home_dir):
         asnmap_binary = os.path.join(go_path, "bin", "asnmap")
         if os.path.exists(asnmap_binary):
             target_path = os.path.join(home_dir, "asnmap")
-            shutil.copy(asnmap_binary, target_path)
-            print(f"asnmap binary copied to {target_path}.")
+            subprocess.run(["cp", asnmap_binary, "/home/host"], check=True)  # Copy binary to /home/host
+            print(f"asnmap binary copied to /home/host.")
         else:
             print("asnmap binary not found in GOPATH bin directory.")
         
         # Ensure asnmap is executable
         subprocess.run(f"chmod +x {asnmap_binary}", shell=True)
-
-        # Ensure the binary is available in the PATH
-        subprocess.run(f"export PATH=$PATH:{os.path.dirname(asnmap_binary)}", shell=True)
-
         print("asnmap is now executable and available in the PATH.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install asnmap: {e}")
