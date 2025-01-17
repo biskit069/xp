@@ -116,10 +116,16 @@ def install_pwncat(home_dir):
         capture_output=True
     )
 
-    # Output the result of poetry install
+    # If poetry install fails, try python3 setup.py install
     if result.returncode != 0:
-        print("Poetry install failed with error:")
-        print(result.stderr)
+        print("Poetry install failed, trying python3 setup.py install...")
+        try:
+            subprocess.run(["python3", "setup.py", "install"], cwd=repo_path, check=True)
+            print("pwncat installed successfully using setup.py.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install pwncat with setup.py: {e}")
+        except FileNotFoundError:
+            print("setup.py not found in the pwncat directory.")
     else:
         print("pwncat setup completed successfully.")
 
