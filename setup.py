@@ -1,30 +1,31 @@
 import os
 import subprocess
 import shutil
+import sys
 
-# Function to install Go using apt
-def install_go():
-    print("Checking if Go is installed...")
+# Function to install golang using apt
+def install_golang():
+    print("Checking if golang is installed...")
     result = subprocess.run(["go", "version"], text=True, capture_output=True)
     if result.returncode == 0:
-        print("Go is already installed.")
+        print("golang is already installed.")
+        return True
     else:
-        print("Go is not installed. Installing Go using apt...")
+        print("golang is not installed. Installing now...")
         try:
             subprocess.run(["sudo", "apt", "update"], check=True, text=True)
             subprocess.run(["sudo", "apt", "install", "-y", "golang"], check=True, text=True)
-            print("Go installed successfully.")
+            print("golang installed successfully.")
+            return True
         except subprocess.CalledProcessError as e:
-            print(f"Failed to install Go: {e}")
+            print(f"Failed to install golang: {e}")
             return False
-    return True
 
 # Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
     print("Installing asnmap...")
-    result = subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, capture_output=True)
-    if result.returncode == 0:
-        print("asnmap installed successfully.")
+    try:
+        subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, check=True, timeout=300)
         asnmap_binary = shutil.which("asnmap")
         if asnmap_binary:
             target_path = os.path.join(home_dir, "asnmap")
@@ -32,8 +33,10 @@ def install_asnmap(home_dir):
             print(f"asnmap binary copied to {target_path}.")
         else:
             print("asnmap binary not found after installation.")
-    else:
-        print(f"Failed to install asnmap: {result.stderr}")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install asnmap: {e}")
+    except subprocess.TimeoutExpired:
+        print("asnmap installation timed out.")
 
 # Function to install pwncat from GitHub
 def install_pwncat(home_dir):
@@ -42,13 +45,26 @@ def install_pwncat(home_dir):
     repo_path = os.path.join(home_dir, "pwncat")
 
     if not os.path.exists(repo_path):
-        subprocess.run(["git", "clone", repo_url, repo_path], text=True)
-        print(f"Cloned pwncat into {repo_path}.")
+        try:
+            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
+            print(f"Cloned pwncat into {repo_path}.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to clone pwncat: {e}")
+            return
+        except subprocess.TimeoutExpired:
+            print("Cloning pwncat timed out.")
+            return
 
     os.chdir(repo_path)
-    subprocess.run(["pip", "install", "pwncat-cs"], text=True)
-    subprocess.run(["pip", "install", "-r", "requirements.txt"], text=True)
-    subprocess.run(["poetry", "install"], text=True)
+    try:
+        subprocess.run(["pip", "install", "pwncat-cs"], text=True, check=True, timeout=300)
+        subprocess.run(["pip", "install", "-r", "requirements.txt"], text=True, check=True, timeout=300)
+        subprocess.run(["poetry", "install"], text=True, check=True, timeout=300)
+        print("pwncat installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install pwncat: {e}")
+    except subprocess.TimeoutExpired:
+        print("pwncat installation timed out.")
 
 # Function to clone repositories and run their setup
 def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
@@ -57,18 +73,16 @@ def setup_repository(repo_url, repo_name, setup_command=None, target_dir=None):
     repo_path = os.path.join(clone_path, repo_name)
 
     if not os.path.exists(repo_path):
-        result = subprocess.run(["git", "clone", repo_url, repo_path], text=True, capture_output=True)
-        if result.returncode == 0:
+        try:
+            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
             print(f"Cloned {repo_name} into {repo_path}.")
             if setup_command:
-                print(f"Setting up {repo_name}...")
-                setup_result = subprocess.run(setup_command, cwd=repo_path, shell=True, text=True, capture_output=True)
-                if setup_result.returncode == 0:
-                    print(f"{repo_name} setup completed successfully.")
-                else:
-                    print(f"Failed to set up {repo_name}: {setup_result.stderr}")
-        else:
-            print(f"Failed to clone {repo_name}: {result.stderr}")
+                subprocess.run(setup_command, cwd=repo_path, shell=True, text=True, check=True, timeout=300)
+                print(f"{repo_name} setup completed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to clone or set up {repo_name}: {e}")
+        except subprocess.TimeoutExpired:
+            print(f"{repo_name} cloning or setup timed out.")
     else:
         print(f"{repo_name} already exists in {repo_path}. Skipping clone.")
 
@@ -102,12 +116,12 @@ def add_tools_to_path(home_dir):
 
 # Main setup function
 def main():
-    print("Setting up tools...")
+    print("Starting setup...")
 
-    # Install Go first
-    if not install_go():
-        print("Failed to install Go. Exiting setup.")
-        return
+    # Install golang first
+    if not install_golang():
+        print("golang installation failed. Exiting setup.")
+        sys.exit(1)
 
     # Get the home directory based on the current user
     home_dir = os.path.expanduser(f"/home/{os.getlogin()}")
