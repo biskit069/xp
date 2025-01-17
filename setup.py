@@ -69,7 +69,6 @@ def install_airgeddon():
         print("airgeddon installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
-# Function to install pwncat and set up everything in the pwncat directory
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -103,8 +102,9 @@ def install_pwncat(home_dir):
     print("Activating virtual environment...")
     activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
     try:
-        subprocess.run(f"source {activate_script}", shell=True, check=True)
-        print("Virtual environment activated successfully.")
+        # Activate the virtual environment by invoking a new shell
+        subprocess.run(f"bash -c 'source {activate_script} && pip install pwncat-cs'", shell=True, check=True)
+        print("Virtual environment activated and pwncat-cs installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to activate virtual environment: {e}")
         return
@@ -140,7 +140,7 @@ def install_pwncat(home_dir):
     
 def install_g2l(home_dir):
     print("Installing g2l...")
-    repo_url = "https://github.com/1N3/G2L"
+    repo_url = "https://github.com/biskit069/g2l"
     repo_path = os.path.join(home_dir, "g2l")
 
     if not os.path.exists(repo_path):
