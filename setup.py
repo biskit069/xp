@@ -86,21 +86,45 @@ def install_pwncat(home_dir):
     # Change to pwncat directory
     os.chdir(repo_path)
 
-    # Install python3-poetry to ensure poetry is available
+    # Step 1: Create the Python virtual environment in the pwncat directory
+    print("Creating virtual environment in pwncat directory...")
+    try:
+        subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True)
+        print("Virtual environment created successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to create virtual environment: {e}")
+        return
+
+    # Step 2: Activate the virtual environment
+    print("Activating virtual environment...")
+    activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
+    try:
+        subprocess.run(f"source {activate_script}", shell=True, check=True)
+        print("Virtual environment activated successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to activate virtual environment: {e}")
+        return
+
+    # Step 3: Install python3-poetry to ensure poetry is available
     print("Installing python3-poetry...")
     subprocess.run(["sudo", "apt", "install", "-y", "python3-poetry"], check=True)
 
-    # Install pwncat-cs directly in the pwncat directory
+    # Step 4: Install pwncat-cs directly in the pwncat directory
     print("Installing pwncat-cs...")
     subprocess.run(["pip", "install", "pwncat-cs"], check=True)
 
-    # Skip unlocking poetry lock if it's hanging
-    print("Skipping poetry lock step and proceeding with poetry install...")
+    # Step 5: Unlock the poetry lock file by running poetry lock --no-update
+    print("Unlocking poetry lock file...")
+    subprocess.run(["poetry", "lock", "--no-update"], check=True)
 
-    # Install dependencies using poetry in the pwncat directory with no dev dependencies
-    print("Installing dependencies using poetry (with --no-dev)...")
+    # Step 6: Install dependencies using poetry in the pwncat directory
+    print("Installing dependencies using poetry...")
     try:
-        subprocess.run(["poetry", "install", "--no-dev", "--verbose"], check=True, timeout=600)
+        subprocess.run(
+            ["poetry", "install", "--no-dev", "--verbose"],
+            check=True,
+            timeout=1200,  # Increase timeout to 20 minutes
+        )
         print("Poetry install completed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Poetry install failed: {e}")
@@ -108,6 +132,7 @@ def install_pwncat(home_dir):
         print("Poetry install timed out.")
 
     print("pwncat setup completed successfully.")
+
     
 def install_g2l(home_dir):
     print("Installing g2l...")
