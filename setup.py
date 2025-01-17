@@ -67,6 +67,7 @@ def install_airgeddon():
         print(f"Failed to install airgeddon: {e}")
 
 # Function to install pwncat from GitHub and set up virtual environment
+# Function to install pwncat from GitHub and set up virtual environment
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -99,10 +100,15 @@ def install_pwncat(home_dir):
     print("Installing poetry in the virtual environment...")
     subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "poetry"], check=True)
 
+    # Run poetry lock --no-update to avoid dependency updates
+    print("Running poetry lock --no-update...")
+    subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "lock", "--no-update"], check=True)
+
     # Now run poetry install
     subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "install"], check=True)
 
     print("pwncat setup completed.")
+
 
 
     if not os.path.exists(repo_path):
