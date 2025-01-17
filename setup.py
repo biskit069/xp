@@ -67,7 +67,6 @@ def install_airgeddon():
         print(f"Failed to install airgeddon: {e}")
 
 # Function to install pwncat from GitHub and set up virtual environment
-# Function to install pwncat from GitHub and set up virtual environment
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -86,6 +85,10 @@ def install_pwncat(home_dir):
 
     # Change to pwncat directory
     os.chdir(repo_path)
+
+    # Install system-wide python3-poetry to ensure poetry is available
+    print("Installing python3-poetry...")
+    subprocess.run(["sudo", "apt", "install", "-y", "python3-poetry"], check=True)
 
     # Create and activate virtual environment
     print("Setting up virtual environment for pwncat...")
