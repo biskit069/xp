@@ -83,21 +83,20 @@ def install_pwncat(home_dir):
             print("Cloning pwncat timed out.")
             return
 
-    os.chdir(repo_path)
-
     # Step 1: Create a virtual environment for pwncat
     print("Creating virtual environment for pwncat...")
-    subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True, text=True)
+    subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True, text=True, cwd=repo_path)
 
-    # Step 2: Activate the virtual environment
+    # Step 2: Activate the virtual environment and install dependencies
     print("Activating virtual environment...")
     activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
-    subprocess.run(f"source {activate_script}", shell=True, check=True, text=True)
-
-    # Install pwncat-cs and other dependencies
+    
+    # Use subprocess to run commands within the activated virtual environment
     try:
-        subprocess.run(["pip", "install", "pwncat-cs"], text=True, check=True, timeout=300)
-        subprocess.run(["poetry", "install"], text=True, check=True, timeout=300)
+        # Install dependencies in the virtual environment
+        subprocess.run(f"source {activate_script} && pip install -r {repo_path}/requirements.txt", shell=True, check=True, text=True)
+        subprocess.run(f"source {activate_script} && pip install pwncat-cs", shell=True, check=True, text=True)
+        subprocess.run(f"source {activate_script} && poetry install", shell=True, check=True, text=True)
         print("pwncat installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install pwncat dependencies: {e}")
