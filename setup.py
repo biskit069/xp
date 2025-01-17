@@ -66,7 +66,6 @@ def install_airgeddon():
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
 
-# Function to install pwncat from GitHub and set up virtual environment
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -90,19 +89,13 @@ def install_pwncat(home_dir):
     print("Setting up virtual environment for pwncat...")
     subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True)
     print("Virtual environment created successfully.")
-    subprocess.run(["source", "pwncat-env/bin/activate"], shell=True, check=True)
 
-    # Install pwncat-cs in the virtual environment
-    print("Installing pwncat-cs...")
-    subprocess.run(["pip", "install", "pwncat-cs"], check=True)
+    # Activate virtual environment and install dependencies
+    print("Activating virtual environment and installing dependencies...")
+    subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "pwncat-cs"], check=True)
+    subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "-r", "requirements.txt"], check=True)
+    subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "install"], check=True)
 
-    # Install other dependencies
-    print("Installing other dependencies from requirements.txt...")
-    subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True)
-
-    # Run poetry install if needed (assuming poetry is used in the project)
-    print("Running poetry install...")
-    subprocess.run(["poetry", "install"], check=True)
     print("pwncat setup completed.")
 
 # Function to install g2l
