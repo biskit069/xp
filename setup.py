@@ -140,6 +140,29 @@ def install_cerbrutus(home_dir):
         except subprocess.TimeoutExpired:
             print("Cloning cerbrutus timed out.")
 
+# Function to install g2l from GitHub
+def install_g2l(home_dir):
+    print("Installing g2l...")
+    repo_url = "https://github.com/biskit069/g2l"
+    repo_path = os.path.join(home_dir, "g2l")
+
+    if not os.path.exists(repo_path):
+        try:
+            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
+            print(f"Cloned g2l into {repo_path}.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to clone g2l: {e}")
+            return
+        except subprocess.TimeoutExpired:
+            print("Cloning g2l timed out.")
+
+    os.chdir(repo_path)
+    try:
+        subprocess.run(["python3", "setup.py", "install"], text=True, check=True, timeout=300)
+        print("g2l installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install g2l: {e}")
+
 # Main setup function
 def main():
     print("Setting up tools...")
@@ -162,6 +185,7 @@ def main():
     install_pwncat(home_dir)
     install_routersploit(home_dir)
     install_cerbrutus(home_dir)
+    install_g2l(home_dir)
 
     print("Setup complete! All tools are installed.")
 
