@@ -172,11 +172,26 @@ def install_routersploit(home_dir):
             print("Cloning routersploit timed out.")
             return
 
-    # Install routersploit
+    # Install dependencies
     os.chdir(repo_path)
+    print("Installing dependencies...")
+    try:
+        subprocess.run(["pip", "install", "--upgrade", "pip", "setuptools"], check=True)  # Ensure pip and setuptools are up-to-date
+        subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True)  # Install the dependencies from requirements.txt
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install dependencies: {e}")
+        return
+
+    # Install routersploit
     print("Installing routersploit...")
-    subprocess.run(["python3", "setup.py", "install"], check=True)
-    print("routersploit installed successfully.")
+    try:
+        subprocess.run(["sudo", "python3", "setup.py", "install"], check=True)
+        print("routersploit installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install routersploit: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred during installation: {e}")
+
 
 # Function to install cerbrutus
 def install_cerbrutus(home_dir):
