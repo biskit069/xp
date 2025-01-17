@@ -229,9 +229,12 @@ def install_routersploit(home_dir):
 # Function to install cerbrutus
 def install_cerbrutus(home_dir):
     print("Installing cerbrutus...")
+
+    # Set the repo URL and path
     repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
     repo_path = os.path.join(home_dir, "cerbrutus")
 
+    # Clone the repository if not already cloned
     if not os.path.exists(repo_path):
         try:
             subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
@@ -243,11 +246,60 @@ def install_cerbrutus(home_dir):
             print("Cloning cerbrutus timed out.")
             return
 
-    # Install cerbrutus
+    # Change to the cerbrutus directory
     os.chdir(repo_path)
-    print("Installing cerbrutus...")
-    subprocess.run(["python3", "setup.py", "install"], check=True)
-    print("cerbrutus installed successfully.")
+
+    # Create and activate a virtual environment
+    print("Creating virtual environment in cerbrutus directory...")
+    try:
+        subprocess.run(["python3", "-m", "venv", "cerbrutus-env"], check=True)
+        print("Virtual environment created.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to create virtual environment: {e}")
+        return
+
+    activate_script = os.path.join(repo_path, "cerbrutus-env", "bin", "activate")
+    try:
+        subprocess.run(f"source {activate_script}", shell=True, check=True)
+        print("Virtual environment activated.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to activate virtual environment: {e}")
+        return
+
+    # Upgrade pip and setuptools
+    print("Upgrading pip and setuptools...")
+    try:
+        subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
+        print("pip and setuptools upgraded.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to upgrade pip/setuptools: {e}")
+        return
+
+    # Install dependencies from requirements.txt
+    if os.path.exists("requirements.txt"):
+        print("Installing dependencies from requirements.txt...")
+        try:
+            subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
+            print("Dependencies installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install dependencies: {e}")
+            return
+    else:
+        print("No requirements.txt found. Proceeding to install cerbrutus.")
+
+    # Install cerbrutus using setup.py
+    print("Installing cerbrutus using setup.py...")
+    try:
+        subprocess.run(["python3", "setup.py", "install"], check=True)
+        print("cerbrutus installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install cerbrutus: {e}")
+        return
+    except Exception as e:
+        print(f"An unexpected error occurred during cerbrutus installation: {e}")
+        return
+
+    print("cerbrutus installation completed.")
 
 # Main setup function
 def main():
