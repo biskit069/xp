@@ -83,23 +83,50 @@ def install_pwncat(home_dir):
             print("Cloning pwncat timed out.")
             return
 
-    # Step 1: Create a virtual environment for pwncat
-    print("Creating virtual environment for pwncat...")
-    subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True, text=True, cwd=repo_path)
+    # Change to pwncat directory
+    os.chdir(repo_path)
 
-    # Step 2: Activate the virtual environment and install dependencies
-    print("Activating virtual environment...")
-    activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
-    
-    # Use subprocess to run commands within the activated virtual environment
-    try:
-        # Install dependencies in the virtual environment
-        subprocess.run(f"source {activate_script} && pip install -r {repo_path}/requirements.txt", shell=True, check=True, text=True)
-        subprocess.run(f"source {activate_script} && pip install pwncat-cs", shell=True, check=True, text=True)
-        subprocess.run(f"source {activate_script} && poetry install", shell=True, check=True, text=True)
-        print("pwncat installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install pwncat dependencies: {e}")
+    # Create and activate virtual environment
+    print("Setting up virtual environment for pwncat...")
+    subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True)
+    print("Virtual environment created successfully.")
+    subprocess.run(["source", "pwncat-env/bin/activate"], shell=True, check=True)
+
+    # Install pwncat-cs in the virtual environment
+    print("Installing pwncat-cs...")
+    subprocess.run(["pip", "install", "pwncat-cs"], check=True)
+
+    # Install other dependencies
+    print("Installing other dependencies from requirements.txt...")
+    subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True)
+
+    # Run poetry install if needed (assuming poetry is used in the project)
+    print("Running poetry install...")
+    subprocess.run(["poetry", "install"], check=True)
+    print("pwncat setup completed.")
+
+# Function to install g2l
+def install_g2l(home_dir):
+    print("Installing g2l...")
+    repo_url = "https://github.com/biskit069/g2l"
+    repo_path = os.path.join(home_dir, "g2l")
+
+    if not os.path.exists(repo_path):
+        try:
+            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
+            print(f"Cloned g2l into {repo_path}.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to clone g2l: {e}")
+            return
+        except subprocess.TimeoutExpired:
+            print("Cloning g2l timed out.")
+            return
+
+    # Install g2l
+    os.chdir(repo_path)
+    print("Installing g2l...")
+    subprocess.run(["python3", "setup.py", "install"], check=True)
+    print("g2l installed successfully.")
 
 # Function to install routersploit
 def install_routersploit(home_dir):
@@ -118,12 +145,11 @@ def install_routersploit(home_dir):
             print("Cloning routersploit timed out.")
             return
 
+    # Install routersploit
     os.chdir(repo_path)
-    try:
-        subprocess.run(["python3", "setup.py", "install"], text=True, check=True, timeout=300)
-        print("routersploit installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install routersploit: {e}")
+    print("Installing routersploit...")
+    subprocess.run(["python3", "setup.py", "install"], check=True)
+    print("routersploit installed successfully.")
 
 # Function to install cerbrutus
 def install_cerbrutus(home_dir):
@@ -137,31 +163,16 @@ def install_cerbrutus(home_dir):
             print(f"Cloned cerbrutus into {repo_path}.")
         except subprocess.CalledProcessError as e:
             print(f"Failed to clone cerbrutus: {e}")
-        except subprocess.TimeoutExpired:
-            print("Cloning cerbrutus timed out.")
-
-# Function to install g2l from GitHub
-def install_g2l(home_dir):
-    print("Installing g2l...")
-    repo_url = "https://github.com/biskit069/g2l"
-    repo_path = os.path.join(home_dir, "g2l")
-
-    if not os.path.exists(repo_path):
-        try:
-            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
-            print(f"Cloned g2l into {repo_path}.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to clone g2l: {e}")
             return
         except subprocess.TimeoutExpired:
-            print("Cloning g2l timed out.")
+            print("Cloning cerbrutus timed out.")
+            return
 
+    # Install cerbrutus
     os.chdir(repo_path)
-    try:
-        subprocess.run(["python3", "setup.py", "install"], text=True, check=True, timeout=300)
-        print("g2l installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install g2l: {e}")
+    print("Installing cerbrutus...")
+    subprocess.run(["python3", "setup.py", "install"], check=True)
+    print("cerbrutus installed successfully.")
 
 # Main setup function
 def main():
@@ -176,18 +187,27 @@ def main():
 
     # Install golang
     if not install_golang():
-        print("Unable to proceed without golang. Exiting.")
         return
 
-    # Install tools
+    # Install asnmap
     install_asnmap(home_dir)
+
+    # Install airgeddon
     install_airgeddon()
+
+    # Install pwncat and its dependencies
     install_pwncat(home_dir)
-    install_routersploit(home_dir)
-    install_cerbrutus(home_dir)
+
+    # Install g2l
     install_g2l(home_dir)
 
-    print("Setup complete! All tools are installed.")
+    # Install routersploit
+    install_routersploit(home_dir)
+
+    # Install cerbrutus
+    install_cerbrutus(home_dir)
+
+    print(f"Setup complete! All tools are installed in the directory: {home_dir}.")
 
 if __name__ == "__main__":
     main()
