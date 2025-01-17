@@ -93,7 +93,6 @@ def install_pwncat(home_dir):
     # Activate virtual environment and install dependencies
     print("Activating virtual environment and installing dependencies...")
     subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "pwncat-cs"], check=True)
-    subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "-r", "requirements.txt"], check=True)
     subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "install"], check=True)
 
     print("pwncat setup completed.")
