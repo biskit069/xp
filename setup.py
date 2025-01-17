@@ -25,14 +25,15 @@ def install_asnmap(home_dir):
     print("Installing asnmap...")
     try:
         # Ensure the GOPATH is set correctly
-        go_path = os.path.join(home_dir, "go")
+        go_path = os.path.expanduser("~") + "/go"  # Use the default GOPATH location
         os.environ["GOPATH"] = go_path
         os.environ["PATH"] += f":{os.path.join(go_path, 'bin')}"
-        
+
         # Create GOPATH directory if it doesn't exist
         os.makedirs(go_path, exist_ok=True)
 
         # Install asnmap using go install
+        print("Installing asnmap using Go...")
         subprocess.run(["go", "install", "github.com/projectdiscovery/asnmap/cmd/asnmap@latest"], text=True, check=True, timeout=300)
         print("asnmap installed successfully.")
 
@@ -45,9 +46,12 @@ def install_asnmap(home_dir):
         else:
             print("asnmap binary not found in GOPATH bin directory.")
         
-        # Ensure asnmap is executable and added to the PATH
+        # Ensure asnmap is executable
         subprocess.run(f"chmod +x {asnmap_binary}", shell=True)
+
+        # Ensure the binary is available in the PATH
         subprocess.run(f"export PATH=$PATH:{os.path.dirname(asnmap_binary)}", shell=True)
+
         print("asnmap is now executable and available in the PATH.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install asnmap: {e}")
