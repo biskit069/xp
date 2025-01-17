@@ -55,7 +55,6 @@ def install_asnmap(home_dir):
     except Exception as e:
         print(f"An unexpected error occurred while installing asnmap: {e}")
 
-# Function to install airgeddon using apt
 def install_airgeddon():
     print("Installing airgeddon...")
     try:
@@ -64,6 +63,7 @@ def install_airgeddon():
         print("airgeddon installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
+
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -141,7 +141,6 @@ def install_pwncat(home_dir):
 
     print("pwncat setup completed successfully.")
 
-    
 def install_g2l(home_dir):
     print("Installing g2l...")
     repo_url = "https://github.com/biskit069/g2l"
@@ -163,18 +162,12 @@ def install_g2l(home_dir):
     print("Installing g2l...")
     subprocess.run(["python3", "setup.py", "install"], check=True)
     print("g2l installed successfully.")
-import subprocess
-import os
 
-# Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
-
-    # Set the repo URL and path
     repo_url = "https://github.com/threat9/routersploit"
     repo_path = os.path.join(home_dir, "routersploit")
 
-    # Clone the repository if not already cloned
     if not os.path.exists(repo_path):
         try:
             subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
@@ -186,63 +179,24 @@ def install_routersploit(home_dir):
             print("Cloning routersploit timed out.")
             return
 
-    # Change to the routersploit directory
     os.chdir(repo_path)
-
-    # Create and activate a virtual environment
     print("Creating virtual environment in routersploit directory...")
-    try:
-        subprocess.run(["python3", "-m", "venv", "rs-env"], check=True)
-        print("Virtual environment created.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to create virtual environment: {e}")
-        return
+    subprocess.run(["python3", "-m", "venv", "rs-env"], check=True)
 
     activate_script = os.path.join(repo_path, "rs-env", "bin", "activate")
-    try:
-        subprocess.run(f"source {activate_script}", shell=True, check=True)
-        print("Virtual environment activated.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to activate virtual environment: {e}")
-        return
+    subprocess.run(f"source {activate_script}", shell=True, check=True)
 
-    # Install pip and setuptools in the virtual environment
-    print("Upgrading pip and setuptools...")
-    try:
-        subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
-        print("pip and setuptools upgraded.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to upgrade pip/setuptools: {e}")
-        return
+    subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
+    subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
+    subprocess.run(["python3", "-m", "pip", "install", "."], check=True)
 
-    # Install the dependencies from the requirements file
-    print("Installing dependencies from requirements.txt...")
-    try:
-        subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
-        print("Dependencies installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install dependencies: {e}")
-        return
+    print("routersploit installed successfully.")
 
-    # Install routersploit itself using pip
-    print("Installing routersploit using pip...")
-    try:
-        subprocess.run(["python3", "-m", "pip", "install", "."], check=True)
-        print("routersploit installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install routersploit: {e}")
-    except Exception as e:
-        print(f"An unexpected error occurred during installation: {e}")
-
-# Function to install cerbrutus
 def install_cerbrutus(home_dir):
     print("Installing cerbrutus...")
-
-    # Set the repo URL and path
     repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
     repo_path = os.path.join(home_dir, "cerbrutus")
 
-    # Clone the repository if not already cloned
     if not os.path.exists(repo_path):
         try:
             subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
@@ -254,95 +208,8 @@ def install_cerbrutus(home_dir):
             print("Cloning cerbrutus timed out.")
             return
 
-    # Change to the cerbrutus directory
     os.chdir(repo_path)
-
-    # Create and activate a virtual environment
-    print("Creating virtual environment in cerbrutus directory...")
-    try:
-        subprocess.run(["python3", "-m", "venv", "cerbrutus-env"], check=True)
-        print("Virtual environment created.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to create virtual environment: {e}")
-        return
-
-    activate_script = os.path.join(repo_path, "cerbrutus-env", "bin", "activate")
-    try:
-        subprocess.run(f"source {activate_script}", shell=True, check=True)
-        print("Virtual environment activated.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to activate virtual environment: {e}")
-        return
-
-    # Upgrade pip and setuptools
-    print("Upgrading pip and setuptools...")
-    try:
-        subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
-        print("pip and setuptools upgraded.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to upgrade pip/setuptools: {e}")
-        return
-
-    # Install dependencies from requirements.txt
-    if os.path.exists("requirements.txt"):
-        print("Installing dependencies from requirements.txt...")
-        try:
-            subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
-            print("Dependencies installed successfully.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to install dependencies: {e}")
-            return
-    else:
-        print("No requirements.txt found. Proceeding to install cerbrutus.")
-
-    # Install cerbrutus using setup.py
-    print("Installing cerbrutus using setup.py...")
-    try:
-        subprocess.run(["python3", "setup.py", "install"], check=True)
-        print("cerbrutus installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install cerbrutus: {e}")
-        return
-    except Exception as e:
-        print(f"An unexpected error occurred during cerbrutus installation: {e}")
-        return
-
-    print("cerbrutus installation completed.")
-
-# Main setup function
-def main():
-    print("Setting up tools...")
-
-    # Get the home directory based on the current user
-    home_dir = os.path.expanduser(f"/home/{os.getlogin()}")
-
-    # Ensure the home directory exists
-    if not os.path.exists(home_dir):
-        os.makedirs(home_dir)
-
-    # Install golang
-    if not install_golang():
-        return
-
-    # Install asnmap
-    install_asnmap(home_dir)
-
-    # Install airgeddon
-    install_airgeddon()
-
-    # Install pwncat and its dependencies
-    install_pwncat(home_dir)
-
-    # Install g2l
-    install_g2l(home_dir)
-
-    # Install routersploit
-    install_routersploit(home_dir)
-
-    # Install cerbrutus
-    install_cerbrutus(home_dir)
-
-    print(f"Setup complete! All tools are installed in the directory: {home_dir}.")
-
-if __name__ == "__main__":
-    main()
+    subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
+    subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
+    subprocess.run(["python3", "-m", "pip", "install", "."], check=True)
+    print("cerbrutus installed successfully.")
