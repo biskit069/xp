@@ -65,7 +65,6 @@ def install_airgeddon():
         print("airgeddon installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
-# Function to install pwncat from GitHub and set up virtual environment
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -85,7 +84,7 @@ def install_pwncat(home_dir):
     # Change to pwncat directory
     os.chdir(repo_path)
 
-    # Install system-wide python3-poetry to ensure poetry is available
+    # Install python3-poetry to ensure poetry is available
     print("Installing python3-poetry...")
     subprocess.run(["sudo", "apt", "install", "-y", "python3-poetry"], check=True)
 
@@ -94,45 +93,15 @@ def install_pwncat(home_dir):
     subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True)
     print("Virtual environment created successfully.")
 
-    # Activate virtual environment and install pwncat-cs
+    # Install pwncat-cs and dependencies using pip
     print("Activating virtual environment and installing pwncat-cs...")
     subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "pwncat-cs"], check=True)
 
-    # Install poetry globally, not in the virtual environment
-    print("Installing poetry globally...")
-    subprocess.run(["sudo", "apt", "install", "-y", "python3-poetry"], check=True)
+    # Install dependencies using poetry (or pip if needed)
+    print("Installing dependencies using poetry...")
+    subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "install"], check=True)
 
-    # Run poetry lock --no-update in the pwncat directory
-    print("Running poetry lock --no-update in the pwncat directory...")
-    subprocess.run(["poetry", "lock", "--no-update"], cwd=repo_path, check=True)
-
-    # Now run poetry install in the pwncat directory and capture verbose output
-    print("Running poetry install with verbose output...")
-    result = subprocess.run(
-        ["poetry", "install", "-v"],  # -v for verbose output
-        cwd=repo_path,
-        check=False,  # Don't exit on error, we want to capture the error
-        text=True,
-        capture_output=True
-    )
-
-    # Output the result of poetry install
-    if result.returncode != 0:
-        print("Poetry install failed, output below:")
-        print(result.stdout)  # Print standard output to see more details
-        print(result.stderr)  # Print error output for more insight
-        print("Trying python3 setup.py install...")
-        try:
-            subprocess.run(["python3", "setup.py", "install"], cwd=repo_path, check=True)
-            print("pwncat installed successfully using setup.py.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to install pwncat with setup.py: {e}")
-        except FileNotFoundError:
-            print("setup.py not found in the pwncat directory.")
-    else:
-        print("pwncat setup completed successfully.")
-
-
+    print("pwncat setup completed successfully.")
     if not os.path.exists(repo_path):
         try:
             subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
