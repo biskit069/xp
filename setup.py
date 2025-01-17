@@ -1,6 +1,5 @@
 import os
 import subprocess
-import shutil
 
 # Function to install golang using apt
 def install_golang():
@@ -39,7 +38,6 @@ def install_asnmap(home_dir):
         # Find the binary and copy it to the target directory
         asnmap_binary = os.path.join(go_path, "bin", "asnmap")
         if os.path.exists(asnmap_binary):
-            target_path = os.path.join(home_dir, "asnmap")
             subprocess.run(["cp", asnmap_binary, "/home/host"], check=True)  # Copy binary to /home/host
             print(f"asnmap binary copied to /home/host.")
         else:
@@ -55,15 +53,7 @@ def install_asnmap(home_dir):
     except Exception as e:
         print(f"An unexpected error occurred while installing asnmap: {e}")
 
-def install_airgeddon():
-    print("Installing airgeddon...")
-    try:
-        subprocess.run(["sudo", "apt", "update"], check=True, text=True)
-        subprocess.run(["sudo", "apt", "install", "-y", "airgeddon"], check=True, text=True)
-        print("airgeddon installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install airgeddon: {e}")
-
+# Function to install pwncat
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -93,123 +83,41 @@ def install_pwncat(home_dir):
         print(f"Failed to create virtual environment: {e}")
         return
 
-    # Step 2: Activate the virtual environment
-    print("Activating virtual environment...")
+    # Step 2: Activate the virtual environment and install dependencies
+    print("Activating virtual environment and installing dependencies...")
     activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
     try:
         subprocess.run(f"source {activate_script}", shell=True, check=True)
-        print("Virtual environment activated successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to activate virtual environment: {e}")
-        return
-
-    # Step 3: Install python3-poetry to ensure poetry is available
-    print("Installing python3-poetry...")
-    subprocess.run(["sudo", "apt", "install", "-y", "python3-poetry"], check=True)
-
-    # Step 4: Install pwncat-cs directly in the pwncat directory
-    print("Installing pwncat-cs...")
-    try:
-        subprocess.run(["pip", "install", "pwncat-cs", "-v"], check=True)  # Added verbose flag
+        subprocess.run(["pip", "install", "pwncat-cs"], check=True)
         print("pwncat-cs installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install pwncat-cs: {e}")
         return
 
-    # Step 5: Unlock the poetry lock file by running poetry lock --no-update
-    print("Unlocking poetry lock file...")
-    try:
-        subprocess.run(["poetry", "lock", "--no-update"], check=True)
-        print("Poetry lock file unlocked successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to unlock poetry lock file: {e}")
-        return
-
-    # Step 6: Install dependencies using poetry in the pwncat directory
-    print("Installing dependencies using poetry...")
-    try:
-        subprocess.run(
-            ["poetry", "install", "--no-dev", "--verbose"],
-            check=True,
-            timeout=1200,  # Increase timeout to 20 minutes
-        )
-        print("Poetry install completed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Poetry install failed: {e}")
-    except subprocess.TimeoutExpired:
-        print("Poetry install timed out.")
-
     print("pwncat setup completed successfully.")
 
-def install_g2l(home_dir):
-    print("Installing g2l...")
-    repo_url = "https://github.com/biskit069/g2l"
-    repo_path = os.path.join(home_dir, "g2l")
+# Main setup function
+def main():
+    print("Setting up tools...")
 
-    if not os.path.exists(repo_path):
-        try:
-            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
-            print(f"Cloned g2l into {repo_path}.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to clone g2l: {e}")
-            return
-        except subprocess.TimeoutExpired:
-            print("Cloning g2l timed out.")
-            return
+    # Get the home directory based on the current user
+    home_dir = os.path.expanduser(f"/home/{os.getlogin()}")
 
-    # Install g2l
-    os.chdir(repo_path)
-    print("Installing g2l...")
-    subprocess.run(["python3", "setup.py", "install"], check=True)
-    print("g2l installed successfully.")
+    # Ensure the home directory exists
+    if not os.path.exists(home_dir):
+        os.makedirs(home_dir)
 
-def install_routersploit(home_dir):
-    print("Installing routersploit...")
-    repo_url = "https://github.com/threat9/routersploit"
-    repo_path = os.path.join(home_dir, "routersploit")
+    # Install golang
+    if not install_golang():
+        return
 
-    if not os.path.exists(repo_path):
-        try:
-            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
-            print(f"Cloned routersploit into {repo_path}.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to clone routersploit: {e}")
-            return
-        except subprocess.TimeoutExpired:
-            print("Cloning routersploit timed out.")
-            return
+    # Install asnmap
+    install_asnmap(home_dir)
 
-    os.chdir(repo_path)
-    print("Creating virtual environment in routersploit directory...")
-    subprocess.run(["python3", "-m", "venv", "rs-env"], check=True)
+    # Install pwncat
+    install_pwncat(home_dir)
 
-    activate_script = os.path.join(repo_path, "rs-env", "bin", "activate")
-    subprocess.run(f"source {activate_script}", shell=True, check=True)
+    print(f"Setup complete! All tools are installed in the directory: {home_dir}.")
 
-    subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
-    subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
-    subprocess.run(["python3", "-m", "pip", "install", "."], check=True)
-
-    print("routersploit installed successfully.")
-
-def install_cerbrutus(home_dir):
-    print("Installing cerbrutus...")
-    repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
-    repo_path = os.path.join(home_dir, "cerbrutus")
-
-    if not os.path.exists(repo_path):
-        try:
-            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
-            print(f"Cloned cerbrutus into {repo_path}.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to clone cerbrutus: {e}")
-            return
-        except subprocess.TimeoutExpired:
-            print("Cloning cerbrutus timed out.")
-            return
-
-    os.chdir(repo_path)
-    subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
-    subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
-    subprocess.run(["python3", "-m", "pip", "install", "."], check=True)
-    print("cerbrutus installed successfully.")
+if __name__ == "__main__":
+    main()
