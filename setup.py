@@ -103,7 +103,7 @@ def install_pwncat(home_dir):
     print("Installing poetry in the virtual environment...")
     subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "poetry"], check=True)
 
-    # Run poetry lock --no-update to avoid dependency updates
+    # Run poetry lock with --no-update to avoid dependency updates
     print("Running poetry lock --no-update...")
     subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "lock", "--no-update"], check=True)
 
@@ -111,6 +111,7 @@ def install_pwncat(home_dir):
     subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "install"], check=True)
 
     print("pwncat setup completed.")
+
 
 
 
