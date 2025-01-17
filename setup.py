@@ -65,6 +65,7 @@ def install_airgeddon():
         print("airgeddon installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
+# Function to install pwncat and set up everything in the pwncat directory
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -88,18 +89,17 @@ def install_pwncat(home_dir):
     print("Installing python3-poetry...")
     subprocess.run(["sudo", "apt", "install", "-y", "python3-poetry"], check=True)
 
-    # Create and activate virtual environment
-    print("Setting up virtual environment for pwncat...")
-    subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True)
-    print("Virtual environment created successfully.")
+    # Install pwncat-cs directly in the pwncat directory
+    print("Installing pwncat-cs...")
+    subprocess.run(["pip", "install", "pwncat-cs"], check=True)
 
-    # Install pwncat-cs and dependencies using pip
-    print("Activating virtual environment and installing pwncat-cs...")
-    subprocess.run([os.path.join("pwncat-env", "bin", "pip"), "install", "pwncat-cs"], check=True)
+    # Unlock the poetry lock file by running poetry lock --no-update
+    print("Unlocking poetry lock file...")
+    subprocess.run(["poetry", "lock", "--no-update"], check=True)
 
-    # Install dependencies using poetry (or pip if needed)
+    # Install dependencies using poetry in the pwncat directory
     print("Installing dependencies using poetry...")
-    subprocess.run([os.path.join("pwncat-env", "bin", "poetry"), "install"], check=True)
+    subprocess.run(["poetry", "install"], check=True)
 
     print("pwncat setup completed successfully.")
     if not os.path.exists(repo_path):
