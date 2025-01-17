@@ -97,9 +97,8 @@ def install_pwncat(home_dir):
     print("Activating virtual environment...")
     activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
     try:
-        # Activate the virtual environment by invoking a new shell
-        subprocess.run(f"bash -c 'source {activate_script} && pip install pwncat-cs'", shell=True, check=True)
-        print("Virtual environment activated and pwncat-cs installed successfully.")
+        subprocess.run(f"source {activate_script}", shell=True, check=True)
+        print("Virtual environment activated successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to activate virtual environment: {e}")
         return
@@ -110,11 +109,21 @@ def install_pwncat(home_dir):
 
     # Step 4: Install pwncat-cs directly in the pwncat directory
     print("Installing pwncat-cs...")
-    subprocess.run(["pip", "install", "pwncat-cs"], check=True)
+    try:
+        subprocess.run(["pip", "install", "pwncat-cs", "-v"], check=True)  # Added verbose flag
+        print("pwncat-cs installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install pwncat-cs: {e}")
+        return
 
     # Step 5: Unlock the poetry lock file by running poetry lock --no-update
     print("Unlocking poetry lock file...")
-    subprocess.run(["poetry", "lock", "--no-update"], check=True)
+    try:
+        subprocess.run(["poetry", "lock", "--no-update"], check=True)
+        print("Poetry lock file unlocked successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to unlock poetry lock file: {e}")
+        return
 
     # Step 6: Install dependencies using poetry in the pwncat directory
     print("Installing dependencies using poetry...")
