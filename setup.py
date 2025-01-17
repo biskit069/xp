@@ -155,11 +155,18 @@ def install_g2l(home_dir):
     print("Installing g2l...")
     subprocess.run(["python3", "setup.py", "install"], check=True)
     print("g2l installed successfully.")
+import subprocess
+import os
+
+# Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
+
+    # Set the repo URL and path
     repo_url = "https://github.com/threat9/routersploit"
     repo_path = os.path.join(home_dir, "routersploit")
 
+    # Clone the repository if not already cloned
     if not os.path.exists(repo_path):
         try:
             subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
@@ -171,20 +178,48 @@ def install_routersploit(home_dir):
             print("Cloning routersploit timed out.")
             return
 
-    # Install dependencies
+    # Change to the routersploit directory
     os.chdir(repo_path)
-    print("Installing dependencies...")
+
+    # Create and activate a virtual environment
+    print("Creating virtual environment in routersploit directory...")
     try:
-        subprocess.run(["pip", "install", "--upgrade", "pip", "setuptools"], check=True, text=True)  # Ensure pip and setuptools are up-to-date
-        subprocess.run(["pip", "install", "-r", "requirements.txt"], check=True, text=True)  # Install the dependencies from requirements.txt
+        subprocess.run(["python3", "-m", "venv", "rs-env"], check=True)
+        print("Virtual environment created.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to create virtual environment: {e}")
+        return
+
+    activate_script = os.path.join(repo_path, "rs-env", "bin", "activate")
+    try:
+        subprocess.run(f"source {activate_script}", shell=True, check=True)
+        print("Virtual environment activated.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to activate virtual environment: {e}")
+        return
+
+    # Install pip and setuptools in the virtual environment
+    print("Upgrading pip and setuptools...")
+    try:
+        subprocess.run(["python3", "-m", "pip", "install", "--upgrade", "pip", "setuptools"], check=True)
+        print("pip and setuptools upgraded.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to upgrade pip/setuptools: {e}")
+        return
+
+    # Install the dependencies from the requirements file
+    print("Installing dependencies from requirements.txt...")
+    try:
+        subprocess.run(["python3", "-m", "pip", "install", "-r", "requirements.txt"], check=True)
+        print("Dependencies installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install dependencies: {e}")
         return
 
-    # Install routersploit
-    print("Installing routersploit...")
+    # Install routersploit itself using pip
+    print("Installing routersploit using pip...")
     try:
-        subprocess.run(["sudo", "python3", "-m", "pip", "install", "."], check=True, text=True)  # Use pip install . instead of setup.py install
+        subprocess.run(["python3", "-m", "pip", "install", "."], check=True)
         print("routersploit installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install routersploit: {e}")
