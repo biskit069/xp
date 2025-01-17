@@ -71,6 +71,7 @@ def install_pwncat(home_dir):
     repo_url = "https://github.com/calebstewart/pwncat"
     repo_path = os.path.join(home_dir, "pwncat")
 
+    # Clone the pwncat repository if not already cloned
     if not os.path.exists(repo_path):
         try:
             subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
@@ -95,13 +96,30 @@ def install_pwncat(home_dir):
 
     # Unlock the poetry lock file by running poetry lock --no-update
     print("Unlocking poetry lock file...")
-    subprocess.run(["poetry", "lock", "--no-update"], check=True)
+    try:
+        subprocess.run(["poetry", "lock", "--no-update"], check=True, timeout=600)
+        print("Poetry lock file unlocked successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error unlocking poetry lock: {e}")
+        return
+    except subprocess.TimeoutExpired:
+        print("Poetry lock process timed out. Attempting to continue...")
 
     # Install dependencies using poetry in the pwncat directory
     print("Installing dependencies using poetry...")
-    subprocess.run(["poetry", "install"], check=True)
+    try:
+        subprocess.run(["poetry", "install"], check=True, timeout=600)
+        print("Poetry install completed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Poetry install failed: {e}")
 
     print("pwncat setup completed successfully.")
+    
+def install_g2l(home_dir):
+    print("Installing g2l...")
+    repo_url = "https://github.com/1N3/G2L"
+    repo_path = os.path.join(home_dir, "g2l")
+
     if not os.path.exists(repo_path):
         try:
             subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
@@ -118,7 +136,6 @@ def install_pwncat(home_dir):
     print("Installing g2l...")
     subprocess.run(["python3", "setup.py", "install"], check=True)
     print("g2l installed successfully.")
-
 # Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
