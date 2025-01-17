@@ -94,24 +94,18 @@ def install_pwncat(home_dir):
     print("Installing pwncat-cs...")
     subprocess.run(["pip", "install", "pwncat-cs"], check=True)
 
-    # Unlock the poetry lock file by running poetry lock --no-update
-    print("Unlocking poetry lock file...")
-    try:
-        subprocess.run(["poetry", "lock", "--no-update"], check=True, timeout=600)
-        print("Poetry lock file unlocked successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error unlocking poetry lock: {e}")
-        return
-    except subprocess.TimeoutExpired:
-        print("Poetry lock process timed out. Attempting to continue...")
+    # Skip unlocking poetry lock if it's hanging
+    print("Skipping poetry lock step and proceeding with poetry install...")
 
-    # Install dependencies using poetry in the pwncat directory
-    print("Installing dependencies using poetry...")
+    # Install dependencies using poetry in the pwncat directory with no dev dependencies
+    print("Installing dependencies using poetry (with --no-dev)...")
     try:
-        subprocess.run(["poetry", "install"], check=True, timeout=600)
+        subprocess.run(["poetry", "install", "--no-dev", "--verbose"], check=True, timeout=600)
         print("Poetry install completed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Poetry install failed: {e}")
+    except subprocess.TimeoutExpired:
+        print("Poetry install timed out.")
 
     print("pwncat setup completed successfully.")
     
