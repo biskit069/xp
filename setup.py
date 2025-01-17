@@ -44,6 +44,11 @@ def install_asnmap(home_dir):
             print(f"asnmap binary copied to {target_path}.")
         else:
             print("asnmap binary not found in GOPATH bin directory.")
+        
+        # Ensure asnmap is executable and added to the PATH
+        subprocess.run(f"chmod +x {asnmap_binary}", shell=True)
+        subprocess.run(f"export PATH=$PATH:{os.path.dirname(asnmap_binary)}", shell=True)
+        print("asnmap is now executable and available in the PATH.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install asnmap: {e}")
     except subprocess.TimeoutExpired:
@@ -61,7 +66,7 @@ def install_airgeddon():
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
 
-# Function to install pwncat from GitHub
+# Function to install pwncat from GitHub and set up virtual environment
 def install_pwncat(home_dir):
     print("Installing pwncat...")
     repo_url = "https://github.com/calebstewart/pwncat"
@@ -79,9 +84,19 @@ def install_pwncat(home_dir):
             return
 
     os.chdir(repo_path)
+
+    # Step 1: Create a virtual environment for pwncat
+    print("Creating virtual environment for pwncat...")
+    subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True, text=True)
+
+    # Step 2: Activate the virtual environment
+    print("Activating virtual environment...")
+    activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
+    subprocess.run(f"source {activate_script}", shell=True, check=True, text=True)
+
+    # Install pwncat-cs and other dependencies
     try:
         subprocess.run(["pip", "install", "pwncat-cs"], text=True, check=True, timeout=300)
-        subprocess.run(["pip", "install", "-r", "requirements.txt"], text=True, check=True, timeout=300)
         subprocess.run(["poetry", "install"], text=True, check=True, timeout=300)
         print("pwncat installed successfully.")
     except subprocess.CalledProcessError as e:
