@@ -15,14 +15,14 @@ from colorama import init, Fore, Style
 import socket
 init(autoreset=True)
 
-# Function to clear the screen
+
 def clear_screen():
     if platform.system() == "Windows":
         os.system("cls")
     else:
         os.system("clear")
 
-# Function to show the main menu logo
+
 def show_main_menu_logo():
     kra = r'''
 ██╗  ██╗██████╗  █████╗
@@ -43,25 +43,24 @@ def show_main_menu_logo():
 
     clear_screen()
 
-    # Define colors
-    light_purple = '\033[38;5;13m'  # Light Purple (256-color code)
+    
+    light_purple = '\033[38;5;13m' 
     faded_white = Fore.WHITE + Style.BRIGHT
 
-    # Combine kra and ken together on one line, side by side
+   
     kra_lines = kra.strip().split("\n")
     ken_lines = ken.strip().split("\n")
 
-    # Merge them line by line, ensuring no space in between
     for kra_line, ken_line in zip(kra_lines, ken_lines):
         print(f"{light_purple}{kra_line}{faded_white}{ken_line}")
-        # Add delay for the effect
+        
 
-# Main function to ensure everything runs only once
+
 def main():
-    print("Starting script...")  # Debugging print to track execution
+    print("Starting script...") 
     show_main_menu_logo()
 
-# Ensure this script only runs once by using the __name__ guard
+
 if __name__ == "__main__":
     main()
 def run_nmap():
@@ -69,15 +68,15 @@ def run_nmap():
     try:
         print(Fore.LIGHTWHITE_EX + "\nChoose an Nmap option:")
         print("1. Run Nmap")
-        print("99. Return to Main Menu")  # Option to return to the main menu
+        print("99. Return to Main Menu")  
         choice = input(Fore.LIGHTCYAN_EX + "\nEnter your choice: ").strip()
 
-        # Return to the main menu if the user selects option 99
+        
         if choice == '99':
             print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
-            return  # Exits the function and goes back to the main menu
+            return  
 
-        # Run Nmap with custom command if selected
+       
         if choice == '1':
             print(Fore.LIGHTRED_EX + "\nEnter Command (Example: nmap 192.168.1.1 -vv -n):")
             command = input(Fore.LIGHTMAGENTA_EX + "Enter command: ").strip()
@@ -85,24 +84,24 @@ def run_nmap():
             if command:
                 print(Fore.GREEN + f"Running command: {command}")
                 try:
-                    # Ensure nmap is in the system path
+                    
                     if not shutil.which("nmap"):
                         print(Fore.RED + "Nmap is not installed or not found in the system path.")
                         return
 
-                    # Launch Nmap with the manually entered command
+                    
                     result = subprocess.run(command, shell=True, capture_output=True, text=True)
 
-                    # Check if Nmap executed successfully
+                    
                     if result.returncode == 0:
                         print(Fore.GREEN + "\nNmap scan completed successfully.")
                         output = result.stdout
 
-                        # Show the results from Nmap
+                       
                         print(Fore.LIGHTCYAN_EX + "\nNmap Results:")
                         print(output)
 
-                        # Ask if the user wants to save the results
+                        
                         save_results = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
                         if save_results == 'yes':
                             file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
@@ -131,7 +130,7 @@ def clear_screen():
 
 def main_menu():
     while True:
-        clear_screen()  # Clear the screen before showing the menu
+        clear_screen() 
         print(Fore.WHITE + "\nNmap:")
         print(Fore.GREEN + "1. Run Nmap")
         print(Fore.RED + "99. Return to main menu")
@@ -139,23 +138,12 @@ def main_menu():
         option = input(Fore.CYAN + "\nEnter an option: ").strip()
 
         if option == "1":
-            run_nmap()  # Launch Nmap directly when option 1 is selected
+            run_nmap()  
         elif option == "99":
             print(Fore.GREEN + "Exiting program...")
             break
         else:
             print(Fore.RED + "Invalid option. Please try again.")
-
-# DO NOT call main_menu() automatically at the start of the script
-
-
-
-
-
-
-
-
-
 
 init(autoreset=True)
 
@@ -164,7 +152,7 @@ def run_subfinder():
     try:
         print(Fore.GREEN + "Launching Subfinder...")
 
-        # Launch Subfinder interactively
+       
         subprocess.run("subfinder", shell=True)
 
         print(Fore.GREEN + "\nSubfinder exited. Returning to the main menu.")
@@ -175,11 +163,11 @@ def run_subfinder():
 def save_results_to_file(file_name, content):
     """Save results to a file in a user-writable directory."""
     try:
-        # Get the user's home directory
+       
         home_dir = os.path.expanduser("~")
         save_path = os.path.join(home_dir, file_name)
 
-        # Write content to the file
+       
         with open(save_path, "w") as file:
             file.write(content)
 
@@ -187,22 +175,12 @@ def save_results_to_file(file_name, content):
     except Exception as e:
         print(Fore.RED + f"Error saving results: {e}")
 
-# Example usage
+
 if __name__ == "__main__":
-    # Example: Save a test result to a file
+    
     test_content = "Example Subfinder results..."
     save_results_to_file("subfinder_results.txt", test_content)
 
-
-
-
-
-
-
-
-
-
-# Function to show all Nmap commands
 def show_all_nmap_commands():
     """Displays a list of all Nmap commands."""
     clear_screen()
@@ -272,16 +250,15 @@ def show_all_nmap_commands():
         "nmap 192.168.1.1 --packet-trace Show the details of the packets that are sent and received during a scan and capture the traffic"
     ]
 
-    # Printing the commands for the user
     for command in commands:
         print(command)
 
     print(Fore.LIGHTCYAN_EX + "\nPress any key to return to the menu...")
-    input()  # Wait for the user to press a key to return to the menu
-    return  # Return to the main menu
+    input()  
+    return 
 
 
-# Function to show NSE script commands
+
 def show_nse_script_commands():
    clear_screen()
    commands = [
@@ -292,7 +269,7 @@ def show_nse_script_commands():
    ]
    show_submenu(commands)
 
-# Function to show firewall scan commands
+
 def show_firewall_scan_commands():
    clear_screen()
    commands = [
@@ -303,7 +280,7 @@ def show_firewall_scan_commands():
    ]
    show_submenu(commands)
 
-# Function to show the submenu with command options
+
 def show_submenu(commands):
    print("\n".join(commands))
    input(Fore.WHITE + "\nPress Enter to return to the main menu...")
@@ -324,18 +301,13 @@ def exiting_loading_screen():
    '''
    colors = [Fore.LIGHTWHITE_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTWHITE_EX]
    for i, line in enumerate(loading_text.splitlines()):
-      print(colors[i % len(colors)] + line)  # Cycle through rainbow colors
-      time.sleep(0.1)  # Short delay (0.1 seconds per line)
-   # Display a final "Exiting..." message with a rainbow background and white text
+      print(colors[i % len(colors)] + line)  
+      time.sleep(0.1) 
+   
    print(Fore.LIGHTWHITE_EX + "\n")
-   time.sleep(0.1)  # Wait for a second before program exit
+   time.sleep(0.1)  
    print(Fore.LIGHTWHITE_EX + "Credits! biskit")
-   # Final message
-   sys.exit()  # Exit the program
-
-
-# Function to run SSLScan on a given IP with command selection
-
+   sys.exit()  
 
 def sslscan_scan():
     global scanning_in_progress
@@ -343,30 +315,29 @@ def sslscan_scan():
         print(Fore.BLUE + "\nChoose an SSLScan command:")
 
         print("4. Manual SSLScan")
-        print("6. Show SSLScan Command List")  # Option to show the SSLScan command list
-        print("99. Return to Main Menu")  # Option to return to the main menu
+        print("6. Show SSLScan Command List")  
+        print("99. Return to Main Menu")  
         choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
 
-        # Return to the main menu if the user selects option 99
+        
         if choice == '99':
             print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
-            return  # Exits the function and goes back to the main menu
+            return  
 
-        # Show SSLScan command list if selected
+        
         if choice == '6':
             show_sslscan_commands()
             return
 
-        ip = ""  # Default to empty, we'll ask for IP only when necessary
+        ip = ""  
 
-        # Only prompt for IP if needed (1, 2, 3, 5)
-        if choice in ['1', '2', '3', '5']:  # Basic, Full, Cert, and Vuln scans
-            ip = get_ip_address()  # Assuming this is your method to get the IP address
+       
+        if choice in ['1', '2', '3', '5']:  
+            ip = get_ip_address()  
             if not ip:
                 print(Fore.RED + "No IP address provided. Exiting SSLScan.")
                 return
 
-        # Define the SSLScan command based on the user's choice
         if choice == '':
             command = f""
         elif choice == '':
@@ -379,37 +350,36 @@ def sslscan_scan():
             command = input(Fore.BLUE + "Enter your SSLScan command: ").strip()
             if not command:
                 print(Fore.RED + "No command entered. Returning to menu.")
-                return  # Exit if no command is entered
-            print(Fore.GREEN + f"Running custom SSLScan command: {command}")  # Debug print
+                return  
+            print(Fore.GREEN + f"Running custom SSLScan command: {command}")  
         elif choice == '':
-            command = f""  # New command for Vuln Scan
+            command = f""  
         else:
             print(Fore.RED + "Invalid choice. Exiting SSLScan.")
             return
 
-        # Debugging: print the command before execution
         print(Fore.YELLOW + f"Debug: Command to run: {command}")
 
-        # Run the selected SSLScan command quickly by using Popen directly
+        
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
 
-        # Check if there's an error
+        
         if stderr:
             print(Fore.RED + "Error during SSLScan:", stderr.decode())
         else:
             output = stdout.decode()
-            if output:  # If there's output, print it
+            if output:  
                 print(Fore.BLUE + "SSLScan Completed Successfully.")
                 print(output)
             else:
                 print(Fore.RED + "No output received from SSLScan.")
 
-            # Prompt if the user wants to save the results
+           
             save_choice = input(Fore.YELLOW + "\nWould you like to save the results? (yes/no): ").strip().lower()
             if save_choice == 'yes':
                 file_name = input(Fore.LIGHTWHITE_EX + "Enter file name (without extension): ").strip() + ".txt"
-                if file_name:  # Ensure a valid file name is provided
+                if file_name:  
                     with open(file_name, "a") as file:
                         file.write(f"IP: {ip}\n{output}\n\n")
                     print(Fore.BLUE + f"Results saved to '{file_name}'.")
@@ -419,23 +389,22 @@ def sslscan_scan():
                 print(Fore.GREEN + "Returning to the main menu...")
             else:
                 print(Fore.RED + "Invalid choice. Returning to the main menu.")
-                return  # Go back to the main menu
+                return  
 
     except Exception as e:
         print(Fore.RED + f"Error running SSLScan: {e}")
     finally:
         scanning_in_progress = False
-        clear_screen()  # Assuming clear_screen() is defined elsewhere
+        clear_screen()  
 
 
 def get_ip_address():
-    # Function to get the IP address (you can replace this with your own method)
+    
     ip = input(Fore.BLUE + "Enter the IP address to scan: ").strip()
     return ip
 
 
 def clear_screen():
-    # This is just an example. Adjust according to your environment.
     subprocess.call('clear' if os.name == 'posix' else 'cls', shell=True)
 
 
@@ -499,8 +468,8 @@ def show_sslscan_commands():
     for command in ssl_commands:
         print(Fore.YELLOW + command)
     print(Fore.LIGHTCYAN_EX + "\nPress any key to return to the menu...")
-    input()  # Wait for the user to press a key to return to the menu
-    return  # Return to the main menu
+    input()  
+    return  
 
 
 
@@ -527,19 +496,19 @@ def update_script():
 def run_routersploit():
     """Function to run RouterSploit with sudo automatically and display host info."""
     try:
-        # Get the hostname using 'whoami' on Linux
+        
         hostname = subprocess.check_output("whoami", shell=True).decode().strip()
 
-        # Automatically get the path to the routersploit directory
+        
         path = shutil.which("rsf.py")
         if not path:
             print(Fore.RED + "RouterSploit is not installed or not found in the system path.")
             return
 
-        # Change to the directory where RouterSploit is located
+        
         os.chdir(os.path.dirname(path))
 
-        # Run RouterSploit with sudo automatically
+       
         print(Fore.GREEN + f"\nRunning RouterSploit as {hostname}...")
         subprocess.run(["sudo", "python3", "rsf.py"])
 
@@ -559,42 +528,42 @@ def metasploit_scan():
             metasploit_commands = ""
             ip = ""
 
-            if choice == '':  # Scan for vulnerabilities
-                ip = get_ip_address()  # Assuming get_ip_address() prompts for IP
+            if choice == '':  
+                ip = get_ip_address() 
                 if not ip:
 
                     return
 
                 metasploit_commands = f""
-            elif choice == '':  # Exploit a vulnerability
-                ip = get_ip_address()  # Prompt for IP address
+            elif choice == '':  
+                ip = get_ip_address()  
                 if not ip:
                     print(Fore.RED + "")
                     return
                 metasploit_commands = input(Fore.BLUE + "")
-            elif choice == '1':  # Manual Metasploit
+            elif choice == '1':  
                 print(Fore.LIGHTCYAN_EX + "Launching manual Metasploit...")
                 os.system("msfconsole")
                 continue
-            elif choice == '':  # View Network Exploits
+            elif choice == '':  
                 print(Fore.BLUE + "")
 
-                # Full list of network exploits with payloads
+                
                 exploits = {
 
                 }
 
-                # Display available exploits
+                
                 for key, value in exploits.items():
                     print(f"{key}: {value}")
 
                 exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
 
-                # Debugging: Print the user's exploit choice
+                
                 print(Fore.YELLOW + f"DEBUG: Exploit choice input: '{exploit_choice}'")
 
                 if exploit_choice in exploits:
-                    ip = get_ip_address()  # Prompt for IP address
+                    ip = get_ip_address()  
                     if not ip:
                         print(Fore.RED + "No IP address provided. Returning to the main menu...")
                         return
@@ -603,31 +572,31 @@ def metasploit_scan():
                 else:
                     print(Fore.RED + "Invalid exploit choice.")
                     continue
-            elif choice == '99':  # Return to main menu
+            elif choice == '99':  
                 print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
                 break
             else:
                 print(Fore.RED + "Invalid choice. Please try again.")
                 continue
 
-            # Run the command in Metasploit directly (no file writing, faster)
+           
             if metasploit_commands:
                 print(Fore.BLUE + "Launching Metasploit...")
 
-                # Debugging: Print the full command being executed
+                
                 print(Fore.YELLOW + f"DEBUG: Full Metasploit commands:\n{metasploit_commands}")
 
-                # Ensure correct separation of commands (with a space after 'set' commands)
+                
                 full_command = f"msfconsole -q -x \"{metasploit_commands}\""
-                print(Fore.YELLOW + f"Executing: {full_command}")  # Debugging line
+                print(Fore.YELLOW + f"Executing: {full_command}")  
 
-                # Run the command in the terminal
+               
                 result = os.system(full_command)
 
-                # Debugging: Check the result of the command execution
+               
                 if result != 0:
                     print(Fore.RED + f"Error: Metasploit command failed with exit code {result}")
-                break  # Exit the loop after launching Metasploit
+                break  
 
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
@@ -641,7 +610,7 @@ def run_tracepath():
         clear_screen()
         print(Fore.GREEN + "Tracepath Utility\n")
 
-        # Get the target domain or IP
+        
         target = input(Fore.CYAN + "Enter the target domain or IP for tracepath: ").strip()
         if not target:
             print(Fore.RED + "No target specified. Returning to the main menu.")
@@ -649,16 +618,16 @@ def run_tracepath():
 
         print(Fore.GREEN + f"\nRunning tracepath on {target}...\n")
 
-        # Run the tracepath command
+       
         result = subprocess.run(["tracepath", target], text=True, capture_output=True)
 
-        # Display the output
+        
         if result.returncode == 0:
             print(Fore.LIGHTWHITE_EX + result.stdout)
         else:
             print(Fore.RED + f"Error running tracepath: {result.stderr}")
 
-        # Wait for user to press Enter before returning
+        
         input(Fore.GREEN + "\nPress Enter to return to the main menu...")
 
     except Exception as e:
@@ -674,7 +643,7 @@ def run_tracepath():
         clear_screen()
         print(Fore.GREEN + "Tracepath Utility\n")
 
-        # Get the target domain or IP
+        
         target = input(Fore.CYAN + "Enter the target domain or IP for tracepath: ").strip()
         if not target:
             print(Fore.RED + "No target specified. Returning to the main menu.")
@@ -682,7 +651,7 @@ def run_tracepath():
 
         print(Fore.GREEN + f"\nRunning tracepath on {target}...\n")
 
-        # Run the tracepath command and stream the output
+       
         process = subprocess.Popen(
             ["tracepath", target],
             stdout=subprocess.PIPE,
@@ -690,17 +659,17 @@ def run_tracepath():
             text=True
         )
 
-        # Display the output line by line as it is produced
+        
         for line in process.stdout:
             print(Fore.LIGHTWHITE_EX + line.strip())
 
-        # Wait for the process to complete and check for errors
+        
         process.wait()
         if process.returncode != 0:
             error_message = process.stderr.read()
             print(Fore.RED + f"Error running tracepath: {error_message.strip()}")
 
-        # Wait for user to press Enter before returning
+        
         input(Fore.GREEN + "\nPress Enter to return to the main menu...")
 
     except Exception as e:
@@ -746,7 +715,7 @@ def clear_screen():
     os.system('clear' if os.name == 'posix' else 'cls')
 
 def show_netdiscover_commands():
-    clear_screen()  # Clear the screen before showing the commands
+    clear_screen()  
     print("Netdiscover Usage:")
     print("""
 Usage: netdiscover [-i device] [-r range | -l file | -p] [-m file] [-F filter] [-s time] [-c count] [-n node] [-dfPLNS]
@@ -769,7 +738,7 @@ Usage: netdiscover [-i device] [-r range | -l file | -p] [-m file] [-F filter] [
 
 If -r, -l or -p are not enabled, netdiscover will scan for common LAN addresses.
     """)
-    input("\nPress Enter to return to the menu...")  # Wait for user input to return to menu
+    input("\nPress Enter to return to the menu...")  
 
 def run_auto_netdiscover(ip):
     try:
@@ -813,11 +782,11 @@ init(autoreset=True)
 
 def find_g2l_script():
     """Search for the g2l.py script in the system."""
-    for root, dirs, files in os.walk('/'):  # Start from the root directory
+    for root, dirs, files in os.walk('/'):  
         if 'g2l.py' in files:
             script_path = os.path.join(root, 'g2l.py')
             return script_path
-    return None  # Return None if the script is not found
+    return None  
 
 def execute_python_script():
     """Find the g2l.py script automatically and execute it."""
@@ -825,7 +794,6 @@ def execute_python_script():
 
     if script_path:
         try:
-            # Execute the Python script using subprocess
             print(Fore.GREEN + f"Executing the script at {script_path}...")
             subprocess.run(["python3", script_path], check=True)
         except subprocess.CalledProcessError as e:
@@ -838,7 +806,7 @@ def run_airgeddon():
         os.system('sudo airgeddon')
     except KeyboardInterrupt:
         print("\nAirgeddon was interrupted.")
-        return  # Return to the main menu
+        return  
 
 def main_menu():
     while True:
@@ -855,53 +823,7 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
-import os
-import subprocess
-import platform
 
-def clear_screen():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-def clear_screen():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-def clear_screen():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-def clear_screen():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-import os
-import subprocess
-import platform
-
-def clear_screen():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-def clear_screen():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-import os
-import subprocess
-import platform
 
 def clear_screen():
     if platform.system() == "Windows":
@@ -1030,8 +952,8 @@ def main_menu():
 def find_pwncat_dir():
     """Automatically find the directory containing pwncat's pyproject.toml."""
     possible_dirs = [
-        os.path.expanduser("~/pwncat"),  # Common directories to check
-        "/opt/pwncat",  # Alternative path
+        os.path.expanduser("~/pwncat"), 
+        "/opt/pwncat",  
     ]
 
     for directory in possible_dirs:
@@ -1061,10 +983,10 @@ def run_pwncat():
         return
 
     try:
-        # Change to the pwncat directory
+       
         os.chdir(pwncat_dir)
 
-        # Run pwncat-cs directly
+        
         print(f"Running pwncat-cs with hostname: {hostname}")
         command = f"pwncat-cs {hostname}"
         subprocess.run(command, shell=True, check=True)
@@ -1093,7 +1015,7 @@ def find_cerbrutus_dir():
     """Automatically find the Cerbrutus directory."""
     try:
         home_dir = os.path.expanduser("~")
-        cerbrutus_dir = os.path.join(home_dir, "cerbrutus")  # Cerbrutus directory
+        cerbrutus_dir = os.path.join(home_dir, "cerbrutus")  
 
         if os.path.exists(cerbrutus_dir):
             return cerbrutus_dir
@@ -1110,7 +1032,7 @@ def clear_screen():
 
 def run_cerbrutus():
     """Function to run Cerbrutus with options for manual mode."""
-    cerbrutus_dir = find_cerbrutus_dir()  # Find Cerbrutus directory
+    cerbrutus_dir = find_cerbrutus_dir()  
 
     if cerbrutus_dir is None:
         print("Cerbrutus not found. Exiting...")
@@ -1126,7 +1048,7 @@ def run_cerbrutus():
         choice = input("\nChoose an option: ").strip()
 
         if choice == '1':
-            # Display Cerbrutus help
+           
             print("\nPython-based Network Brute Forcing Tool!")
             print("""\nUsage: cerbrutus.py [options]
 positional arguments:
@@ -1153,9 +1075,9 @@ options:
                 full_command = f"python3 {os.path.join(cerbrutus_dir, 'cerbrutus.py')} {custom_command}"
                 print(f"Running custom command: {full_command}")
                 try:
-                    # Run the command and wait until it finishes before continuing
+                    
                     result = subprocess.run(full_command, shell=True, cwd=cerbrutus_dir, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    # Output the results
+                    
                     print(result.stdout.decode())
                     if result.stderr:
                         print(result.stderr.decode())
@@ -1166,7 +1088,7 @@ options:
                 print("No command entered.")
 
         elif choice == '3':
-            # Return to the main menu
+            
             break
 
         else:
@@ -1176,10 +1098,10 @@ def signal_handler(sig, frame):
     print("\nExiting...")
     sys.exit(0)
 
-# Set up the signal handler to catch Ctrl+C
+
 signal.signal(signal.SIGINT, signal_handler)
 
-# Main menu function to select options
+
 def menu():
     while True:
         clear_screen()
@@ -1200,7 +1122,6 @@ def signal_handler(sig, frame):
     print("\nExiting...")
     sys.exit(0)
 
-# Set up the signal handler to catch Ctrl+C
 signal.signal(signal.SIGINT, signal_handler)
 
 def ping_ip():
@@ -1208,40 +1129,38 @@ def ping_ip():
     while True:
         ip = input("Enter IP address to ping (or press 99 to return to the main menu): ")
 
-        # Check if the user pressed 99 to return to the menu
+        
         if ip == '99':
-            return  # Return to the main menu
+            return 
 
-        # Detect the operating system
+        
         os_type = platform.system().lower()
 
         try:
-            # For Windows, use -n for count
+            
             if os_type == "windows":
                 response = subprocess.run(["ping", "-n", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
             else:
-                # For Linux/macOS, use -c for count
+                
                 response = subprocess.run(["ping", "-c", "4", ip], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=5)
 
-            # Check if the ping was successful
+            
             if response.returncode == 0:
                 print(f"\nPing to {ip} successful!")
-                print(response.stdout.decode())  # Display detailed ping result
+                print(response.stdout.decode())  
             else:
                 print("\nPing failed!")
-                print(response.stderr.decode())  # Display error message
+                print(response.stderr.decode())  
 
         except subprocess.TimeoutExpired:
             print("\nPing request timed out.")
         except Exception as e:
             print(f"An error occurred: {e}")
 
-        # After showing the result, prompt to return to the main menu or try again
+        
         return_to_menu = input("\nPress 99 to return to the main menu, or Enter to try another IP: ")
         if return_to_menu == '99':
-            return  # Return to the main menu
-
-# Menu function where the user selects options
+            return  
 def menu():
     while True:
         print("\nSelect an option:")
@@ -1251,7 +1170,7 @@ def menu():
         choice = input("Enter your choice: ")
 
         if choice == '1':
-            ping_ip()  # Call ping_ip when option 1 is selected
+            ping_ip()  
         elif choice == '2':
             print("Exiting...")
             break
@@ -1259,26 +1178,21 @@ def menu():
             print("Invalid option, please try again.")
 def hostname_to_ip(hostname):
     try:
-        # Resolve the hostname to an IP address
         ip_address = socket.gethostbyname(hostname)
         return ip_address
     except socket.gaierror:
-        # Handle errors if the hostname cannot be resolved
+        
         return f"Error: Unable to resolve hostname {hostname}"
-
-# Function to handle the hostname to IP scan
 def scan_hostname_to_ip():
     hostname = input("Enter a hostname to resolve to IP: ")
     ip_address = hostname_to_ip(hostname)
     print(f"The IP address for hostname {hostname} is {ip_address}")
     return_to_main_menu()
 
-# Function to return to the main menu
 def return_to_main_menu():
     print("\nReturn to main menu")
     input("Press Enter to continue...")
 
-# Main menu function where you choose what to do
 def main_menu():
     while True:
         print("\nMain Menu:")
@@ -1287,13 +1201,13 @@ def main_menu():
         choice = input("Choose an option: ")
 
         if choice == "1":
-            scan_hostname_to_ip()  # Run the hostname-to-IP scan when chosen
+            scan_hostname_to_ip()  
         elif choice == "2":
             print("Exiting the script.")
             break
         else:
             print("Invalid option, please choose again.")
-# Function to handle exiting gracefully with Ctrl+C
+
 def signal_handler(sig, frame):
     print("\nExiting...")
     sys.exit(0)
@@ -1322,17 +1236,14 @@ def main_menu():
             "[99] To Exit",
             "[13] ping ip",
         ]
-        # Alternate between light purple and white for each option
         for i, option in enumerate(options):
             if i % 2 == 0:
-                print('\033[38;5;13m' + option)  # Light purple for even options
+                print('\033[38;5;13m' + option)  
             else:
-                print('\033[97m' + option)  # White for odd options
+                print('\033[97m' + option)  
 
-        # User input for the choice
+       
         choice = input('\033[97m' + "\nkraken$ ").strip()
-
-        # Handle the user's choice
         if choice == '2':
             show_all_nmap_commands()
         elif choice == '1':
@@ -1367,7 +1278,5 @@ def main_menu():
             exiting_loading_screen()
         else:
             print('\033[91m' + "Invalid choice. Please try again.")
-
-# Main entry point
 if __name__ == "__main__":
     main_menu()
