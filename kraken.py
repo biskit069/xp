@@ -1265,7 +1265,7 @@ def main_menu():
             else:
                 print('\033[97m' + option)  
 
-        choice = input('\033[97m' + "\nkraken$ ").strip()
+        choice = input('\033[97m' + "\nkraken> ").strip()
 
         if choice == '2':
             show_all_nmap_commands()
