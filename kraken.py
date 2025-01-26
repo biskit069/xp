@@ -42,7 +42,7 @@ def show_main_menu_logo():
 
     clear_screen()
 
-    light_purple = '\033[38;5;13m'  
+    light_purple = '\033[38;5;218m'
     faded_white = Fore.WHITE + Style.BRIGHT
 
     kra_lines = kra.strip().split("\n")
@@ -296,7 +296,7 @@ def exiting_loading_screen():
 
 
    '''
-   colors = [Fore.LIGHTWHITE_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTBLACK_EX, Fore.LIGHTWHITE_EX]
+   colors = ['\033[38;5;218m', Fore.LIGHTWHITE_EX,]
    for i, line in enumerate(loading_text.splitlines()):
       print(colors[i % len(colors)] + line)  
       time.sleep(0.1) 
@@ -1363,9 +1363,12 @@ def main_menu():
 def main_menu():
     while True:
         show_main_menu_logo()
-        print('\033[96m' + "sudo python3 kraken.py To Update, Then Exit Program")
-        print('\033[96m' + "V 0.2")
-        print('\033[38;2;255;182;193m' + "use the tool nicely @biskit",)
+        
+        print(Fore.WHITE + "sudo python3 kraken.py To Update, Then Exit Program")
+        
+        print(Fore.WHITE + "V 0.2")
+        
+        print(Fore.WHITE + "use the tool nicely @biskit")
         options = [
             "[1] nmap",
             "[2] Show All Nmap Commands",
@@ -1380,20 +1383,21 @@ def main_menu():
             "[9] netcat",
             "[15] hostname to private ip",
             "[25] network brute force tool / cerbrutus",
-            "[WHOIS]",
+            "[WHOIS IP] Enter whois Not WHOIS",
             "[6] Update Script",
             "[99] To Exit",
             "[21] Hping3 Ddos Packets / ip ddos",
             "[13] ping ip",
         ]
-        for i, option in enumerate(options):
-            if i % 2 == 0:
-                print('\033[38;5;13m' + option)  
-            else:
-                print('\033[97m' + option)  
+        
+        # Display all options in white
+        for option in options:
+            print('\033[38;5;218m' + option)
 
-        choice = input('\033[97m' + "\nkraken> ").strip()
+        # Red text for the "kraken >" prompt
+        choice = input('\033[91m' + "\nkraken> ").strip()
 
+        # Handle menu choices
         if choice == '2':
             show_all_nmap_commands()
         elif choice == '1':
@@ -1419,11 +1423,11 @@ def main_menu():
         elif choice == '9':
             netcat_menu()
         elif choice == '15':
-          scan_hostname_to_ip()
+            scan_hostname_to_ip()
         elif choice == '25':
             run_cerbrutus()
         elif choice == '13':
-             ping_ip()
+            ping_ip()
         elif choice == '21':
             hping3_menu()
         elif choice == 'whois':
@@ -1432,5 +1436,6 @@ def main_menu():
             exiting_loading_screen()
         else:
             print('\033[91m' + "Invalid choice. Please try again.")
+
 if __name__ == "__main__":
     main_menu()
