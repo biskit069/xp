@@ -1227,7 +1227,7 @@ def run_hping3_good_dos_prompt():
             # Prompt for number of threads
             threads = int(input("Enter the number of threads (80, 100, 150, 250): ").strip())
 
-            if threads in [80, 100, 150, 250]:
+            if threads in [20, 50, 100, 250, 500, 1000]:
                 run_hping3_good_dos(target_ip, target_port, threads)
             else:
                 print("Invalid thread count. Please enter one of the allowed values: 80, 100, 150, 250.")
@@ -1253,7 +1253,7 @@ def run_hping3_kill_mode_prompt():
             # Prompt for number of threads
             threads = int(input("Enter the number of threads (100, 250, 500, 1000): ").strip())
 
-            if threads in [100, 250, 500, 1000]:
+            if threads in [20, 50, 80, 90, 100, 250, 500, 1000]:
                 run_hping3_kill_mode(target_ip, target_port, threads)
             else:
                 print("Invalid thread count. Please enter one of the allowed values: 100, 250, 500, 1000.")
