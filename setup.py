@@ -1,24 +1,73 @@
-import os
 import subprocess
-import shutil
+import sys
+
+# Function to install required Python modules
+def install_python_modules():
+    modules = [
+        "signal",
+        "sys",
+        "platform",
+        "subprocess",
+        "threading",
+        "time",
+        "os",
+        "re",
+        "ipaddress",
+        "requests",
+        "shutil",
+        "colorama",
+        "socket"
+    ]
+    
+    for module in modules:
+        try:
+            subprocess.run([sys.executable, "-m", "pip", "install", module], check=True)
+            print(f"{module} installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install {module}: {e}")
 
 # Function to install golang using apt
 def install_golang():
     print("Checking if golang is installed...")
-    result = subprocess.run(["go", "version"], text=True, capture_output=True)
-    if result.returncode == 0:
-        print("golang is already installed.")
-        return True
-    else:
-        print("golang is not installed. Installing now...")
-        try:
-            subprocess.run(["sudo", "apt", "update"], check=True, text=True)
-            subprocess.run(["sudo", "apt", "install", "-y", "golang"], check=True, text=True)
-            print("golang installed successfully.")
+    
+    # Check if Go is installed
+    try:
+        result = subprocess.run(["go", "version"], text=True, capture_output=True)
+        if result.returncode == 0:
+            print("golang is already installed.")
             return True
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to install golang: {e}")
-            return False
+        else:
+            print(f"golang check failed with error: {result.stderr}")
+    except FileNotFoundError:
+        print("golang is not installed. Installing now...")
+    except Exception as e:
+        print(f"An unexpected error occurred while checking golang: {e}")
+
+    # Attempt to install golang if not found
+    try:
+        print("Installing golang...")
+        subprocess.run(["sudo", "apt", "update"], check=True, text=True)
+        subprocess.run(["sudo", "apt", "install", "-y", "golang"], check=True, text=True)
+        print("golang installed successfully.")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install golang: {e}")
+        return False
+    except Exception as e:
+        print(f"An unexpected error occurred while installing golang: {e}")
+        return False
+
+# Main setup function
+def main():
+    print("Setting up tools...")
+
+    # Install golang
+    if not install_golang():
+        print("Golang installation failed. Exiting setup.")
+        return
+
+    # Proceed with other installations here...
+    print("Proceeding with other tool installations...")
 
 # Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
@@ -65,75 +114,17 @@ def install_airgeddon():
         print("airgeddon installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
-# Function to install pwncat and set up everything in the pwncat directory
-def install_pwncat(home_dir):
-    print("Installing pwncat...")
-    repo_url = "https://github.com/calebstewart/pwncat"
-    repo_path = os.path.join(home_dir, "pwncat")
 
-    # Clone the pwncat repository if not already cloned
-    if not os.path.exists(repo_path):
-        try:
-            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
-            print(f"Cloned pwncat into {repo_path}.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to clone pwncat: {e}")
-            return
-        except subprocess.TimeoutExpired:
-            print("Cloning pwncat timed out.")
-            return
-
-    # Change to pwncat directory
-    os.chdir(repo_path)
-
-    # Step 1: Create the Python virtual environment in the pwncat directory
-    print("Creating virtual environment in pwncat directory...")
+# Function to install netcat using apt
+def install_netcat():
+    print("Installing netcat...")
     try:
-        subprocess.run(["python3", "-m", "venv", "pwncat-env"], check=True)
-        print("Virtual environment created successfully.")
+        subprocess.run(["sudo", "apt", "install", "-y", "netcat"], check=True, text=True)
+        print("netcat installed successfully.")
     except subprocess.CalledProcessError as e:
-        print(f"Failed to create virtual environment: {e}")
-        return
+        print(f"Failed to install netcat: {e}")
 
-    # Step 2: Activate the virtual environment
-    print("Activating virtual environment...")
-    activate_script = os.path.join(repo_path, "pwncat-env", "bin", "activate")
-    try:
-        subprocess.run(f"source {activate_script}", shell=True, check=True)
-        print("Virtual environment activated successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to activate virtual environment: {e}")
-        return
-
-    # Step 3: Install python3-poetry to ensure poetry is available
-    print("Installing python3-poetry...")
-    subprocess.run(["sudo", "apt", "install", "-y", "python3-poetry"], check=True)
-
-    # Step 4: Install pwncat-cs directly in the pwncat directory
-    print("Installing pwncat-cs...")
-    subprocess.run(["pip", "install", "pwncat-cs"], check=True)
-
-    # Step 5: Unlock the poetry lock file by running poetry lock --no-update
-    print("Unlocking poetry lock file...")
-    subprocess.run(["poetry", "lock", "--no-update"], check=True)
-
-    # Step 6: Install dependencies using poetry in the pwncat directory
-    print("Installing dependencies using poetry...")
-    try:
-        subprocess.run(
-            ["poetry", "install", "--no-dev", "--verbose"],
-            check=True,
-            timeout=1200,  # Increase timeout to 20 minutes
-        )
-        print("Poetry install completed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Poetry install failed: {e}")
-    except subprocess.TimeoutExpired:
-        print("Poetry install timed out.")
-
-    print("pwncat setup completed successfully.")
-
-    
+# Function to install g2l
 def install_g2l(home_dir):
     print("Installing g2l...")
     repo_url = "https://github.com/1N3/G2L"
@@ -155,6 +146,7 @@ def install_g2l(home_dir):
     print("Installing g2l...")
     subprocess.run(["python3", "setup.py", "install"], check=True)
     print("g2l installed successfully.")
+
 # Function to install routersploit
 def install_routersploit(home_dir):
     print("Installing routersploit...")
@@ -212,6 +204,9 @@ def main():
     if not os.path.exists(home_dir):
         os.makedirs(home_dir)
 
+    # Install Python modules first
+    install_python_modules()
+
     # Install golang
     if not install_golang():
         return
@@ -222,8 +217,8 @@ def main():
     # Install airgeddon
     install_airgeddon()
 
-    # Install pwncat and its dependencies
-    install_pwncat(home_dir)
+    # Install netcat
+    install_netcat()
 
     # Install g2l
     install_g2l(home_dir)
