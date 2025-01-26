@@ -55,6 +55,15 @@ def install_airgeddon():
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
 
+# Function to install tracepath using apt
+def install_tracepath():
+    print("Installing tracepath...")
+    try:
+        subprocess.run(["sudo", "apt", "install", "iputils-tracepath", "-y"], check=True, text=True)
+        print("tracepath installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install tracepath: {e}")
+
 # Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
     print("Installing asnmap...")
@@ -153,19 +162,18 @@ def install_cerbrutus(home_dir):
             print("Cloning cerbrutus timed out.")
             return
 
-    # Check if setup.py exists and install
-    setup_path = os.path.join(repo_path, "setup.py")
-    if os.path.exists(setup_path):
+    # Install cerbrutus using pip3
+    requirements_path = os.path.join(repo_path, "requirements.txt")
+    if os.path.exists(requirements_path):
         try:
-            # Install cerbrutus
-            os.chdir(repo_path)
-            print("Installing cerbrutus...")
-            subprocess.run(["python3", "setup.py", "install"], check=True)
+            print("Installing cerbrutus dependencies...")
+            subprocess.run(["pip3", "install", "-r", requirements_path], check=True)
             print("cerbrutus installed successfully.")
         except subprocess.CalledProcessError as e:
-            print(f"Failed to install cerbrutus: {e}")
+            print(f"Failed to install cerbrutus dependencies: {e}")
     else:
-        print(f"Error: setup.py not found in {repo_path}. Please check the installation method for cerbrutus.")
+        print(f"Error: requirements.txt not found in {repo_path}. Please check the installation method for cerbrutus.")
+
 # Main setup function
 def main():
     print("Setting up tools...")
@@ -188,6 +196,9 @@ def main():
 
     # Install Airgeddon
     install_airgeddon()
+
+    # Install Tracepath
+    install_tracepath()
 
     # Install asnmap
     install_asnmap(home_dir)
