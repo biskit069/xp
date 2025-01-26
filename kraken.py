@@ -842,7 +842,7 @@ def asnmap_commands():
     print("""
     ASNMap Commands:
     Usage:
-    ./asnmap [flags]
+        [flags]
 
     Flags:
     INPUT:
@@ -876,7 +876,7 @@ def asnmap_commands():
 def run_asnmap_manual():
     try:
         while True:
-            command = input("Enter ./asnmap command (or press Enter to return to the menu): ").strip()
+            command = input("Press Enter To Return Back To Menu| no need to use ./asnmap use a flag (how to use -i 192.168.1.1)").strip()
             if not command:
                 break
             home_directory = get_user_home_directory()
@@ -892,7 +892,7 @@ def run_asnmap_manual():
         print(f"Error running the command: {e}")
 
 def run_asn_scan():
-    asn = input("Enter the ASN to look up with ./asnmap (e.g., AS5650): ")
+    asn = input("Type Your ASN (example: AS5650): ")
     if asn:
         home_directory = get_user_home_directory()
         if home_directory:
@@ -956,23 +956,6 @@ def asnmap_menu():
         elif choice == "4":
             enter_api_key()
         elif choice == "5":
-            break
-        else:
-            print("Invalid choice, please try again.")
-
-def main_menu():
-    while True:
-        clear_screen()
-        print("\nMain Menu:")
-        print("1. Run ASNMap")
-        print("2. Exit")
-
-        choice = input("Choose an option: ")
-
-        if choice == "1":
-            asnmap_menu()
-        elif choice == "2":
-            print("Exiting...")
             break
         else:
             print("Invalid choice, please try again.")
