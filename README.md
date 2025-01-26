@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=F7F7F7&background=6C25FF&width=435&lines=metasploit+routersploit+Auto+Exploit+;Commands+Coming+Soon!!!" alt="Typing SVG">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=B60EF7&width=435&lines=network+exploits" alt="Typing SVG">
 </p>
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&duration=10000&pause=1000&color=FFFFFF&background=FF0F99&width=435&lines=unfinished+tool" alt="Typing SVG">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=F7F7F7&width=435&lines=coming+soon" alt="Typing SVG">
 </p>
 
 ![Screenshot](https://github.com/biskit069/kraken/raw/main/kraken.png)
