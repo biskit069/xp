@@ -137,7 +137,6 @@ def install_routersploit(home_dir):
     subprocess.run(["python3", "setup.py", "install"], check=True)
     print("routersploit installed successfully.")
 
-# Function to install cerbrutus from GitHub
 def install_cerbrutus(home_dir):
     print("Installing cerbrutus...")
     repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
@@ -154,12 +153,19 @@ def install_cerbrutus(home_dir):
             print("Cloning cerbrutus timed out.")
             return
 
-    # Install cerbrutus
-    os.chdir(repo_path)
-    print("Installing cerbrutus...")
-    subprocess.run(["python3", "setup.py", "install"], check=True)
-    print("cerbrutus installed successfully.")
-
+    # Check if setup.py exists and install
+    setup_path = os.path.join(repo_path, "setup.py")
+    if os.path.exists(setup_path):
+        try:
+            # Install cerbrutus
+            os.chdir(repo_path)
+            print("Installing cerbrutus...")
+            subprocess.run(["python3", "setup.py", "install"], check=True)
+            print("cerbrutus installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install cerbrutus: {e}")
+    else:
+        print(f"Error: setup.py not found in {repo_path}. Please check the installation method for cerbrutus.")
 # Main setup function
 def main():
     print("Setting up tools...")
