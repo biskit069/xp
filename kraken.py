@@ -826,8 +826,7 @@ def clear_screen():
     print("\033[H\033[J", end="")  # Clear the screen
 
 
-# Define the path where asnmap is installed
-asnmap_path = "./asnmap"  # Use relative path if it's in the current directory
+asnmap_path = "/home/./asnmap"  # Updated to /home/./asnmap
 
 def asnmap_commands():
     clear_screen()
@@ -871,7 +870,7 @@ def run_asnmap_manual():
             command = input(f"Enter {asnmap_path} command (or press Enter to return to the menu): ").strip()
             if not command:
                 break
-            subprocess.run(command, shell=True)
+            subprocess.run(f"{asnmap_path} {command}", shell=True)
     except KeyboardInterrupt:
         print("\nReturning to the menu.")
 
@@ -928,24 +927,6 @@ def asnmap_menu():
             break
         else:
             print("Invalid choice, please try again.")
-
-def main_menu():
-    while True:
-        clear_screen()
-        print("\nMain Menu:")
-        print("1. Run ASNMap")
-        print("2. Exit")
-
-        choice = input("Choose an option: ")
-
-        if choice == "1":
-            asnmap_menu()
-        elif choice == "2":
-            print("Exiting...")
-            break
-        else:
-            print("Invalid choice, please try again.")
-
 def find_cerbrutus_dir():
     """Automatically find the Cerbrutus directory."""
     try:
