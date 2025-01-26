@@ -826,14 +826,23 @@ def clear_screen():
     print("\033[H\033[J", end="")  # Clear the screen
 
 
-asnmap_path = "/home/./asnmap"  # Updated to /home/./asnmap
+def get_user_home_directory():
+    try:
+        # Get the current username using 'whoami'
+        username = subprocess.check_output(["whoami"]).strip().decode()
+        # Construct the home directory path
+        home_directory = f"/home/{username}/./asnmap"
+        return home_directory
+    except subprocess.CalledProcessError as e:
+        print(f"Error getting the username: {e}")
+        return None
 
 def asnmap_commands():
     clear_screen()
-    print(f"""
+    print("""
     ASNMap Commands:
     Usage:
-    {asnmap_path} [flags]
+    ./asnmap [flags]
 
     Flags:
     INPUT:
@@ -867,38 +876,53 @@ def asnmap_commands():
 def run_asnmap_manual():
     try:
         while True:
-            command = input(f"Enter {asnmap_path} command (or press Enter to return to the menu): ").strip()
+            command = input("Enter ./asnmap command (or press Enter to return to the menu): ").strip()
             if not command:
                 break
-            subprocess.run(f"{asnmap_path} {command}", shell=True)
+            home_directory = get_user_home_directory()
+            if home_directory:
+                asnmap_path = os.path.join(home_directory)
+                subprocess.run([asnmap_path] + command.split(), shell=True)
+            else:
+                print("Could not determine the user's home directory.")
     except KeyboardInterrupt:
         print("\nReturning to the menu.")
 
 def run_asn_scan():
-    asn = input(f"Enter the ASN to look up with {asnmap_path} (e.g., AS5650): ")
+    asn = input("Enter the ASN to look up with ./asnmap (e.g., AS5650): ")
     if asn:
-        try:
-            process = subprocess.Popen([asnmap_path, "-a", asn], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            for line in process.stdout:
-                print(line, end="")  # Print output in real-time
-            process.stdout.close()
-            process.wait()
-            if process.returncode != 0:
-                print(f"Error: {process.stderr.read()}")
-        except Exception as e:
-            print(f"Error running {asnmap_path}: {e}")
+        home_directory = get_user_home_directory()
+        if home_directory:
+            asnmap_path = os.path.join(home_directory)
+            try:
+                process = subprocess.Popen([asnmap_path, "-a", asn], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                for line in process.stdout:
+                    print(line, end="")  # Print output in real-time
+                process.stdout.close()
+                process.wait()
+                if process.returncode != 0:
+                    print(f"Error: {process.stderr.read()}")
+            except Exception as e:
+                print(f"Error running {asnmap_path}: {e}")
+        else:
+            print("Could not determine the user's home directory.")
     else:
         print("No ASN entered. Returning to the menu.")
     input("\nPress Enter to return to the menu.")
 
 def enter_api_key():
-    api_key = input(f"Enter your API key for {asnmap_path}: ").strip()
+    api_key = input("Enter your API key for ./asnmap: ").strip()
     if api_key:
-        try:
-            subprocess.run([asnmap_path, "-auth", api_key], check=True)
-            print("Signed in successfully with the provided API key.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to sign in with the provided API key: {e}")
+        home_directory = get_user_home_directory()
+        if home_directory:
+            asnmap_path = os.path.join(home_directory)
+            try:
+                subprocess.run([asnmap_path, "-auth", api_key], check=True)
+                print("Signed in successfully with the provided API key.")
+            except subprocess.CalledProcessError as e:
+                print(f"Failed to sign in with the provided API key: {e}")
+        else:
+            print("Could not determine the user's home directory.")
     else:
         print("No API key entered.")
     input("\nPress Enter to return to the menu: ")
