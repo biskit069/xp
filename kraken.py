@@ -825,12 +825,16 @@ def main_menu():
 def clear_screen():
     print("\033[H\033[J", end="")  # Clear the screen
 
+
+# Define the path where asnmap is installed
+asnmap_path = "./asnmap"  # Use relative path if it's in the current directory
+
 def asnmap_commands():
     clear_screen()
-    print("""
+    print(f"""
     ASNMap Commands:
     Usage:
-    ./asnmap [flags]
+    {asnmap_path} [flags]
 
     Flags:
     INPUT:
@@ -864,7 +868,7 @@ def asnmap_commands():
 def run_asnmap_manual():
     try:
         while True:
-            command = input("Enter ./asnmap command (or press Enter to return to the menu): ").strip()
+            command = input(f"Enter {asnmap_path} command (or press Enter to return to the menu): ").strip()
             if not command:
                 break
             subprocess.run(command, shell=True)
@@ -872,10 +876,10 @@ def run_asnmap_manual():
         print("\nReturning to the menu.")
 
 def run_asn_scan():
-    asn = input("Enter the ASN to look up with ./asnmap (e.g., AS5650): ")
+    asn = input(f"Enter the ASN to look up with {asnmap_path} (e.g., AS5650): ")
     if asn:
         try:
-            process = subprocess.Popen(["./asnmap", "-a", asn], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            process = subprocess.Popen([asnmap_path, "-a", asn], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             for line in process.stdout:
                 print(line, end="")  # Print output in real-time
             process.stdout.close()
@@ -883,16 +887,16 @@ def run_asn_scan():
             if process.returncode != 0:
                 print(f"Error: {process.stderr.read()}")
         except Exception as e:
-            print(f"Error running ./asnmap: {e}")
+            print(f"Error running {asnmap_path}: {e}")
     else:
         print("No ASN entered. Returning to the menu.")
     input("\nPress Enter to return to the menu.")
 
 def enter_api_key():
-    api_key = input("Enter your API key for ./asnmap: ").strip()
+    api_key = input(f"Enter your API key for {asnmap_path}: ").strip()
     if api_key:
         try:
-            subprocess.run(["./asnmap", "-auth", api_key], check=True)
+            subprocess.run([asnmap_path, "-auth", api_key], check=True)
             print("Signed in successfully with the provided API key.")
         except subprocess.CalledProcessError as e:
             print(f"Failed to sign in with the provided API key: {e}")
@@ -941,6 +945,7 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
+
 def find_cerbrutus_dir():
     """Automatically find the Cerbrutus directory."""
     try:
