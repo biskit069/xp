@@ -24,6 +24,8 @@ def install_golang():
             print(f"golang check failed with error: {result.stderr}")
     except FileNotFoundError:
         print("golang is not installed. Installing now...")
+    except Exception as e:
+        print(f"An unexpected error occurred while checking golang: {e}")
 
     try:
         print("Installing golang...")
@@ -109,31 +111,8 @@ def install_g2l(home_dir):
     # Install g2l
     os.chdir(repo_path)
     print("Installing g2l...")
-    subprocess.run(["sudo", "python3", "setup.py", "install"], check=True)
+    subprocess.run(["python3", "setup.py", "install"], check=True)
     print("g2l installed successfully.")
-
-# Function to install cerbrutus from GitHub
-def install_cerbrutus(home_dir):
-    print("Installing cerbrutus...")
-    repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
-    repo_path = os.path.join(home_dir, "cerbrutus")
-
-    if not os.path.exists(repo_path):
-        try:
-            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
-            print(f"Cloned cerbrutus into {repo_path}.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to clone cerbrutus: {e}")
-            return
-        except subprocess.TimeoutExpired:
-            print("Cloning cerbrutus timed out.")
-            return
-
-    # Install cerbrutus
-    os.chdir(repo_path)
-    print("Installing cerbrutus...")
-    subprocess.run(["pip3", "install", "-r", "requirements.txt"], check=True)
-    print("cerbrutus installed successfully.")
 
 # Function to install routersploit from GitHub
 def install_routersploit(home_dir):
@@ -155,9 +134,38 @@ def install_routersploit(home_dir):
     # Install routersploit
     os.chdir(repo_path)
     print("Installing routersploit...")
-    subprocess.run(["sudo", "python3", "setup.py", "install"], check=True)
+    subprocess.run(["python3", "setup.py", "install"], check=True)
     print("routersploit installed successfully.")
 
+def install_cerbrutus(home_dir):
+    print("Installing cerbrutus...")
+    repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
+    repo_path = os.path.join(home_dir, "cerbrutus")
+
+    if not os.path.exists(repo_path):
+        try:
+            subprocess.run(["git", "clone", repo_url, repo_path], text=True, check=True, timeout=300)
+            print(f"Cloned cerbrutus into {repo_path}.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to clone cerbrutus: {e}")
+            return
+        except subprocess.TimeoutExpired:
+            print("Cloning cerbrutus timed out.")
+            return
+
+    # Check if setup.py exists and install
+    setup_path = os.path.join(repo_path, "setup.py")
+    if os.path.exists(setup_path):
+        try:
+            # Install cerbrutus
+            os.chdir(repo_path)
+            print("Installing cerbrutus...")
+            subprocess.run(["python3", "setup.py", "install"], check=True)
+            print("cerbrutus installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install cerbrutus: {e}")
+    else:
+        print(f"Error: setup.py not found in {repo_path}. Please check the installation method for cerbrutus.")
 # Main setup function
 def main():
     print("Setting up tools...")
@@ -187,11 +195,11 @@ def main():
     # Install g2l
     install_g2l(home_dir)
 
-    # Install cerbrutus
-    install_cerbrutus(home_dir)
-
     # Install routersploit
     install_routersploit(home_dir)
+
+    # Install cerbrutus
+    install_cerbrutus(home_dir)
 
     print(f"Setup complete! All tools are installed in the directory: {home_dir}.")
 
