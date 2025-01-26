@@ -1211,7 +1211,60 @@ def main_menu():
 def signal_handler(sig, frame):
     print("\nExiting...")
     sys.exit(0)
+def manual_netcat_command():
+    command = input("Enter your custom Netcat command (e.g., nc -v example.com 1234): ")
+    try:
+        print(f"Running command: {command}")
+        subprocess.run(command, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running command: {e}")
+    except KeyboardInterrupt:
+        print("\nExiting Netcat...")
 
+def netcat_listener():
+    port = input("Enter the port to listen on: ")
+    try:
+        print(f"Starting Netcat listener on port {port}...")
+        subprocess.run(["nc", "-l", port], check=True)
+        print(f"Netcat is now listening on port {port}...")
+    except subprocess.CalledProcessError as e:
+        print(f"Error running Netcat: {e}")
+    except KeyboardInterrupt:
+        print("\nExiting Netcat listener...")
+
+def netcat_menu():
+    while True:
+        print("\nNetcat Menu:")
+        print("1. Manual Netcat Command")
+        print("99. Back to Main Menu")
+
+        choice = input("Select an option (1-99 to return): ")
+        
+        if choice == "1":
+            manual_netcat_command()
+        elif choice == "99":
+            print("Returning to Main Menu...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+def signal_handler(sig, frame):
+    print("\nExiting...")
+    sys.exit(0)
+def manual_hping3_command():
+    while True:
+        command = input("hping3> command (or type 'exit' to quit): ")
+        if command.lower() == "exit":
+            print("Exiting hping3 menu...")
+            break
+        try:
+            print(f"Running command: {command}")
+            subprocess.run(command, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error running command: {e}")
+        except KeyboardInterrupt:
+            print("\nExiting hping3...")
+    manual_hping3_command()
 def main_menu():
     while True:
         show_main_menu_logo()
@@ -1229,11 +1282,12 @@ def main_menu():
             "[33] asnmap",
             "[77] airgeddon",
             "[12] Netdiscover",
-            "[9] pwncat",
+            "[9] netcat",
             "[15] hostname to private ip",
             "[25] network brute force tool / cerbrutus",
             "[6] Update Script",
             "[99] To Exit",
+            "[21] Hping3 Ddos Packets / ip ddos",
             "[13] ping ip",
         ]
         for i, option in enumerate(options):
@@ -1242,7 +1296,6 @@ def main_menu():
             else:
                 print('\033[97m' + option)  
 
-       
         choice = input('\033[97m' + "\nkraken$ ").strip()
         if choice == '2':
             show_all_nmap_commands()
@@ -1267,13 +1320,15 @@ def main_menu():
         elif choice == '33':
             asnmap_menu()
         elif choice == '9':
-            run_pwncat()
+            netcat_menu()
         elif choice == '15':
           scan_hostname_to_ip()
         elif choice == '25':
             run_cerbrutus()
         elif choice == '13':
              ping_ip()
+        elif choice == '21':
+            manual_hping3_command()
         elif choice == '99':
             exiting_loading_screen()
         else:
