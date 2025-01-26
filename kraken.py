@@ -882,11 +882,13 @@ def run_asnmap_manual():
             home_directory = get_user_home_directory()
             if home_directory:
                 asnmap_path = os.path.join(home_directory)
-                subprocess.run([asnmap_path] + command.split(), shell=True)
+                subprocess.run([asnmap_path] + command.split(), check=True)
             else:
                 print("Could not determine the user's home directory.")
     except KeyboardInterrupt:
         print("\nReturning to the menu.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error running the command: {e}")
 
 def run_asn_scan():
     asn = input("Enter the ASN to look up with ./asnmap (e.g., AS5650): ")
@@ -895,9 +897,11 @@ def run_asn_scan():
         if home_directory:
             asnmap_path = os.path.join(home_directory)
             try:
+                # Running the ASN scan command with '-a' flag for ASN lookup
                 process = subprocess.Popen([asnmap_path, "-a", asn], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                # Read and display the output in real-time
                 for line in process.stdout:
-                    print(line, end="")  # Print output in real-time
+                    print(line, end="")
                 process.stdout.close()
                 process.wait()
                 if process.returncode != 0:
@@ -917,6 +921,7 @@ def enter_api_key():
         if home_directory:
             asnmap_path = os.path.join(home_directory)
             try:
+                # Running the API key authentication command
                 subprocess.run([asnmap_path, "-auth", api_key], check=True)
                 print("Signed in successfully with the provided API key.")
             except subprocess.CalledProcessError as e:
@@ -948,6 +953,23 @@ def asnmap_menu():
         elif choice == "4":
             enter_api_key()
         elif choice == "5":
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+def main_menu():
+    while True:
+        clear_screen()
+        print("\nMain Menu:")
+        print("1. Run ASNMap")
+        print("2. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            asnmap_menu()
+        elif choice == "2":
+            print("Exiting...")
             break
         else:
             print("Invalid choice, please try again.")
