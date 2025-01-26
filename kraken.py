@@ -22,7 +22,6 @@ def clear_screen():
     else:
         os.system("clear")
 
-
 def show_main_menu_logo():
     kra = r'''
 ██╗  ██╗██████╗  █████╗
@@ -43,21 +42,25 @@ def show_main_menu_logo():
 
     clear_screen()
 
-    
-    light_purple = '\033[38;5;13m' 
+    # Define colors
+    light_purple = '\033[38;5;13m'  # Light Purple (256-color code)
     faded_white = Fore.WHITE + Style.BRIGHT
 
-   
+    # Split kra and ken into lines
     kra_lines = kra.strip().split("\n")
     ken_lines = ken.strip().split("\n")
 
+    # Calculate the maximum length of the lines from both logos to ensure alignment
+    max_length = max(len(line) for line in kra_lines)
+
+    # Merge kra and ken together on one line, side by side, ensuring alignment
     for kra_line, ken_line in zip(kra_lines, ken_lines):
-        print(f"{light_purple}{kra_line}{faded_white}{ken_line}")
-        
+        # Print kra logo followed by ken logo on the same line with no extra spaces
+        print(f"{light_purple}{kra_line:<{max_length}}{faded_white}{ken_line}")
 
-
+# Main function to ensure everything runs only once
 def main():
-    print("Starting script...") 
+    print("Starting script...")  # Debugging print to track execution
     show_main_menu_logo()
 
 
@@ -826,16 +829,14 @@ def main_menu():
 
 
 def clear_screen():
-    if platform.system() == "Windows":
-        os.system("cls")
-    else:
-        os.system("clear")
+    print("\033[H\033[J", end="")  # Clear the screen
 
-def show_asnmap_commands():
+def asnmap_commands():
     clear_screen()
     print("""
+    ASNMap Commands:
     Usage:
-    asnmap [flags]
+    ./asnmap [flags]
 
     Flags:
     INPUT:
@@ -869,37 +870,35 @@ def show_asnmap_commands():
 def run_asnmap_manual():
     try:
         while True:
-            command = input("Enter asnmap command (or press Enter to return to the menu): ").strip()
+            command = input("Enter ./asnmap command (or press Enter to return to the menu): ").strip()
             if not command:
                 break
             subprocess.run(command, shell=True)
     except KeyboardInterrupt:
         print("\nReturning to the menu.")
 
-def auto_run_asnmap():
-    asn = input("Enter the ASN to look up with asnmap (e.g., AS5650): ")
+def run_asn_scan():
+    asn = input("Enter the ASN to look up with ./asnmap (e.g., AS5650): ")
     if asn:
         try:
-            subprocess.run(["asnmap", "-a", asn], check=True)
-            save_choice = input("Would you like to save the results to a file? (y/n): ").lower()
-            if save_choice == "y":
-                filename = input("Enter the file name to save results (e.g., results.txt): ").strip()
-                if not filename.endswith(".txt"):
-                    filename += ".txt"
-                with open(filename, "w") as file:
-                    result = subprocess.run(["asnmap", "-a", asn], capture_output=True, text=True)
-                    file.write(result.stdout)
-                print(f"Results saved to {filename}")
-        except subprocess.CalledProcessError as e:
-            print(f"Error running asnmap: {e}")
+            process = subprocess.Popen(["./asnmap", "-a", asn], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            for line in process.stdout:
+                print(line, end="")  # Print output in real-time
+            process.stdout.close()
+            process.wait()
+            if process.returncode != 0:
+                print(f"Error: {process.stderr.read()}")
+        except Exception as e:
+            print(f"Error running ./asnmap: {e}")
     else:
         print("No ASN entered. Returning to the menu.")
+    input("\nPress Enter to return to the menu.")
 
 def enter_api_key():
-    api_key = input("Enter your API key for asnmap: ").strip()
+    api_key = input("Enter your API key for ./asnmap: ").strip()
     if api_key:
         try:
-            subprocess.run(["asnmap", "-auth", api_key], check=True)
+            subprocess.run(["./asnmap", "-auth", api_key], check=True)
             print("Signed in successfully with the provided API key.")
         except subprocess.CalledProcessError as e:
             print(f"Failed to sign in with the provided API key: {e}")
@@ -911,20 +910,20 @@ def asnmap_menu():
     while True:
         clear_screen()
         print("\nASNMap Menu:")
-        print("1. Show asnmap Commands")
-        print("2. Run asnmap (Manual Command)")
-        print("3. Auto Run asnmap")
-        print("4. Enter API Key for asnmap")
+        print("1. ASNMap Commands")
+        print("2. Run ASNMap (Manual Command)")
+        print("3. Run ASN Scan")
+        print("4. Enter API Key for ASNMap")
         print("5. Return to Main Menu")
 
         choice = input("Choose an option: ")
 
         if choice == "1":
-            show_asnmap_commands()
+            asnmap_commands()
         elif choice == "2":
             run_asnmap_manual()
         elif choice == "3":
-            auto_run_asnmap()
+            run_asn_scan()
         elif choice == "4":
             enter_api_key()
         elif choice == "5":
@@ -948,69 +947,6 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
-
-def find_pwncat_dir():
-    """Automatically find the directory containing pwncat's pyproject.toml."""
-    possible_dirs = [
-        os.path.expanduser("~/pwncat"), 
-        "/opt/pwncat",  
-    ]
-
-    for directory in possible_dirs:
-        for root, dirs, files in os.walk(directory):
-            if "pyproject.toml" in files:
-                return root
-    return None
-
-def get_hostname():
-    """Get the current Linux hostname."""
-    try:
-        return subprocess.check_output("whoami", shell=True, text=True).strip()
-    except subprocess.CalledProcessError as e:
-        print(f"Error retrieving hostname: {e}")
-        return None
-
-def run_pwncat():
-    """Run pwncat-cs directly after navigating to the pwncat directory."""
-    pwncat_dir = find_pwncat_dir()
-    if not pwncat_dir:
-        print("Pwncat directory not found.")
-        return
-
-    hostname = get_hostname()
-    if not hostname:
-        print("Hostname retrieval failed.")
-        return
-
-    try:
-       
-        os.chdir(pwncat_dir)
-
-        
-        print(f"Running pwncat-cs with hostname: {hostname}")
-        command = f"pwncat-cs {hostname}"
-        subprocess.run(command, shell=True, check=True)
-
-    except subprocess.CalledProcessError as e:
-        print(f"Error running pwncat-cs: {e}")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-    finally:
-        os.chdir(os.path.expanduser("~"))
-
-def pwncat_menu():
-    while True:
-        print("\n1. Run Pwncat")
-        print("2. Return to Main Menu")
-
-        choice = input("Choose an option: ")
-
-        if choice == "1":
-            run_pwncat()
-        elif choice == "2":
-            break
-        else:
-            print("Invalid choice.")
 def find_cerbrutus_dir():
     """Automatically find the Cerbrutus directory."""
     try:
@@ -1251,20 +1187,53 @@ def netcat_menu():
 def signal_handler(sig, frame):
     print("\nExiting...")
     sys.exit(0)
-def manual_hping3_command():
+
+def clear_screen():
+    print("\033[H\033[J", end="")  #
+
+def run_hping3_manual():
     while True:
-        command = input("hping3> command (or type 'exit' to quit): ")
+        command = input("Enter hping3 command (or type 'exit' to return to the menu): ").strip()
         if command.lower() == "exit":
-            print("Exiting hping3 menu...")
+            print("Returning to the menu...")
             break
         try:
-            print(f"Running command: {command}")
-            subprocess.run(command, shell=True, check=True)
-        except subprocess.CalledProcessError as e:
+            subprocess.run(command, shell=True)
+        except Exception as e:
             print(f"Error running command: {e}")
-        except KeyboardInterrupt:
-            print("\nExiting hping3...")
-    manual_hping3_command()
+
+def hping3_menu():
+    while True:
+        clear_screen()
+        print("\nHping3 Menu:")
+        print("1. Run Hping3 (Manual Command)")
+        print("2. Return to Main Menu")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            run_hping3_manual()
+        elif choice == "2":
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+def main_menu():
+    while True:
+        clear_screen()
+        print("\nMain Menu:")
+        print("1. Run Hping3")
+        print("2. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            hping3_menu()
+        elif choice == "2":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice, please try again.")
 def main_menu():
     while True:
         show_main_menu_logo()
@@ -1297,6 +1266,7 @@ def main_menu():
                 print('\033[97m' + option)  
 
         choice = input('\033[97m' + "\nkraken$ ").strip()
+
         if choice == '2':
             show_all_nmap_commands()
         elif choice == '1':
@@ -1328,7 +1298,7 @@ def main_menu():
         elif choice == '13':
              ping_ip()
         elif choice == '21':
-            manual_hping3_command()
+            hping3_menu()
         elif choice == '99':
             exiting_loading_screen()
         else:
