@@ -1239,7 +1239,7 @@ def main_menu():
         show_main_menu_logo()
         print('\033[96m' + "sudo python3 kraken.py To Update, Then Exit Program")
         print('\033[96m' + "V 0.1")
-        print('\033[38;2;255;182;193m' + "Go To https://github.com/biskit069/g2l To install ip tool",)
+        print('\033[38;2;255;182;193m' + "use the tool nicely @biskit",)
         options = [
             "[1] nmap",
             "[2] Show All Nmap Commands",
