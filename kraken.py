@@ -882,6 +882,7 @@ def run_asnmap_manual():
             home_directory = get_user_home_directory()
             if home_directory:
                 asnmap_path = os.path.join(home_directory)
+                print(f"Running command: {asnmap_path} {command}")  # Debugging: Log the command being run
                 subprocess.run([asnmap_path] + command.split(), check=True)
             else:
                 print("Could not determine the user's home directory.")
@@ -897,7 +898,8 @@ def run_asn_scan():
         if home_directory:
             asnmap_path = os.path.join(home_directory)
             try:
-                # Running the ASN scan command with '-a' flag for ASN lookup
+                # Log the full command being executed for debugging
+                print(f"Running ASN scan command: {asnmap_path} -a {asn}")
                 process = subprocess.Popen([asnmap_path, "-a", asn], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 # Read and display the output in real-time
                 for line in process.stdout:
@@ -921,7 +923,8 @@ def enter_api_key():
         if home_directory:
             asnmap_path = os.path.join(home_directory)
             try:
-                # Running the API key authentication command
+                # Log the full command for debugging
+                print(f"Running API key command: {asnmap_path} -auth {api_key}")
                 subprocess.run([asnmap_path, "-auth", api_key], check=True)
                 print("Signed in successfully with the provided API key.")
             except subprocess.CalledProcessError as e:
