@@ -11,6 +11,15 @@ def install_python_modules():
     except subprocess.CalledProcessError as e:
         print(f"Failed to install Python modules: {e}")
 
+# Function to install tracepath using apt
+def install_tracepath():
+    print("Installing tracepath...")
+    try:
+        subprocess.run(["sudo", "apt", "install", "iputils-tracepath", "-y"], check=True, text=True)
+        print("tracepath installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install tracepath: {e}")
+
 # Function to install golang using apt
 def install_golang():
     print("Checking if golang is installed...")
@@ -54,15 +63,6 @@ def install_airgeddon():
         print("airgeddon installed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
-
-# Function to install tracepath using apt
-def install_tracepath():
-    print("Installing tracepath...")
-    try:
-        subprocess.run(["sudo", "apt", "install", "iputils-tracepath", "-y"], check=True, text=True)
-        print("tracepath installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install tracepath: {e}")
 
 # Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
@@ -162,15 +162,15 @@ def install_cerbrutus(home_dir):
             print("Cloning cerbrutus timed out.")
             return
 
-    # Install cerbrutus using pip3
+    # Check if requirements.txt exists and install
     requirements_path = os.path.join(repo_path, "requirements.txt")
     if os.path.exists(requirements_path):
         try:
-            print("Installing cerbrutus dependencies...")
+            # Install cerbrutus dependencies
             subprocess.run(["pip3", "install", "-r", requirements_path], check=True)
             print("cerbrutus installed successfully.")
         except subprocess.CalledProcessError as e:
-            print(f"Failed to install cerbrutus dependencies: {e}")
+            print(f"Failed to install cerbrutus: {e}")
     else:
         print(f"Error: requirements.txt not found in {repo_path}. Please check the installation method for cerbrutus.")
 
@@ -179,7 +179,7 @@ def main():
     print("Setting up tools...")
 
     # Get the home directory based on the current user
-    home_dir = os.path.expanduser(f"/home/{os.getlogin()}")
+    home_dir = os.environ.get('HOME', '/home/default_user')  # Default fallback if HOME is not set
 
     # Ensure the home directory exists
     if not os.path.exists(home_dir):
@@ -197,7 +197,7 @@ def main():
     # Install Airgeddon
     install_airgeddon()
 
-    # Install Tracepath
+    # Install tracepath
     install_tracepath()
 
     # Install asnmap
