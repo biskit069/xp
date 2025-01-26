@@ -1,36 +1,20 @@
+import os
 import subprocess
-import sys
-import os 
-# Function to install required Python modules
+import shutil
+
+# Function to install all required Python modules
 def install_python_modules():
-    modules = [
-        "signal",
-        "sys",
-        "platform",
-        "subprocess",
-        "threading",
-        "time",
-        "os",
-        "re",
-        "ipaddress",
-        "requests",
-        "shutil",
-        "colorama",
-        "socket"
-    ]
-    
-    for module in modules:
-        try:
-            subprocess.run([sys.executable, "-m", "pip", "install", module], check=True)
-            print(f"{module} installed successfully.")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to install {module}: {e}")
+    print("Installing required Python modules...")
+    try:
+        subprocess.run(["pip", "install", "signal", "sys", "platform", "subprocess", "threading", "time", "os", "re", "ipaddress", "requests", "shutil", "colorama", "socket"], check=True)
+        print("Python modules installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install Python modules: {e}")
 
 # Function to install golang using apt
 def install_golang():
     print("Checking if golang is installed...")
     
-    # Check if Go is installed
     try:
         result = subprocess.run(["go", "version"], text=True, capture_output=True)
         if result.returncode == 0:
@@ -43,7 +27,6 @@ def install_golang():
     except Exception as e:
         print(f"An unexpected error occurred while checking golang: {e}")
 
-    # Attempt to install golang if not found
     try:
         print("Installing golang...")
         subprocess.run(["sudo", "apt", "update"], check=True, text=True)
@@ -53,21 +36,24 @@ def install_golang():
     except subprocess.CalledProcessError as e:
         print(f"Failed to install golang: {e}")
         return False
-    except Exception as e:
-        print(f"An unexpected error occurred while installing golang: {e}")
-        return False
 
-# Main setup function
-def main():
-    print("Setting up tools...")
+# Function to install netcat using apt
+def install_netcat():
+    print("Installing netcat...")
+    try:
+        subprocess.run(["sudo", "apt", "install", "netcat", "-y"], check=True, text=True)
+        print("netcat installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install netcat: {e}")
 
-    # Install golang
-    if not install_golang():
-        print("Golang installation failed. Exiting setup.")
-        return
-
-    # Proceed with other installations here...
-    print("Proceeding with other tool installations...")
+# Function to install airgeddon using apt
+def install_airgeddon():
+    print("Installing airgeddon...")
+    try:
+        subprocess.run(["sudo", "apt", "install", "airgeddon", "-y"], check=True, text=True)
+        print("airgeddon installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install airgeddon: {e}")
 
 # Function to install asnmap via Go and copy to the desired directory
 def install_asnmap(home_dir):
@@ -105,29 +91,10 @@ def install_asnmap(home_dir):
     except Exception as e:
         print(f"An unexpected error occurred while installing asnmap: {e}")
 
-# Function to install airgeddon using apt
-def install_airgeddon():
-    print("Installing airgeddon...")
-    try:
-        subprocess.run(["sudo", "apt", "update"], check=True, text=True)
-        subprocess.run(["sudo", "apt", "install", "-y", "airgeddon"], check=True, text=True)
-        print("airgeddon installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install airgeddon: {e}")
-
-# Function to install netcat using apt
-def install_netcat():
-    print("Installing netcat...")
-    try:
-        subprocess.run(["sudo", "apt", "install", "-y", "netcat"], check=True, text=True)
-        print("netcat installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to install netcat: {e}")
-
-# Function to install g2l
+# Function to install g2l from GitHub
 def install_g2l(home_dir):
     print("Installing g2l...")
-    repo_url = "https://github.com/1N3/G2L"
+    repo_url = "https://github.com/biskit069/g2l"
     repo_path = os.path.join(home_dir, "g2l")
 
     if not os.path.exists(repo_path):
@@ -147,7 +114,7 @@ def install_g2l(home_dir):
     subprocess.run(["python3", "setup.py", "install"], check=True)
     print("g2l installed successfully.")
 
-# Function to install routersploit
+# Function to install routersploit from GitHub
 def install_routersploit(home_dir):
     print("Installing routersploit...")
     repo_url = "https://github.com/threat9/routersploit"
@@ -170,7 +137,7 @@ def install_routersploit(home_dir):
     subprocess.run(["python3", "setup.py", "install"], check=True)
     print("routersploit installed successfully.")
 
-# Function to install cerbrutus
+# Function to install cerbrutus from GitHub
 def install_cerbrutus(home_dir):
     print("Installing cerbrutus...")
     repo_url = "https://github.com/Cerbrutus-BruteForcer/cerbrutus"
@@ -204,21 +171,20 @@ def main():
     if not os.path.exists(home_dir):
         os.makedirs(home_dir)
 
-    # Install Python modules first
+    # Install Python modules
     install_python_modules()
 
-    # Install golang
-    if not install_golang():
-        return
+    # Install Golang
+    install_golang()
+
+    # Install Netcat
+    install_netcat()
+
+    # Install Airgeddon
+    install_airgeddon()
 
     # Install asnmap
     install_asnmap(home_dir)
-
-    # Install airgeddon
-    install_airgeddon()
-
-    # Install netcat
-    install_netcat()
 
     # Install g2l
     install_g2l(home_dir)
