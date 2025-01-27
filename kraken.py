@@ -1493,7 +1493,7 @@ def main_menu():
         print(Fore.WHITE + "use the tool nicely @biskit") 
         print(Fore.LIGHTCYAN_EX+"all commands | nmap | ssl sslscan | nmap -h for every single nmap command | msf6 metasploit | rsf routersploit | trace tracepath | ip look up | airgeddon | asnmap | netdiscover | netcat | hostname"),
         print(Fore.YELLOW+"More Commands | hostname to private ip | whois | ping | ddos | cerb | sniff |99 To Exit",)
-              options = [
+        options = [
             "{nmap}",
             "{every single nmap command}", 
             "{sslscan}",                                 
