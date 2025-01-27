@@ -1298,11 +1298,11 @@ def stress_test_good_dos_prompt():
     while True:
         try:
             target_ip = input("Enter the target IP address: ").strip()
-            target_port = input("Enter the port number (e.g., 80): ").strip()
-            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
+            target_port = input("Enter the port number (e.g 80): ").strip()
+            threads = int(input("Enter the number of threads (e.g., 3, 5, 10, 20, 50, 100, 250, 500, 1000): ").strip())
             packet_rate = input("Enter the packet rate (e.g., u1000, u5000, u10000): ").strip()
 
-            if threads in [20, 50, 100, 250, 500, 1000]:
+            if threads in [3, 5, 10, 20, 50, 100, 250, 500, 1000]:
                 # Start the packet capturing in a separate thread
                 packet_thread = threading.Thread(target=show_packets, args=("tcpdump",))
                 packet_thread.daemon = True
@@ -1336,12 +1336,12 @@ def hping3_menu():
         if choice == "1":
             target_ip = input("Enter the target IP address: ").strip()
             target_port = input("Enter the port number (e.g., 80): ").strip()
-            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
+            threads = int(input("Enter the number of threads (e.g 3, 5, 10, 20, 50, 100, 250, 500, 1000): ").strip())
             run_hping3_good_dos(target_ip, target_port, threads)
         elif choice == "2":
             target_ip = input("Enter the target IP address: ").strip()
             target_port = input("Enter the port number (e.g., 80): ").strip()
-            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
+            threads = int(input("Enter the number of threads (e.g., 3, 5, 10, 20, 50, 100, 250, 500, 1000): ").strip())
             run_hping3_kill_mode(target_ip, target_port, threads)
         elif choice == "3":
             stress_test_good_dos_prompt()
