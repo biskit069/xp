@@ -1493,7 +1493,7 @@ def main_menu():
         
         print(Fore.WHITE + "use the tool nicely @biskit") 
         options = [
-            "1 {nmap}",
+            "1{nmap}",
             "2{every single nmap command}", 
             "3{sslscan}",                                 
             "4{Metasploit}",
