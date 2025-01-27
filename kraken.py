@@ -517,10 +517,10 @@ def run_routersploit():
 def metasploit_scan():
     try:
         while True:
-            print(Fore.YELLOW + "99. to return to main menu")
             print("1. Launch Metasploit")
             print("2. Auto exploits")
             print("3. Reverse Shell Option")  # Added option for reverse shell
+            print(Fore.YELLOW + "99. to return to main menu")
             choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
 
             print(Fore.YELLOW + f"Choice: '{choice}'")
