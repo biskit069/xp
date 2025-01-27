@@ -1491,28 +1491,26 @@ def main_menu():
         print(Fore.WHITE + "V 0.2")
         
         print(Fore.WHITE + "use the tool nicely @biskit") 
-        print(Fore.LIGHTCYAN_EX+"all commands | nmap | ssl sslscan | nmap -h for every single nmap command | msf6 metasploit | rsf routersploit | trace tracepath | ip look up | airgeddon | asnmap | netdiscover | netcat | hostname"),
-        print(Fore.YELLOW+"More Commands | hostname to private ip | whois | ping | ddos | cerb | sniff |99 To Exit",)
         options = [
-            "{nmap}",
-            "{every single nmap command}", 
-            "{sslscan}",                                 
-            "{Metasploit}",
-            "{Routersploit}",
-            "{tracepath}",
-            "{IP look up}",
-            "{asnmap}",
-            "{airgeddon}",
-            "{Netdiscover}",
-            "{netcat}",
-            "{hostname to private ip}",
-            "{network brute force tool / cerbrutus}",
-            "{whos ip search}",
-            "{Update Script}",
-            "{To Exit}",
-            "{Hping3 Ddos Packets / ip ddos}",
-            "{ping ip}",
-            "{sniff}",
+            "1 {nmap}",
+            "2{every single nmap command}", 
+            "3{sslscan}",                                 
+            "4{Metasploit}",
+            "5{Routersploit}",
+            "6{tracepath}",
+            "7{IP look up}",
+            "8{asnmap}",
+            "9{airgeddon}",
+            "10{Netdiscover}",
+            "11{netcat}",
+            "12{hostname to private ip}",
+            "13{network brute force tool / cerbrutus}",
+            "14{whos ip search}",
+            "15{Update Script}",
+            "16{Hping3 Ddos}",
+            "17{ping ip}",
+            "18{sniff}",
+            "99{exit}",
         ]
         
         # Display all options in white
@@ -1523,41 +1521,41 @@ def main_menu():
         choice = input('\033[91m' + "\nkraken> ").strip()
 
         # Handle menu choices
-        if choice == 'nmap -h':
+        if choice == '2':
             show_all_nmap_commands()
-        elif choice == 'nmap':
+        elif choice == '1':
             run_nmap()
-        elif choice == 'ssl':
+        elif choice == '3':
             sslscan_scan()
-        elif choice == 'msf':
+        elif choice == '4':
             metasploit_scan()
-        elif choice == 'update':
+        elif choice == '5':
             update_script()
-        elif choice == 'rsf':
+        elif choice == '6':
             run_routersploit()
-        elif choice == 'trace':
+        elif choice == '7':
             run_tracepath()
-        elif choice == 'ip look up':
+        elif choice == '8':
             execute_python_script()
-        elif choice == 'netdiscover':
+        elif choice == '9':
             netdiscover_menu()
-        elif choice == 'airgeddon':
+        elif choice == '10':
             run_airgeddon()
-        elif choice == 'asnmap':
+        elif choice == '11':
             asnmap_menu()
-        elif choice == 'netcat':
+        elif choice == '12':
             netcat_menu()
-        elif choice == 'host to private ip':
+        elif choice == '13':
             scan_hostname_to_ip()
-        elif choice == 'cerb':
+        elif choice == '14':
             run_cerbrutus()
-        elif choice == 'ping':
+        elif choice == '15':
             ping_ip()
-        elif choice == 'ddos':
+        elif choice == '16':
             hping3_menu()
-        elif choice == 'whois':
+        elif choice == '17':
             whois_lookup()
-        elif choice == "sniff":
+        elif choice == "18":
              tcpdump_menu()
         elif choice == '99':
             exiting_loading_screen()
