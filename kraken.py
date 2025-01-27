@@ -1493,7 +1493,7 @@ def main_menu():
         
         print(Fore.WHITE + "V 0.2")
         
-        print(Fore.WHITE + "use the tool nicely @biskit") 
+        print(Fore.LIGHTBLUE_EX + "use the tool nicely @biskit") 
         options = [
             "1{nmap}",
             "2{every single nmap command}", 
