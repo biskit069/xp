@@ -14,9 +14,10 @@ import subprocess
 from colorama import init, Fore, Style
 import socket
 import re
+
+
+
 init(autoreset=True)
-
-
 def clear_screen():
     if platform.system() == "Windows":
         os.system("cls")
