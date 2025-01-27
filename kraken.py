@@ -1324,13 +1324,13 @@ def stress_test_good_dos_prompt():
 
 def hping3_menu():
     while True:
-        print("*****************")
+        print(Fore.BLUE+"******")
         print("\== DDOS MENU ==")
         print("1. Good DOS Attack")
         print("2. Kill Mode Attack")
         print("3. Stress Test Mode")
         print("4. Return to Main Menu")
-        print("***********************")
+        print(Fore.BLUE+"*************")
         choice = input("Choose an option: ")
 
         if choice == "1":
