@@ -13,6 +13,7 @@ import shutil
 import subprocess
 from colorama import init, Fore, Style
 import socket
+import re
 init(autoreset=True)
 
 
@@ -143,40 +144,6 @@ def main_menu():
             print(Fore.RED + "Invalid option. Please try again.")
 
 init(autoreset=True)
-
-def run_subfinder():
-    """Function to open Subfinder interactively."""
-    try:
-        print(Fore.GREEN + "Launching Subfinder...")
-
-       
-        subprocess.run("subfinder", shell=True)
-
-        print(Fore.GREEN + "\nSubfinder exited. Returning to the main menu.")
-
-    except Exception as e:
-        print(Fore.RED + f"Error launching Subfinder: {e}")
-
-def save_results_to_file(file_name, content):
-    """Save results to a file in a user-writable directory."""
-    try:
-       
-        home_dir = os.path.expanduser("~")
-        save_path = os.path.join(home_dir, file_name)
-
-       
-        with open(save_path, "w") as file:
-            file.write(content)
-
-        print(Fore.GREEN + f"Results saved to '{save_path}'.")
-    except Exception as e:
-        print(Fore.RED + f"Error saving results: {e}")
-
-
-if __name__ == "__main__":
-    
-    test_content = "Example Subfinder results..."
-    save_results_to_file("subfinder_results.txt", test_content)
 
 def show_all_nmap_commands():
     """Displays a list of all Nmap commands."""
@@ -1412,6 +1379,85 @@ def main_menu():
             break
         else:
             print("Invalid choice, please try again.")
+init(autoreset=True)
+
+import subprocess
+from colorama import Fore, init
+
+# Initialize colorama for colored output
+init(autoreset=True)
+
+# Function to run tcpdump
+def run_tcpdump():
+    try:
+        print(Fore.YELLOW + "Starting tcpdump...")
+
+        # Run tcpdump with sudo to capture only TCP traffic
+        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Read and colorize the output
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+
+                # Apply color based on packet type
+                if "TCP" in line:
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
+                elif "IP" in line:
+                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                else:
+                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+
+    except Exception as e:
+        print(Fore.RED + f"Error running tcpdump: {e}")
+
+
+def run_tcpdump():
+    try:
+        print(Fore.YELLOW + "Starting tcpdump...")
+
+        # Run tcpdump with sudo to capture only TCP traffic
+        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Read and colorize the output
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+
+                # Apply color based on packet type
+                if "TCP" in line:
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
+                elif "IP" in line:
+                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                else:
+                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+
+    except Exception as e:
+        print(Fore.RED + f"Error running tcpdump: {e}")
+
+def tcpdump_menu():
+    while True:
+        print("\nTCPDump Menu:")
+        print("1. Start sniffing (TCP packets)")
+        print("2. Return to Main Menu")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            run_tcpdump()  # Run tcpdump
+        elif choice == "2":
+            print("Returning to main menu...")
+            break
+        else:
+            print("Invalid choice, please try again.")
 
 def main_menu():
     while True:
@@ -1441,6 +1487,7 @@ def main_menu():
             "[99] To Exit",
             "[21] Hping3 Ddos Packets / ip ddos",
             "[13] ping ip",
+            "[sniff]",
         ]
         
         # Display all options in white
@@ -1485,6 +1532,8 @@ def main_menu():
             hping3_menu()
         elif choice == 'whois':
             whois_lookup()
+        elif choice == "sniff":
+             tcpdump_menu()
         elif choice == '99':
             exiting_loading_screen()
         else:
