@@ -64,15 +64,16 @@ def install_airgeddon():
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
 
-# Function to install asnmap via Go and copy to the desired directory
-def install_asnmap(home_dir):
+def install_asnmap():
     print("Installing asnmap...")
     try:
-        # Ensure the GOPATH is set correctly
+        # Dynamically determine the current user's home directory
+        user = os.getlogin()  # Get the current Linux username
+        home_dir = f"/home/{user}"
         go_path = os.path.join(home_dir, "go")
         os.environ["GOPATH"] = go_path
         os.environ["PATH"] += f":{os.path.join(go_path, 'bin')}"
-        
+
         # Create GOPATH directory if it doesn't exist
         os.makedirs(go_path, exist_ok=True)
 
@@ -88,7 +89,7 @@ def install_asnmap(home_dir):
             print(f"asnmap binary copied to {target_path}.")
         else:
             print("asnmap binary not found in GOPATH bin directory.")
-        
+
         # Ensure asnmap is executable and added to the PATH
         subprocess.run(f"chmod +x {asnmap_binary}", shell=True)
         subprocess.run(f"export PATH=$PATH:{os.path.dirname(asnmap_binary)}", shell=True)
