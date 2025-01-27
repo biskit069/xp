@@ -914,7 +914,7 @@ def asnmap_commands():
 def run_asnmap_manual():
     try:
         while True:
-            command = input("Press Enter To Return Back To Menu| no need to use ./asnmap use a flag (how to use -i 192.168.1.1)").strip()
+            command = input("Press Enter To Return Back To Menu| no need to use ./asnmap use a flag (how to use -i 192.168.1.1) ").strip()
             if not command:
                 break
             home_directory = get_user_home_directory()
@@ -1277,7 +1277,7 @@ def run_hping3_good_dos_prompt():
             target_port = input("Enter the port number (e.g., 80): ").strip()
             threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
 
-            if threads in [20, 50, 100, 250, 500, 1000]:
+            if threads in [20, 80, 50, 100, 250, 500, 1000]:
                 run_hping3_good_dos(target_ip, target_port, threads)
             else:
                 print("Invalid thread count. Please enter one of the allowed values.")
@@ -1297,7 +1297,7 @@ def run_hping3_kill_mode_prompt():
             target_port = input("Enter the port number (e.g., 80): ").strip()
             threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
 
-            if threads in [20, 50, 100, 250, 500, 1000]:
+            if threads in [20, 80, 50, 100, 250, 500, 1000]:
                 run_hping3_kill_mode(target_ip, target_port, threads)
             else:
                 print("Invalid thread count. Please enter one of the allowed values.")
