@@ -1384,9 +1384,11 @@ def run_tcpdump():
     try:
         print(Fore.YELLOW + "Starting tcpdump...")
 
-        command = "sudo tcpdump -i any -l tcp" 
+        # Run tcpdump with sudo to capture only TCP traffic
+        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+        # Read and colorize the output
         while True:
             output = process.stdout.readline()
             if output == b"" and process.poll() is not None:
@@ -1394,12 +1396,13 @@ def run_tcpdump():
             if output:
                 line = output.decode('utf-8').strip()
 
+                # Apply color based on packet type
                 if "TCP" in line:
-                    print(Fore.LIGHTRED_EX + line) 
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
                 elif "IP" in line:
-                    print(Fore.LIGHTGREEN_EX + line) 
+                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
                 else:
-                    print(Fore.LIGHTYELLOW_EX + line)  
+                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
 
     except Exception as e:
         print(Fore.RED + f"Error running tcpdump: {e}")
@@ -1408,9 +1411,11 @@ def run_tcpdump_ip_details():
     try:
         print(Fore.YELLOW + "Starting tcpdump with detailed IP information...")
 
-        command = "sudo tcpdump -i any -nn -v -A"  
+        # Run tcpdump with sudo to capture all packet information, focusing on IP details
+        command = "sudo tcpdump -i any -nn -v -A"  # -nn for no DNS resolution, -v for verbose, -A for ASCII output
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+        # Read and colorize the output
         while True:
             output = process.stdout.readline()
             if output == b"" and process.poll() is not None:
@@ -1418,6 +1423,34 @@ def run_tcpdump_ip_details():
             if output:
                 line = output.decode('utf-8').strip()
 
+                # Apply color based on packet type
+                if "IP" in line:
+                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                elif "TCP" in line:
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
+                else:
+                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+
+    except Exception as e:
+        print(Fore.RED + f"Error running tcpdump: {e}")
+
+def run_tcpdump_wireshark_like():
+    try:
+        print(Fore.YELLOW + "Starting tcpdump with Wireshark-like detailed information...")
+
+        # Run tcpdump with sudo to capture detailed packet info like Wireshark
+        command = "sudo tcpdump -i any -nn -v -X -s 0"  # -nn for no DNS resolution, -v for verbose, -X for hex and ASCII, -s 0 for full packet capture
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Read and colorize the output
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+
+                # Apply color based on packet type
                 if "IP" in line:
                     print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
                 elif "TCP" in line:
@@ -1431,9 +1464,10 @@ def run_tcpdump_ip_details():
 def tcpdump_menu():
     while True:
         print("\nTCPDump Menu:")
-        print("1. Start sniffing (packets / ips)")
-        print("2. Start sniffing with detailed IP information")
-        print("3. Return to Main Menu")
+        print("1. normal sniff")
+        print("2. mid sniff")
+        print("3. hard sniff")
+        print("4. Return to Main Menu")
 
         choice = input("Choose an option: ")
 
@@ -1442,11 +1476,12 @@ def tcpdump_menu():
         elif choice == "2":
             run_tcpdump_ip_details()  # Run tcpdump with detailed IP capture
         elif choice == "3":
+            run_tcpdump_wireshark_like()  # Run tcpdump with Wireshark-like detailed capture
+        elif choice == "4":
             print("Returning to main menu...")
             break
         else:
             print("Invalid choice, please try again.")
-
 def main_menu():
     while True:
         show_main_menu_logo()
