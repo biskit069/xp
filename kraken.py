@@ -1446,7 +1446,7 @@ def run_tcpdump():
 def tcpdump_menu():
     while True:
         print("\nTCPDump Menu:")
-        print("1. Start sniffing (TCP packets)")
+        print("1. Start sniffing (packets / ips)")
         print("2. Return to Main Menu")
 
         choice = input("Choose an option: ")
