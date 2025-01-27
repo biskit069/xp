@@ -44,7 +44,7 @@ def show_main_menu_logo():
 
     clear_screen()
 
-    light_purple = '\033[38;5;218m'
+    light_purple = Fore.BLUE
     faded_white = Fore.WHITE + Style.BRIGHT
 
     kra_lines = kra.strip().split("\n")
@@ -1516,7 +1516,7 @@ def main_menu():
         
         # Display all options in white
         for option in options:
-            print('\033[38;5;218m' + option)
+            print(Fore.LIGHTWHITE_EX + option)
 
         # Red text for the "kraken >" prompt
         choice = input(Fore.LIGHTWHITE_EX + "\nkraken> ").strip()
@@ -1561,7 +1561,7 @@ def main_menu():
         elif choice == '99':
             exiting_loading_screen()
         else:
-            print('\033[91m' + "Invalid choice. Please try again.")
+            print('\033[91' + "Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main_menu()
