@@ -1508,7 +1508,7 @@ def main_menu():
             "13{network brute force tool / cerbrutus}",
             "14{whos ip search}",
             "15{Update Script}",
-            "16{Hping3 Ddos}",
+            "16{Ddos}",
             "17{ping ip}",
             "18{sniff}",
             "99{exit}",
