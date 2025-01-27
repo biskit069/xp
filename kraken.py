@@ -552,7 +552,7 @@ def metasploit_scan():
                     "12": "exploit/windows/mssql/mssql_payload",
                     "13": "exploit/windows/mssql/mssql_ping",
                     "15": "exploit/windows/smb/ms20_0796_smbv3_lpe",
-                    "16": "exploit/windows/mssql/mssql_ping",,
+                    "16": "exploit/windows/mssql/mssql_ping",
                     "17": "exploit/unix/samba/samba_symlink_traversal",
                     "18": "exploit/multi/misc/java_deserialization",
                     "19": "exploit/multi/http/weblogic_deserialize",
