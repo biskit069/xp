@@ -1519,7 +1519,7 @@ def main_menu():
             print('\033[38;5;218m' + option)
 
         # Red text for the "kraken >" prompt
-        choice = input('\033[91m' + "\nkraken> ").strip()
+        choice = input(Fore.LIGHTWHITE_EX + "\nkraken> ").strip()
 
         # Handle menu choices
         if choice == '2':
