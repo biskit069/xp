@@ -64,12 +64,14 @@ def install_airgeddon():
     except subprocess.CalledProcessError as e:
         print(f"Failed to install airgeddon: {e}")
 
-def install_asnmap():
+def install_asnmap(home_dir=None):
     print("Installing asnmap...")
     try:
-        # Dynamically determine the current user's home directory
-        user = os.getlogin()  # Get the current Linux username
-        home_dir = f"/home/{user}"
+        # Determine the home directory dynamically if not provided
+        if home_dir is None:
+            user = os.getlogin()  # Get the current Linux username
+            home_dir = f"/home/{user}"
+
         go_path = os.path.join(home_dir, "go")
         os.environ["GOPATH"] = go_path
         os.environ["PATH"] += f":{os.path.join(go_path, 'bin')}"
