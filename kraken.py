@@ -1380,23 +1380,13 @@ def main_menu():
         else:
             print("Invalid choice, please try again.")
 init(autoreset=True)
-
-import subprocess
-from colorama import Fore, init
-
-# Initialize colorama for colored output
-init(autoreset=True)
-
-# Function to run tcpdump
 def run_tcpdump():
     try:
         print(Fore.YELLOW + "Starting tcpdump...")
 
-        # Run tcpdump with sudo to capture only TCP traffic
-        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
+        command = "sudo tcpdump -i any -l tcp" 
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        # Read and colorize the output
         while True:
             output = process.stdout.readline()
             if output == b"" and process.poll() is not None:
@@ -1404,27 +1394,23 @@ def run_tcpdump():
             if output:
                 line = output.decode('utf-8').strip()
 
-                # Apply color based on packet type
                 if "TCP" in line:
-                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
+                    print(Fore.LIGHTRED_EX + line) 
                 elif "IP" in line:
-                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                    print(Fore.LIGHTGREEN_EX + line) 
                 else:
-                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+                    print(Fore.LIGHTYELLOW_EX + line)  
 
     except Exception as e:
         print(Fore.RED + f"Error running tcpdump: {e}")
 
-
-def run_tcpdump():
+def run_tcpdump_ip_details():
     try:
-        print(Fore.YELLOW + "Starting tcpdump...")
+        print(Fore.YELLOW + "Starting tcpdump with detailed IP information...")
 
-        # Run tcpdump with sudo to capture only TCP traffic
-        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
+        command = "sudo tcpdump -i any -nn -v -A"  
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        # Read and colorize the output
         while True:
             output = process.stdout.readline()
             if output == b"" and process.poll() is not None:
@@ -1432,11 +1418,10 @@ def run_tcpdump():
             if output:
                 line = output.decode('utf-8').strip()
 
-                # Apply color based on packet type
-                if "TCP" in line:
-                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
-                elif "IP" in line:
+                if "IP" in line:
                     print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                elif "TCP" in line:
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
                 else:
                     print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
 
@@ -1447,13 +1432,16 @@ def tcpdump_menu():
     while True:
         print("\nTCPDump Menu:")
         print("1. Start sniffing (packets / ips)")
-        print("2. Return to Main Menu")
+        print("2. Start sniffing with detailed IP information")
+        print("3. Return to Main Menu")
 
         choice = input("Choose an option: ")
 
         if choice == "1":
-            run_tcpdump()  # Run tcpdump
+            run_tcpdump()  # Run tcpdump with basic packet capture
         elif choice == "2":
+            run_tcpdump_ip_details()  # Run tcpdump with detailed IP capture
+        elif choice == "3":
             print("Returning to main menu...")
             break
         else:
