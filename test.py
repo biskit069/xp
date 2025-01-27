@@ -1380,87 +1380,173 @@ def main_menu():
         else:
             print("Invalid choice, please try again.")
 init(autoreset=True)
+def run_tcpdump():
+    try:
+        print(Fore.YELLOW + "Starting tcpdump...")
 
-import subprocess
-from colorama import Fore, init
+        # Run tcpdump with sudo to capture only TCP traffic
+        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-# Initialize colorama for colored output
+        # Read and colorize the output
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+
+                # Apply color based on packet type
+                if "TCP" in line:
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
+                elif "IP" in line:
+                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                else:
+                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+
+    except Exception as e:
+        print(Fore.RED + f"Error running tcpdump: {e}")
+
+def run_tcpdump_ip_details():
+    try:
+        print(Fore.YELLOW + "Starting tcpdump with detailed IP information...")
+
+        # Run tcpdump with sudo to capture all packet information, focusing on IP details
+        command = "sudo tcpdump -i any -nn -v -A"  # -nn for no DNS resolution, -v for verbose, -A for ASCII output
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Read and colorize the output
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+
+                # Apply color based on packet type
+                if "IP" in line:
+                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                elif "TCP" in line:
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
+                else:
+                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+
+    except Exception as e:
+        print(Fore.RED + f"Error running tcpdump: {e}")
+
+def run_tcpdump_wireshark_like():
+    try:
+        print(Fore.YELLOW + "Starting tcpdump with Wireshark-like detailed information...")
+
+        # Run tcpdump with sudo to capture detailed packet info like Wireshark
+        command = "sudo tcpdump -i any -nn -v -X -s 0"  # -nn for no DNS resolution, -v for verbose, -X for hex and ASCII, -s 0 for full packet capture
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Read and colorize the output
+        while True:
+            output = process.stdout.readline()
+            if output == b"" and process.poll() is not None:
+                break
+            if output:
+                line = output.decode('utf-8').strip()
+
+                # Apply color based on packet type
+                if "IP" in line:
+                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
+                elif "TCP" in line:
+                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
+                else:
+                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+
+    except Exception as e:
+        print(Fore.RED + f"Error running tcpdump: {e}")
+
+def tcpdump_menu():
+    while True:
+        print("\nTCPDump Menu:")
+        print("1. normal sniff")
+        print("2. mid sniff")
+        print("3. hard sniff")
+        print("4. Return to Main Menu")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            run_tcpdump()  # Run tcpdump with basic packet capture
+        elif choice == "2":
+            run_tcpdump_ip_details()  # Run tcpdump with detailed IP capture
+        elif choice == "3":
+            run_tcpdump_wireshark_like()  # Run tcpdump with Wireshark-like detailed capture
+        elif choice == "4":
+            print("Returning to main menu...")
+            break
+        else:
+            print("Invalid choice, please try again.")
 init(autoreset=True)
 
-# Function to run tcpdump
-def run_tcpdump():
+def run_manual_aircrack_ng():
     try:
-        print(Fore.YELLOW + "Starting tcpdump...")
+        # Prompt the user to input any aircrack-ng command
+        command = input(Fore.YELLOW + "Enter the Aircrack-ng command you want to run (e.g., aircrack-ng capture-01.cap): ").strip()
 
-        # Run tcpdump with sudo to capture only TCP traffic
-        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if command:
+            print(Fore.GREEN + f"Running command: {command}")
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        # Read and colorize the output
-        while True:
-            output = process.stdout.readline()
-            if output == b"" and process.poll() is not None:
-                break
-            if output:
-                line = output.decode('utf-8').strip()
+            # Output the results of the command
+            for line in process.stdout:
+                print(line.decode('utf-8').strip())
+            for line in process.stderr:
+                print(Fore.RED + line.decode('utf-8').strip())
 
-                # Apply color based on packet type
-                if "TCP" in line:
-                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
-                elif "IP" in line:
-                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
-                else:
-                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
+        else:
+            print(Fore.RED + "No command entered.")
+    
+    except Exception as e:
+        print(Fore.RED + f"Error running Aircrack-ng: {e}")
+
+def run_auto_brute_force():
+    try:
+        # Ask the user for the location of the capture file and wordlist
+        capture_file = input(Fore.YELLOW + "Enter the path to the capture file (e.g., capture-01.cap): ").strip()
+        wordlist_file = input(Fore.YELLOW + "Enter the path to the wordlist file (e.g., /path/to/wordlist.txt): ").strip()
+
+        if capture_file and wordlist_file:
+            print(Fore.GREEN + "Starting WPA/WPA2 brute force...")
+            # Command to run Aircrack-ng with the capture file and wordlist
+            command = f"sudo aircrack-ng {capture_file} -w {wordlist_file}"
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            # Output the results of the command
+            for line in process.stdout:
+                print(line.decode('utf-8').strip())
+            for line in process.stderr:
+                print(Fore.RED + line.decode('utf-8').strip())
+        
+        else:
+            print(Fore.RED + "Capture file or wordlist file not specified.")
 
     except Exception as e:
-        print(Fore.RED + f"Error running tcpdump: {e}")
+        print(Fore.RED + f"Error running Aircrack-ng: {e}")
 
+def aircrack_menu():
+    while True:
+        print("\nAircrack-ng Menu:")
+        print("1. Run custom Aircrack-ng command")
+        print("2. Run WPA/WPA2 brute force (with wordlist)")
+        print("3. Return to Main Menu")
 
-import subprocess
-from colorama import Fore
+        choice = input("Choose an option: ")
 
-def run_tcpdump():
-    try:
-        print(Fore.YELLOW + "Starting tcpdump...")
-
-        # Run tcpdump with sudo to capture only TCP traffic
-        command = "sudo tcpdump -i any -l tcp"  # Use -l for line buffering, -i any for all interfaces
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        # Read and colorize the output
-        while True:
-            output = process.stdout.readline()
-            if output == b"" and process.poll() is not None:
-                break
-            if output:
-                line = output.decode('utf-8').strip()
-
-                # Apply color based on packet type
-                if "TCP" in line:
-                    print(Fore.LIGHTRED_EX + line)  # Light red for TCP packets
-                elif "IP" in line:
-                    print(Fore.LIGHTGREEN_EX + line)  # Light green for IP packets
-                else:
-                    print(Fore.LIGHTYELLOW_EX + line)  # Light yellow for other packets
-
-    except Exception as e:
-        print(Fore.RED + f"Error running tcpdump: {e}")
-
-
-def start_tcpdump_option():
-    # Directly start sniffing or return to main menu based on user input
-    print("\n1. Start sniffing (TCP packets)")
-    print("2. Return to Main Menu")
-
-    choice = input("Choose an option: ")
-
-    if choice == "1":
-        run_tcpdump()  # Run tcpdump
-    elif choice == "2":
-        print("Returning to main menu...")
-    else:
-        print("Invalid choice, please try again.")
-
+        if choice == "1":
+            run_manual_aircrack_ng()  # Run manual Aircrack-ng command
+        elif choice == "2":
+            run_auto_brute_force()  # Run WPA brute force
+        elif choice == "3":
+            print("Returning to main menu...")
+            break
+        else:
+            print("Invalid choice, please try again.")
 def main_menu():
     while True:
         show_main_menu_logo()
@@ -1484,6 +1570,7 @@ def main_menu():
             "[9] netcat",
             "[15] hostname to private ip",
             "[25] network brute force tool / cerbrutus",
+            "[aircrack-ng] (type aircrack to use option:) / brute force wifi passwords",
             "[WHOIS IP] Enter whois Not WHOIS",
             "[6] Update Script",
             "[99] To Exit",
@@ -1491,13 +1578,9 @@ def main_menu():
             "[13] ping ip",
             "[sniff]",
         ]
-        
-        # Display all options in white
         for option in options:
             print('\033[38;5;218m' + option)
-
-        # Red text for the "kraken >" prompt
-        choice = input('\033[91m' + "\nkraken> ").strip()
+        choice = input('\033[91m' + "kraken> ").strip()
 
         # Handle menu choices
         if choice == '2':
@@ -1535,7 +1618,9 @@ def main_menu():
         elif choice == 'whois':
             whois_lookup()
         elif choice == "sniff":
-             start_tcpdump_option()
+             tcpdump_menu()
+        elif choice == "aircrack":
+            aircrack_menu()
         elif choice == '99':
             exiting_loading_screen()
         else:
