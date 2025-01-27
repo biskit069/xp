@@ -1482,6 +1482,71 @@ def tcpdump_menu():
             break
         else:
             print("Invalid choice, please try again.")
+init(autoreset=True)
+
+def run_manual_aircrack_ng():
+    try:
+        # Prompt the user to input any aircrack-ng command
+        command = input(Fore.YELLOW + "Enter the Aircrack-ng command you want to run (e.g., aircrack-ng capture-01.cap): ").strip()
+
+        if command:
+            print(Fore.GREEN + f"Running command: {command}")
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            # Output the results of the command
+            for line in process.stdout:
+                print(line.decode('utf-8').strip())
+            for line in process.stderr:
+                print(Fore.RED + line.decode('utf-8').strip())
+
+        else:
+            print(Fore.RED + "No command entered.")
+    
+    except Exception as e:
+        print(Fore.RED + f"Error running Aircrack-ng: {e}")
+
+def run_auto_brute_force():
+    try:
+        # Ask the user for the location of the capture file and wordlist
+        capture_file = input(Fore.YELLOW + "Enter the path to the capture file (e.g., capture-01.cap): ").strip()
+        wordlist_file = input(Fore.YELLOW + "Enter the path to the wordlist file (e.g., /path/to/wordlist.txt): ").strip()
+
+        if capture_file and wordlist_file:
+            print(Fore.GREEN + "Starting WPA/WPA2 brute force...")
+            # Command to run Aircrack-ng with the capture file and wordlist
+            command = f"sudo aircrack-ng {capture_file} -w {wordlist_file}"
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            # Output the results of the command
+            for line in process.stdout:
+                print(line.decode('utf-8').strip())
+            for line in process.stderr:
+                print(Fore.RED + line.decode('utf-8').strip())
+        
+        else:
+            print(Fore.RED + "Capture file or wordlist file not specified.")
+
+    except Exception as e:
+        print(Fore.RED + f"Error running Aircrack-ng: {e}")
+
+def aircrack_menu():
+    while True:
+        print("\nAircrack-ng Menu:")
+        print("1. Run custom Aircrack-ng command")
+        print("2. Run WPA/WPA2 brute force (with wordlist)")
+        print("3. Return to Main Menu")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            run_manual_aircrack_ng()  # Run manual Aircrack-ng command
+        elif choice == "2":
+            run_auto_brute_force()  # Run WPA brute force
+        elif choice == "3":
+            print("Returning to main menu...")
+            break
+        else:
+            print("Invalid choice, please try again.")
 def main_menu():
     while True:
         show_main_menu_logo()
@@ -1490,75 +1555,72 @@ def main_menu():
         
         print(Fore.WHITE + "V 0.2")
         
-        print(Fore.WHITE + "use the tool nicely @biskit") 
-        print(Fore.LIGHTCYAN_EX+"all commands | nmap | ssl sslscan | nmap -h for every single nmap command | msf6 metasploit | rsf routersploit | trace tracepath | ip look up | airgeddon | asnmap | netdiscover | netcat | hostname",
-        print(Fore.YELLOW+"More Commands | hostname to private ip | whois | ping | ddos | cerb | sniff |99 To Exit",
-              options = [
-            "{nmap}",
-            "{every single nmap command}", 
-            "{sslscan}",                                 
-            "{Metasploit}",
-            "{Routersploit}",
-            "{tracepath}",
-            "{IP look up}",
-            "{asnmap}",
-            "{airgeddon}",
-            "{Netdiscover}",
-            "{netcat}",
-            "{hostname to private ip}",
-            "{network brute force tool / cerbrutus}",
-            "{whos ip search}",
-            "{Update Script}",
-            "{To Exit}",
-            "{Hping3 Ddos Packets / ip ddos}",
-            "{ping ip}",
-            "{sniff}",
+        print(Fore.WHITE + "use the tool nicely @biskit")
+        options = [
+            "[1] nmap",
+            "[2] Show All Nmap Commands",
+            "[3] sslscan",
+            "[5] Metasploit",
+            "[88] Routersploit",
+            "[22] tracepath",
+            "[11] IP look up",
+            "[33] asnmap",
+            "[77] airgeddon",
+            "[12] Netdiscover",
+            "[9] netcat",
+            "[15] hostname to private ip",
+            "[25] network brute force tool / cerbrutus",
+            "[aircrack-ng] (type aircrack to use option:) / brute force wifi passwords",
+            "[WHOIS IP] Enter whois Not WHOIS",
+            "[6] Update Script",
+            "[99] To Exit",
+            "[21] Hping3 Ddos Packets / ip ddos",
+            "[13] ping ip",
+            "[sniff]",
         ]
-        
-        # Display all options in white
         for option in options:
             print('\033[38;5;218m' + option)
-
-        # Red text for the "kraken >" prompt
-        choice = input('\033[91m' + "\nkraken> ").strip()
+        choice = input('\033[91m' + "kraken> ").strip()
 
         # Handle menu choices
-        if choice == 'nmap -h':
+        if choice == '2':
             show_all_nmap_commands()
-        elif choice == 'nmap':
+        elif choice == '1':
             run_nmap()
-        elif choice == 'ssl':
+        elif choice == '3':
             sslscan_scan()
-        elif choice == 'msf':
+        elif choice == '5':
             metasploit_scan()
-        elif choice == 'update':
+        elif choice == '6':
             update_script()
-        elif choice == 'rsf':
+        elif choice == '88':
             run_routersploit()
-        elif choice == 'trace':
+        elif choice == '22':
             run_tracepath()
-        elif choice == 'ip look up':
+        elif choice == '11':
             execute_python_script()
-        elif choice == 'netdiscover':
+        elif choice == '12':
             netdiscover_menu()
-        elif choice == 'airgeddon':
+        elif choice == '77':
             run_airgeddon()
-        elif choice == 'asnmap':
+        elif choice == '33':
             asnmap_menu()
-        elif choice == 'netcat':
+        elif choice == '9':
             netcat_menu()
-        elif choice == 'host to private ip':
+        elif choice == '15':
             scan_hostname_to_ip()
-        elif choice == 'cerb':
+        elif choice == '25':
             run_cerbrutus()
-        elif choice == 'ping':
+        elif choice == '13':
             ping_ip()
-        elif choice == 'ddos':
+        elif choice == '21':
             hping3_menu()
         elif choice == 'whois':
             whois_lookup()
         elif choice == "sniff":
              tcpdump_menu()
+        elif choice == "aircrack":
+            aircrack_menu()
         elif choice == '99':
             exiting_loading_screen()
         else:
