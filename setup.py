@@ -173,8 +173,13 @@ def install_cerbrutus(home_dir):
             print(f"Failed to install cerbrutus: {e}")
     else:
         print(f"Error: requirements.txt not found in {repo_path}. Please check the installation method for cerbrutus.")
-
-# Main setup function
+def install_aircrack_ng():
+    print("Installing Aircrack-ng...")
+    try:
+        subprocess.run(["sudo", "apt", "install", "aircrack-ng", "-y"], check=True, text=True)
+        print("Aircrack-ng installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install Aircrack-ng: {e}")
 def main():
     print("Setting up tools...")
 
