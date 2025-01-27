@@ -651,7 +651,7 @@ def metasploit_scan():
             elif choice == '3':  # Reverse Shell Option
                 print(Fore.LIGHTCYAN_EX + "Launching Reverse Shell Option...")
 
-                print(Fore.WHITE+ "how to use (you will need to send a file over to the attackers machine to gain access first you will need to set up the listenr or exploiting a vulnerability:")
+                print(Fore.WHITE+ "how to use (you will need to send a file over to the attackers machine to gain access first you will need to set up the listenr or exploiting a vulnerability to gain access:")
                 lhost = input(Fore.BLUE + "Enter LHOST (your local IP this is your private ip):").strip()
                 lport = input(Fore.BLUE + "Enter LPORT (the port for the reverse shell): ").strip()
 
