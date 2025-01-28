@@ -1540,7 +1540,7 @@ def main_menu():
         elif choice == '6':
             run_tracepath()
         elif choice == '7':
-           whois_lookup()
+           execute_python_script()
         elif choice == '8':
             asnmap_menu()
         elif choice == '9':
