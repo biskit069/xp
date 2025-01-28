@@ -44,8 +44,8 @@ def show_main_menu_logo():
 
     clear_screen()
 
-    light_purple = Fore.BLUE
-    faded_white = Fore.WHITE + Style.BRIGHT
+    light_purple = '\033[38;2;255;165;0m'
+    faded_white = Fore.LIGHTYELLOW_EX + Style.BRIGHT
 
     kra_lines = kra.strip().split("\n")
     ken_lines = ken.strip().split("\n")
@@ -1488,82 +1488,85 @@ def tcpdump_menu():
 def main_menu():
     while True:
         show_main_menu_logo()
-        
-        print(Fore.WHITE + "sudo python3 kraken.py To Update, Then Exit Program")
-        
-        print(Fore.WHITE + "V 0.2")
-        
-        print(Fore.LIGHTBLUE_EX + "use the tool nicely @biskit") 
-        options = [
-            "1{nmap}",
-            "2{every single nmap command}", 
-            "3{sslscan}",                                 
-            "4{Metasploit}",
-            "5{Routersploit}",
-            "6{tracepath}",
-            "7{IP look up}",
-            "8{asnmap}",
-            "9{airgeddon}",
-            "10{Netdiscover}",
-            "11{netcat}",
-            "12{hostname to private ip}",
-            "13{network brute force tool / cerbrutus}",
-            "14{whos ip search}",
-            "15{Update Script}",
-            "16{Ddos}",
-            "17{ping ip}",
-            "18{sniff}",
-            "99{exit}",
-        ]
-        
-        # Display all options in white
-        for option in options:
-            print(Fore.LIGHTWHITE_EX + option)
 
-        # Red text for the "kraken >" prompt
-        choice = input(Fore.LIGHTWHITE_EX + "\nkraken> ").strip()
+        # Display update info and version
+        print(Fore.LIGHTWHITE_EX + "sudo python3 kraken.py To Update, Then Exit Program")
+        print(Fore.LIGHTMAGENTA_EX + "V 0.2")
+
+        # Display tool credits
+        print(Fore.LIGHTRED_EX + "use the tool nicely @biskit")
+
+        # Define menu options
+        options = [
+            "[1] Nmap",
+            "[2] Every Single Nmap Command",
+            "[3] SSLScan",
+            "[4] Metasploit",
+            "[5] Routersploit",
+            "[6] Tracepath",
+            "[7] IP Lookup",
+            "[8] ASNMap",
+            "[9] Airgeddon",
+            "[10] Netdiscover",
+            "[11] Netcat",
+            "[12] Hostname to Private IP",
+            "[13] Network Brute Force Tool / Cerbrutus",
+            "[14] Whois IP Search",
+            "[15] Update Script",
+            "[16] DDoS",
+            "[17] Ping IP",
+            "[18] Sniff",
+            "[99] Exit", 
+        ]
+
+        # Display all options in a visually appealing format
+        for option in options:
+            print(Fore.LIGHTCYAN_EX + option)
+
+        # Prompt for user input
+        choice = input(Fore.LIGHTGREEN_EX + "\nkraken> " + Style.RESET_ALL).strip()
 
         # Handle menu choices
-        if choice == '2':
-            show_all_nmap_commands()
-        elif choice == '1':
+        if choice == '1':
             run_nmap()
+        elif choice == '2':
+            show_all_nmap_commands()
         elif choice == '3':
             sslscan_scan()
         elif choice == '4':
             metasploit_scan()
         elif choice == '5':
-            update_script()
-        elif choice == '6':
             run_routersploit()
-        elif choice == '7':
+        elif choice == '6':
             run_tracepath()
+        elif choice == '7':
+           whois_lookup()
         elif choice == '8':
-            execute_python_script()
-        elif choice == '9':
-            netdiscover_menu()
-        elif choice == '10':
-            run_airgeddon()
-        elif choice == '11':
             asnmap_menu()
-        elif choice == '12':
+        elif choice == '9':
+            run_airgeddon()
+        elif choice == '10':
+            netdiscover_menu()
+        elif choice == '11':
             netcat_menu()
+        elif choice == '12':
+            hostname_to_ip()
         elif choice == '13':
-            scan_hostname_to_ip()
-        elif choice == '14':
             run_cerbrutus()
+        elif choice == '14':
+            whois_lookup()
         elif choice == '15':
-            ping_ip()
+            update_script()
         elif choice == '16':
             hping3_menu()
         elif choice == '17':
-            whois_lookup()
-        elif choice == "18":
-             tcpdump_menu()
+            ping_ip()
+        elif choice == '18':
+            tcpdump_menu()
         elif choice == '99':
             exiting_loading_screen()
+            break
         else:
-            print('\033[91' + "Invalid choice. Please try again.")
-
+            print(Fore.RED + "Invalid choice. Please try again." + Style.RESET_ALL)
 if __name__ == "__main__":
     main_menu()
