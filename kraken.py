@@ -1028,7 +1028,7 @@ def run_cerbrutus():
         clear_screen()
         print("\nCerbrutus Menu:")
         print("1. Show Cerbrutus Help")
-        print("2. Run Cerbrutus with Custom Command")
+        print("2. Run Cerbrutus")
         print("3. Return to Main Menu")
 
         choice = input("\nChoose an option: ").strip()
@@ -1179,24 +1179,6 @@ def return_to_main_menu():
     print("\nReturn to main menu")
     input("Press Enter to continue...")
 
-def main_menu():
-    while True:
-        print("\nMain Menu:")
-        print("1. Scan hostname to IP")
-        print("2. Exit")
-        choice = input("Choose an option: ")
-
-        if choice == "1":
-            scan_hostname_to_ip()  
-        elif choice == "2":
-            print("Exiting the script.")
-            break
-        else:
-            print("Invalid option, please choose again.")
-
-def signal_handler(sig, frame):
-    print("\nExiting...")
-    sys.exit(0)
 def manual_netcat_command():
     command = input("Enter your custom Netcat command (e.g., nc -v example.com 1234): ")
     try:
@@ -1550,7 +1532,7 @@ def main_menu():
         elif choice == '11':
             netcat_menu()
         elif choice == '12':
-            hostname_to_ip()
+            scan_hostname_to_ip()
         elif choice == '13':
             run_cerbrutus()
         elif choice == '14':
